@@ -188,6 +188,10 @@ Watering system that generates AI reports based on soil data.
 
 Key Point: Still follows steps but improves efficiency and output using AI insights. Not fully autonomous.
 
+Example: Coffee Machine Asks, "Do you want stronger coffee today" and alters receipe; 
+
+Professional: Lead Capture Workflow that uses GPT to write thank-you emails
+
 3. AI Agents (Autonomous Decision Makers)
 
 Definition: Autonomous systems that make decisions, adapt, and use tools to achieve goals.
@@ -201,6 +205,10 @@ Garden AI agent adjusting watering based on weather, soil, plant type, and growt
 Coffee assistant checking calendar, adapting brewing schedule and strength.
 
 Professional AI agents deciding whether to send an email, schedule a meeting, or draft messages.
+
+Personal: Assistant checks your calendar, if you have a busy day it makes stronger coffee, if Saturday it asks even if we want a coffee
+
+Professional: Instead of always sending the same email, agent decides, Should I send an email, schedule a meeting or draft a LinkedIn Message
 
 Key Point: Acts like a digital human, makes independent decisions, highly adaptive, goes beyond AI automation.
 
