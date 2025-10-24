@@ -40,11 +40,11 @@
 
 # **I) Intro to AI Agents:**
 
-**A) Introduction to AI Agents**
+# **A) Introduction to AI Agents**
 
 This module introduces AI agents, focusing on their fundamentals, capabilities, and real-world applications. It covers Agentic AI, clarifying common misconceptions, and provides a simple demo to illustrate how an AI agent works. The session will define AI agents, highlight their key characteristics, and use a practical example—like Netflix or Amazon Prime’s recommendation system—to explain how AI agents function under the hood. Finally, the module will explore various real-world use cases across industries.
 
-**B) What is Agentic AI ?**
+# **B) What is Agentic AI ?**
 
 This lesson explains the difference between non-agentic AI (zero-shot AI) and Agentic AI.
 
@@ -54,7 +54,7 @@ Agentic AI follows a step-by-step, iterative workflow, improving output as it go
 
 Key takeaway: Non-agentic AI is quick but less precise, while Agentic AI is structured, iterative, and produces more refined results.
 
-**C) Demo: AI Agents**
+# **C) Demo: AI Agents**
 
 This section provides a real-world demo of an AI agent using a robotic vacuum cleaner as an example. The human gives a command (via app or button), and the vacuum autonomously makes decisions:
 
@@ -64,7 +64,7 @@ It detects unsuitable surfaces (like carpet when mopping) and adjusts its action
 
 Key takeaway: An AI agent can perceive its environment, make decisions, and act autonomously to achieve a goal.
 
-**D) What are AI Agents?**
+# **D) What are AI Agents?**
 
 This lesson explains AI agents, their definition, key characteristics, and examples:
 
@@ -86,7 +86,7 @@ Examples of AI Agents: Chatbots (like ChatGPT), recommendation systems (Netflix)
 
 Key takeaway: An AI agent is a smart, interactive, and adaptive system that acts autonomously to achieve goals by perceiving, deciding, and acting in its environment.
 
-**E) How an AI Agent Works ?**
+# **E) How an AI Agent Works ?**
 
 This lesson explains how AI agents power recommendation systems, using Netflix/Amazon Prime as an example:
 
@@ -102,7 +102,7 @@ End-to-End Workflow: The AI agent integrates the selections and email content, t
 
 Key takeaway: AI agents combine user data, metadata, and LLMs to generate personalized, automated recommendations without human intervention.
 
-**F) Use Cases of AI Agents in the Real World**
+# **F) Use Cases of AI Agents in the Real World**
 
 This lesson explores real-world applications of AI agents across industries:
 
@@ -237,7 +237,7 @@ AI Agents: “Understand the goal and figure out the best way to achieve it inde
 
 # **II) Azure AI Foundry Basics (For Absolute Beginners)**
 
-**A) Introduction to Azure AI Foundry**
+# **A) Introduction to Azure AI Foundry**
 
 Welcome to the module on Azure AI Foundry.
 
@@ -255,7 +255,7 @@ Furthermore, we’ll take a look at the various playgrounds that Microsoft provi
 
 Finally, we will discuss the management center, which is crucial for governance and management of hubs and projects. I look forward to seeing you in the lectures!
 
-**B) What is Azure AI Foundry?**
+# **B) What is Azure AI Foundry?**
 
 Now, the thing with Azure AI Foundry is that it has its own history. Microsoft has transitioned a lot over time. It all goes back to the days when Microsoft made a deal with OpenAI, agreeing to make the Azure OpenAI models available inside Azure.
 
@@ -277,7 +277,7 @@ In summary, Azure AI Foundry is a comprehensive platform that combines model acc
 
 In the next lecture, we will explore the architecture of Azure AI Foundry in detail.
 
-**C) Architecture of Azure AI Foundry**
+# **C) Architecture of Azure AI Foundry**
 
 Back in December 2024, at Microsoft Ignite, Azure AI Foundry was officially introduced by Satya Nadella. The architecture highlights several important components, including the developer tools (IDEs), the model catalog, and observability. Let’s explore each of these components in detail.
 
@@ -313,7 +313,7 @@ This observability layer provides transparency, continuous monitoring, and ongoi
 
 Overall, this comprehensive architecture highlights the beauty and power of Azure AI Foundry, combining models, services, developer tools, and governance into one cohesive platform.
 
-**D) Projects vs Hubs**
+# **D) Projects vs Hubs**
 
 Another key aspect you need to be aware of when studying Azure AI Foundry is the concept of projects and hubs. When working on AI projects, these are two components you will always use. A hub acts as a container, and inside it, you have projects. Think of it like this: the hub is the outer container, and the projects are the items inside it.
 
@@ -327,14 +327,128 @@ Finally, AI projects group components for model customization, orchestrate workf
 
 Don’t worry if this feels a bit confusing at first—I will demonstrate all of this in a proper demo in the upcoming lectures.
 
-**E) How It Differs from Azure OpenAI Service**
+# **E) How It Differs from Azure OpenAI Service**
 
-**F) Navigating the Azure AI Foundry Portal**
+Another key area where many folks get confused is how to use the Azure OpenAI service with AI Foundry.
 
-**G) Demo: Create a Hub & Project**
+Microsoft has clarified that using a project and a hub is not mandatory if you are only interested in the Azure OpenAI service. If you remember the architecture of Azure AI Foundry, the Azure OpenAI service was shown as a separate component. This means you don’t need a project if your goal is solely to access Azure OpenAI models.
 
-**H) Model Benchmarks**
+Using Azure OpenAI service without a project allows you to directly go to Azure OpenAI through Azure AI Foundry. The primary focus here is to provide access to Azure OpenAI models, allowing users to deploy, fine-tune, and manage these models directly.
 
-**I) Acesss Playgrounds via Foundry**
+However, if you use Azure OpenAI service with a project, it becomes part of a broader platform. This setup focuses on end-to-end tooling to build generative AI applications and integrates with multiple AI services. For example, if you also want to use Azure AI Search or work with models like Meta Llama from various providers including Azure, OpenAI, Microsoft, Cohere, or Nvidia, then a project setup is recommended.
 
-**J) Management Centre**
+When using a project, the platform provides features like a model catalog, fine-tuning and deployment options, and access to all Azure OpenAI models as well as models from other providers. This setup offers a comprehensive suite of tools for building, testing, and deploying AI applications.
+
+In terms of usage, if your focus is exclusively Azure OpenAI, you can skip the project and start developing individually. But if you are exploring multiple models and AI services, using a project provides enterprise-grade features like access management, private networks, and a unified interface for managing different AI resources and projects. It also allows you to leverage the SDK to work on multiple models efficiently.
+
+In summary, if your goal is solely to use Azure OpenAI service, you can do so without a project. But for broader AI development with multiple services and models, creating a project in Azure AI Foundry is the better approach.
+
+# **F) Navigating the Azure AI Foundry Portal**
+
+This video is designed to demystify how to access the Azure AI Foundry.
+
+This topic often confuses many folks because when you go to Portal.azure.com, you can see the Azure AI Foundry resource. Clicking on it takes you to the Foundry, but it may show that it cannot find any resources. From here, you could create a hub or a project, but we’re not going to do that for this lesson.
+
+In the theory lesson, I explained that Microsoft has created a subdomain specifically for Azure AI Foundry, called ai.azure.com. Opening this domain takes you directly to the Azure AI Foundry interface.
+
+Here is where it gets interesting. The page highlights options like “Jump start your AI journey”, finding the ideal model for your business needs, and tinker, tweak, customize to achieve your goals.
+
+The first option is Jump start your AI journey. Clicking this opens a model catalog with a wide variety of models, such as Deep Seek, O3, Mini, GPT, and more—all under one umbrella.
+
+If you are only interested in Azure OpenAI, there is an option to focus specifically on the Azure OpenAI service. Clicking this filters the model catalog to show only OpenAI models, excluding others like Llama or Deep Seek. This organization makes it easier to navigate and access what you need.
+
+You will also notice a connected resource. This shows your Azure OpenAI resource that is already created and linked to your Foundry. You can see all Azure OpenAI models, with no other models included.
+
+There are also concepts like playgrounds and tools, which are shared resources that help with deployments, quotas, and testing. Some older videos may show previous versions of Azure OpenAI Studio, but the concepts remain the same, even if the interface looks slightly different.
+
+In the chat playground, you can type requests and test the models. You first need to create a deployment to use the chat playground effectively.
+
+Other features include assistants API, which is the backbone for creating Azure AI agents (covered in upcoming lectures), real-time audio, image generation like DALL-E, completions, and other shared resources.
+
+In summary, this video demonstrates how to access your Azure OpenAI service from Azure AI Foundry, navigate the model catalog, and understand the available tools and playgrounds.
+
+# **G) Demo: Create a Hub & Project**
+
+This lecture explains how to create your project and hub in Azure AI Foundry, which is actually quite straightforward.
+
+As mentioned before, if you go to Portal.azure.com, you can access the resources inside the Foundry. However, if nothing is installed yet, it may show “no Azure AI Foundry to display.” The recommended approach is to access the Foundry via ai.azure.com.
+
+Once you’re on ai.azure.com, you can create a project. This is important because it allows you to customize many aspects. You can either accept the default settings and simply click Create, or provide your own names. For example, you might name your project “Azure Foundry Project”.
+
+Next, you’ll specify the hub name, e.g., Azure AI Hub, select the subscription, and choose a resource group. You can either use an existing resource group or create a new one. You can also choose the location, which defaults to a region like Sweden Central.
+
+You then have the option to connect an Azure OpenAI service. You can either create a new Azure OpenAI service or connect an existing one. The same applies for Azure AI Search—you can create a new resource or connect an existing one. After clicking Next, you’ll review your choices, including project name, subscription, resource group, and location.
+
+Clicking Create will start the creation of your resources. Within a few minutes, the following resources will be created:
+
+Azure Foundry Project – your project.
+
+Azure AI Hub – a hub can contain multiple projects.
+
+Storage Account – used for data uploads and storing artifacts created by Azure AI.
+
+Key Vault – stores connection strings for external resources managed within Azure AI.
+
+After creation, you can view your hub and project in Portal.azure.com. Clicking the hub allows you to launch Azure AI Foundry, view users, models, endpoints, connected resources, and compute resources. This is essentially the global settings for your hub.
+
+Similarly, clicking the project allows you to launch the studio, which provides an interface very similar to ai.azure.com. From here, you can access your model catalog, playgrounds, services, and agents, and manage them as needed.
+
+It’s important to note that if your work is limited to Azure OpenAI resources or models, creating a project and hub is not necessary. However, if you plan to use other models like Meta Llama or Deep Seek, it is mandatory to go through the Azure AI hub and project in the Foundry.
+
+# **H) Model Benchmarks**
+
+Another key feature of the Foundry is the model benchmarks.
+
+Earlier, we looked at the model catalog, which contains a wide variety of models—not just Azure OpenAI or ChatGPT models (like GPT-0103), but also models from Meta, Microsoft, Deep Seek, and others. The model benchmark feature allows you to compare the performance of these models.
+
+Inside the Foundry, in the model catalog, you’ll see an option to “Compare with benchmarks”. If new model benchmarks are available, you can select them here. The Foundry will automatically pick some popular models for comparison, and you can also add more models manually.
+
+On the comparison screen, you’ll see various metrics like quality index and cost (USD per 1 million tokens, where lower is better). For example, the Llama model may appear with a certain quality score and cost score. The benchmark even provides rankings based on quality and cost—for instance, a model might rank fourth in quality and tenth in cost.
+
+You can also switch to a list view, which shows all relevant metrics like accuracy, coherence, fluency, and more. This is useful if you prefer a table format over graphs.
+
+Clicking on a specific model, like GPT-4, shows a detailed comparison against other models such as Mistral 5.3, GPT-3.5, and Llama 3.2. Various benchmarks are displayed, including AI quality index, estimated cost, latency, throughput, and generated tokens.
+
+AI Quality: Higher is better. GPT-4 typically ranks at the top.
+
+Cost: Lower is better. Llama models are strong performers here.
+
+Throughput and Generated Tokens: Higher is better. Both GPT and Llama models perform well.
+
+Overall, this feature allows you to compare different third-party models before deciding which one to use. Reviewing benchmarks can help you make an informed choice based on quality, cost, and other performance metrics.
+
+# **I) Acesss Playgrounds via Foundry**
+
+In this video, we will take a look at how to deploy a model inside your Azure AI Foundry and then use it within the playground.
+
+Once you have created or deployed a project, click on your project—for example, Azure Foundry Project. Then navigate to the model catalog. As mentioned earlier, there are many models available.
+
+Let’s say we are interested in a more recent OpenAI model like O3 Mini. To deploy it, simply click on Deploy. Note that some newer models, like O3 Mini, require registration and access.
+
+If registration is required, you can choose a slightly older model, like O1 Mini. Here, you can create a new deployment, for example naming it O1 Mini New. Set the deployment type (e.g., Global Standard and REST), check the model version (e.g., 12th September 2024), and verify your project and capacity (e.g., 1 million tokens per minute). Select the region (e.g., East US 2) and click Deploy.
+
+Once deployed, the system will display the endpoint and the API key needed for authentication. You can now access this deployment in the playground.
+
+To do this, either select the deployment directly from the catalog or go to Assets → Models and Endpoints. You will see your deployed model, for example, O1 Mini New. Clicking Open in Playground allows you to interact with the model.
+
+For instance, you can ask questions like “Who is the PM of India?” The model responds based on its knowledge. In this example, it returned: “As of 2023, Narendra Modi is the Prime Minister of India.”
+
+This demonstrates how to deploy a model and use it through the Azure AI Foundry playground.
+
+# **J) Management Centre**
+
+It's now time to talk about another key artifact of Azure AI Foundry, which is the Management Center.
+
+The Management Center is part of the Azure AI Foundry portal and is designed to streamline governance and management activities. From here, you can manage hubs, projects, resources, and settings within the Foundry.
+
+To visit the Management Center, open your Azure AI Foundry project and select Management Center from the left menu. First, click on Launch Studio to enter your project interface. Once inside, the Management Center option will be available.
+
+Within the Management Center, you can manage hubs and projects. You can create additional hubs, create new projects within those hubs, and view all hubs and projects you have access to. The left menu allows you to navigate hub and project sections to manage individual items.
+
+For example, selecting All Hubs and Projects displays the names of your hubs and projects. You can also view quotas and request additional quota if needed. Each hub or project has a subsection where you can click Details or Overview to see information about users, models, endpoints, and connected resources. These connected resources will be particularly useful during coding and development tasks.
+
+The Management Center also allows you to manage resource utilization, including quotas and usage metrics across multiple hubs and Azure subscriptions. The Quota link in the left menu lets you view and manage quotas efficiently.
+
+Additionally, you can govern access through the Management Center. By selecting Users, you can manage access for both hubs and projects. You can assign roles, manage users, and ensure that all settings comply with organizational standards.
+
+Overall, the Management Center is a critical feature for governance, resource management, and access control within Azure AI Foundry.
