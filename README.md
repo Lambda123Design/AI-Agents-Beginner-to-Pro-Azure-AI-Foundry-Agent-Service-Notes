@@ -38,6 +38,43 @@
 
 **J) Management Centre**
 
+**III) Assistants API - A Refresher**
+
+**A) Title Intro - Assistants API**
+
+**B) Introduction to Assistants API**
+
+**C) What is Assistants API ?**
+
+**D) Assistants API Component / Key Terms**
+
+**E) Assistants API Architecture**
+
+**F) What is Function Calling ?**
+
+**G) Demo: FC: Python Code : Function Calling Intro**
+
+**H) Demo: FC: Python Code: Get an API Key from openweathermap.org**
+
+**I) Pre-Req Setup azureopenai.env**
+
+**J) Demo: FC : Python Code : Initialise and Set the Environment**
+
+**K) Demo: FC : Python Code : Instantiate the Client Object of Azure OpenAI**
+
+**L) Demo:FC : Python Code: Define the get_weather Function**
+
+**M) Demo: FC: Python Code: Define the tools list required for the Assistants API**
+
+**N) Demo: FC_ Python Code : Create an Assistant & Thread**
+
+**O) Demo: FC:Python Code: Create a function for running the conversation**
+
+**P) Demo: FC: Python Code: Take the User input and show result**
+
+
+
+
 # **I) Intro to AI Agents:**
 
 # **A) Introduction to AI Agents**
@@ -452,3 +489,127 @@ The Management Center also allows you to manage resource utilization, including 
 Additionally, you can govern access through the Management Center. By selecting Users, you can manage access for both hubs and projects. You can assign roles, manage users, and ensure that all settings comply with organizational standards.
 
 Overall, the Management Center is a critical feature for governance, resource management, and access control within Azure AI Foundry.
+
+# **III) Assistants API - A Refresher**
+
+# **A) Title Intro - Assistants API**
+
+Just an Intro music of "Intro - Assisstants API"
+
+# **B) Introduction to Assistants API**
+
+Hello and welcome to the series of Lectures on Assistance API.
+
+Now why have I included Assistance API as part of my Agents course? That would be the question that would be coming to your mind.
+
+The reason for that is because the Agent service is actually based on top of the Assistance API. You can think of it in this way — the Assistance API forms the foundation or the foundational layer for the Agent service.
+
+Now, the thing is, with the Assistance API, this is something that was actually given by OpenAI. OpenAI came up with the Assistance API where they introduced the concept of tools, where they said you could use function calling, you could use file search, and so on.
+
+To give you a perfect example — with function calling, they understood the importance that our models are trained up to a certain level. But what if we give the capability for the model to talk to third-party APIs? For example, if I say, “What’s the weather like in London today?”, the model can actually interact with the OpenWeatherMap API.
+
+These are the kinds of capabilities provided by the Assistance API. That’s why it’s very important to understand what an Assistance API is, its key components, and the terms that we use — things like threads and messages. You’ll notice that the same terms are used for the Agent service as well. That’s where it becomes very important to understand the architecture.
+
+In this series of lectures, you will see complete Python code where we will explore how to use function calling with the Assistance API. We will actually create an API key in OpenWeatherMap and see how function calling can perform the same action — for example, fetching the current weather in London.
+
+The LLM itself is not trained to provide this information, but now it can interact with a third-party API, such as OpenWeatherMap, to retrieve it.
+
+Another reason for including this topic is that Microsoft mentions that when you use the Agent service, you can think of it as a wrapper built on top of the Assistance API. This means you have to write much fewer lines of code.
+
+So I believe this would be a perfect opportunity for you to compare the code — what we will build with the Assistance API, and how it looks when implemented using the Agent service.
+
+I’m sure this will be an interesting and valuable series of lectures.
+
+# **C) What is Assistants API ?**
+
+So let's dive straight into the topic of Azure OpenAI Assistants API.
+
+Right. So the Assistants API is designed to help developers build powerful AI assistants. As the name suggests, with the Assistants API you are creating your own assistants.
+
+Now, the best thing to understand is — if you think about a human, right? People like managers often have human assistants or personal assistants who help them with their work. In the same way, applications can create AI assistants.
+
+So, in the coming future or in the coming months or years, you will see applications start deploying many small AI assistants. This is where the Assistants API becomes really important.
+
+It enhances the developer experience. First of all, remember that it simplifies the creation of sophisticated, copilot-like experiences in applications.
+
+Now you might ask, what is a copilot? So, a copilot typically refers to an AI-powered assistant which is designed to aid humans in various tasks across various domains like software development, content creation, and data analysis.
+
+Now, when we actually start looking programmatically at how the Assistants API works, you'd be amazed — it's so simple. They have really enhanced the developer experience.
+
+If I go to an example, a developer can integrate an AI assistant into an app to help users navigate and utilize the app. Let's say you have a navigation app — right inside that navigation app, you can create an AI assistant which can probably use something like natural language processing.
+
+So, you can have those capabilities. Right now, you might be using just a postcode to search, but with NLP you could do more — for example, you could simply say, “Hey, I need to go to the nearest petrol pump.” You just say that or type that. This is just an example.
+
+When I say “enhance developer experience,” it means that it automates tasks — a lot of tasks are automated, especially when you have to sift through data, process the data, suggest solutions, or automate workflows. Everything can be taken care of by the Assistants API.
+
+A good example can be an AI assistant which can analyze customer feedback. So, there is an app that looks at the feedback, and based on that feedback, it generates a report suggesting improvements. It’s a perfect example — you’re constantly getting feedback, and based on that feedback, the assistant generates a report suggesting the kinds of improvements to be made. Otherwise, you would need humans to go through all that feedback and come up with those improvements manually.
+
+Now again, another good thing is customizable personality. It allows the tuning of AI model personalities and capabilities through specific instructions. As we always say, there is always a brand voice — certain brands speak or reply in a certain manner. You can train your model that way. You can train your Assistants API in the same manner.
+
+Another good example can be if you want to configure an AI assistant to respond in a friendly and casual tone — especially if you take the example of a social media platform. In such a platform, you will always see that the response you get will be in a very casual and friendly manner. That’s the benefit.
+
+The Assistants API also allows parallel tool access. It supports accessing multiple tools simultaneously, including Azure-hosted tools and custom-built tools.
+
+A perfect example can be that you can use both a database search tool and a code interpreter to help a user troubleshoot a technical issue. There are several tools — for example, file search and code interpreter. What this means is that the Assistants API allows you to call multiple tools at the same time. So, you could be using function calling, file search, or code interpreter — all at once. That level of parallel tool access is allowed.
+
+The next good thing about the Assistants API is that you don’t have to worry about historical messages. It enables persistent conversation threads and stores message history.
+
+So, all your previous conversations are stored — it maintains your context. Whatever interaction you’ve been having with your AI system, it stores that information and allows persistent conversation threads to be maintained. It also helps manage context length automatically.
+
+A very good example can be that a user picks up a conversation with an AI assistant right where they left off after one week. Even after one week, when you go back to your conversation, the AI assistant is intelligent enough to know your context. It won’t ask, “Hey, what were you asking about?” That is the beauty of persistent threads.
+
+The next one is file handling. The Assistants API has the capability not only to access data but also to create files in various formats. It can go through data and generate its own files as well.
+
+A good example here can be that it can generate an Excel spreadsheet from sales data and include references to the original data files. That’s the beauty of the Assistants API.
+
+Now, a very important thing — although it says no extra cost, please remember that there are certain tools, and I’ll talk to you about that later when we do deeper dives into these tools.
+
+There is no additional pricing or quota for Assistants — basically, if you are just using the Assistants API, there are no additional charges. You’re paying for the input and output tokens anyway, which is standard.
+
+But, just in case you are looking to use the two tools available at the moment — code interpreter and file search — then you have to be aware of the additional costs.
+
+The costs are as follows (and we will discuss this in more detail in the deep-dive lectures):
+If you use Code Interpreter, you will be charged $0.03 per session or per hour, and $0.01 per gigabyte of vector storage per day.
+If you are using File Search, similar additional charges apply.
+
+But all I want to say is this — if you are just purely using the Assistants API, you don’t have to pay anything extra. However, if within the Assistants API you are making use of these two tools (Code Interpreter or File Search), then you will need to pay additional charges.
+
+A business use case for this can be where you have the Assistants API managing customer inquiries without incurring additional costs — or when you don’t need advanced tools.
+
+The Assistants API has versatile use cases — it can be used in product recommenders, sales analyst apps, coding assistants, or even QA chatbots. All of these are great examples.
+
+Another couple of examples could be an AI assistant helping employees find HR-related information by searching through the company’s internal knowledge base, or a marketing team using the Assistants Playground to experiment with different AI assistants.
+
+If you want to utilize the Assistants API, you’ll see that it’s available in Azure OpenAI Studio as part of the Assistants Playground.
+
+It offers a no-code environment — that’s the beauty of the Assistants API. You simply choose your assistant, select the tools you want to use, upload your data, and you can immediately start interacting with the LLM.
+
+And that’s the beauty of the Assistants API.
+
+So, I hope you got a good understanding — or at least an initial basic understanding — of what the Assistants API is.
+
+# **D) Assistants API Component / Key Terms**
+
+# **E) Assistants API Architecture**
+
+# **F) What is Function Calling ?**
+
+# **G) Demo: FC: Python Code : Function Calling Intro**
+
+# **H) Demo: FC: Python Code: Get an API Key from openweathermap.org**
+
+# **I) Pre-Req Setup azureopenai.env**
+
+# **J) Demo: FC : Python Code : Initialise and Set the Environment**
+
+# **K) Demo: FC : Python Code : Instantiate the Client Object of Azure OpenAI**
+
+# **L) Demo:FC : Python Code: Define the get_weather Function**
+
+# **M) Demo: FC: Python Code: Define the tools list required for the Assistants API**
+
+# **N) Demo: FC_ Python Code : Create an Assistant & Thread**
+
+# **O) Demo: FC:Python Code: Create a function for running the conversation**
+
+# **P) Demo: FC: Python Code: Take the User input and show result**
