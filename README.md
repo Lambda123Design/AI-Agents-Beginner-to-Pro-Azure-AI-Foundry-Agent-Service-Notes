@@ -72,6 +72,61 @@
 
 **P) Demo: FC: Python Code: Take the User input and show result**
 
+**IV) Azure AI Agent Service**
+
+**A) Intro to Azure AI Agent Service**
+
+**B) What is Azure AI Agent Service?**
+
+**C) Architecture of Azure AI Agent Service**
+
+**D) Assistants API Vs Azure AI Agent Service**
+
+**E) Model & Region Support**
+
+**F) Quotas & Limits**
+
+**G) Azure AI Agent Service Pricing**
+
+**H) Demo: Create a Hub & Project**
+
+**I) Demo: Create an Agent via Azure Foundry**
+
+**J) Demo: Understand the various Knowledge & Action Tools**
+
+**K) Demo : Get a Response to your prompt via the Agents Playground**
+
+**V) Understanding Azure SDK for Python**
+
+**A) Introduction to Azure SDK for Python**
+
+**B) What is Azure AI Projects client library for Python**
+
+**C) Demo: Create VSCode Environment & setup Azure-CLI**
+
+**D) Execute the Sample Code**
+
+**E) Understand the Workflow for Agent Creation**
+
+**F) Demo: Create Azure AI Project via Azure AI Foundry**
+
+**G) Demo: Create Entra ID Application & Grant Contributor access**
+
+**VI) Azure AI Agent Service Action Tools- Function Calling**
+
+**A) Intro to Function Calling**
+
+**B) Demo: Create a new Deployment inside Project**
+
+**C) Demo: Understand the Workflow for Weather Agent**
+
+**D) Demo : Understand the Environment Variables**
+
+**E) Demo : Install Libraries and Setup Enviornment**
+
+**F) Demo: Understand the Get_Weather Function**
+
+**G) Demo: Calling your Azure AI Agent**
 
 
 
@@ -782,3 +837,662 @@ The third-party API responds with the weather data, which is then formatted into
 You can continue interacting with the assistant by asking for weather updates in other locations, such as New Delhi. The process is the same: the assistant determines the required latitude and longitude, calls the third-party API, retrieves the current weather, and then formats the response for you. This demonstrates the intelligence and automation that function calling adds—OpenAI itself does not have access to real-time weather, but it can seamlessly integrate with external APIs to provide accurate, up-to-date information.
 
 This series of lectures highlights the power and flexibility of Azure OpenAI with function calling, enabling dynamic, real-time interactions that extend far beyond the model’s training data. I hope you found this walkthrough valuable. If you haven’t yet provided feedback on the course, please do so—it really helps us continue producing high-quality content and new learning material. Thank you for watching, and I hope you enjoyed this demonstration.
+
+# **IV) Azure AI Agent Service**
+
+# **A) Intro to Azure AI Agent Service**
+
+Hello and welcome to the module on Azure AI Agent Service and the reason why you've enrolled in this course.
+
+Obviously, you must be thinking that we've enrolled to learn about the Azure AI Agent Service, and it is coming now. The reason we are covering this now is that we first needed to talk about the Azure AI Foundry and the Assistance API, as these are foundational layers. Understanding these will help you grasp the Azure AI Agent Service better.
+
+In this series of lectures, we will focus on the Azure AI Agent Service itself. We’ll do a deep dive into its architecture, which is truly amazing. I love it because Microsoft has introduced a concept of tools within the service. These include knowledge tools and action tools, and we will explore all of these in detail.
+
+I will also provide a comparison between the Assistance API and the Azure AI Agent Service. This is why understanding the Assistance API beforehand is important. Additionally, as with Azure OpenAI Service, not every model is available in every region. We will discuss model and region support in the context of Azure AI Agent Service.
+
+Another important aspect to cover is quotas and limits. There are specific quotas to follow, including the number of files you can upload, the total size of the files, and the number of tokens you can have. All of this falls under the quota and limit guidelines, which you need to be aware of.
+
+We will also discuss the pricing aspect. Many people read in blogs that Azure AI Agent Service is free. While the service itself is free, the underlying resources are paid. By underlying resources, I mean you would be paying for Azure OpenAI Service, file search capabilities, grounding with Bing search, SharePoint usage, and other individual services. So, be careful and keep this in mind.
+
+In the upcoming sessions, we will have a lot of practical demos. We will create a hub and a project, which is a good opportunity to practice if you haven’t done it yet. You will also see how to create an agent via the Azure Foundry. The theoretical concepts of tools we discussed earlier will now be demonstrated practically. I will show you where the knowledge and action tools are located inside the agents playground.
+
+Finally, we will explore the agents playground by creating a sample agent, giving it a prompt, and observing the response from the agent. This will provide hands-on exposure to how agents work and interact in real scenarios.
+
+Keep watching, guys, because this module is going to be very informative and practical.
+
+# **B) What is Azure AI Agent Service?**
+
+Hi folks, it's now time to take a look at Azure AI Agent Service and the reason why you enrolled in this course.
+
+So, let’s dive in. Azure AI Agent Service is a fully managed service. By now, you probably understand that when we say it’s a managed service, it means you don’t have to worry about infrastructure, scalability, or security. The cloud vendor, or the provider of the service, takes care of all these aspects. This service is designed to empower developers to build securely. Essentially, you are building, deploying, and scaling high-quality, extensible AI agents within the Azure ecosystem in a very secure manner.
+
+The service is purely focused on Azure AI agents. When we talk about its key characteristics, it provides a managed intelligent agent platform, which simplifies the building and deployment of AI-powered agents. There has been a lot of discussion around AI agents and how complex it can be, especially because AI interactions often require stateful context awareness. This service simplifies that process, allowing you to build intelligent, context-aware agents efficiently.
+
+As mentioned earlier, Azure AI Agent Service is fully integrated with the Azure ecosystem. This is one of its biggest advantages. You can seamlessly integrate with Azure Cognitive Services (also known as Azure AI Search), Azure OpenAI Service, and Azure Machine Learning to enrich your agent’s capabilities. Furthermore, integration with Azure Logic Apps allows access to over 1,400 connectors, which include Microsoft Teams, Excel, Dynamics 365, and many more. This integration enables your agents to be versatile and enterprise-ready.
+
+Additionally, the service provides scalability and security. Built on Azure’s robust cloud infrastructure, it ensures enterprise-grade scalability, security, and compliance. Among its features, bring your own storage allows enterprises to securely retrieve data for agents, and bring your own virtual network enables secure deployment with data privacy and compliance in mind. The service also supports limitless scale, providing maximum performance and scaling capabilities when running Azure AI Agent Service on your provisioned deployments.
+
+Another remarkable feature of Azure AI Agent Service is that it is multi-modal. Multi-modal means you can interact not just with text, but also with other forms like voice, video, and images, allowing the creation of versatile conversational AI experiences. Traditionally, natural language processing relied only on text input and output, but now you can work with multiple modalities, expanding the scope of interaction significantly.
+
+Finally, the service offers multi-vendor support, which is an exciting development. Microsoft, in close collaboration with OpenAI, initially provided only OpenAI models. Now, customers can create agents using not only Azure OpenAI models but also models from other partners, such as Meta (LLaMA 3), Mistral, and Cohere. Over time, more vendor support will be added, allowing even greater flexibility in choosing models for AI agents.
+
+With this lecture, I wanted to give you a quick but comprehensive glimpse of Azure AI Agent Service. It combines robust cloud infrastructure, multi-modal capabilities, multi-vendor support, and seamless Azure integration to simplify building intelligent, scalable, and secure AI agents.
+
+# **C) Architecture of Azure AI Agent Service**
+
+Now it’s time to take a look at the architecture of Azure AI Agent Service. The first thing you’ll notice is the presence of the Azure AI Foundry. Remember, the agent service is actually part of the Foundry. When you look at the Agent Service, it comes under the umbrella of Azure AI Foundry. In the portal, when you go to a project inside the Foundry, you will be able to access your agents directly.
+
+Let’s start from left to right and explore the key features. The first is built-in enterprise readiness. Microsoft has designed this with enterprises in mind, understanding the requirements of modern organizations. This includes BYO – Bring Your Own options. For example, Bring Your Own File Storage allows organizations to use their existing data storage solutions. Similarly, Bring Your Own Search Index lets enterprises integrate their own search index for customized search experiences.
+
+Next is OBOE – On Behalf Of authorization support. This feature enables secure delegated access, meaning you can delegate access on behalf of someone else. Another key feature is enhanced observability, which provides monitoring and analytics capabilities for better insights into system performance and usage.
+
+Moving to the middle part, we have the extensive ecosystem of tools. Earlier, we discussed Assistance API tools like the code interpreter and function calling. Microsoft has now expanded this, providing a plethora of tools that empower agents. These are categorized into knowledge tools and action tools.
+
+Knowledge tools provide agents with access to various data and services:
+
+Microsoft Fabric: A unified data platform for analytics and AI.
+
+SharePoint: Integration for accessing enterprise content stored in SharePoint or Confluence.
+
+Bing Search: For web searching, allowing agents to ground responses using Bing.
+
+Azure AI Search: A cloud search service for indexing and retrieving data seamlessly.
+
+Licensed Data: Organizations can integrate proprietary data sources like TripAdvisor or other licensed datasets.
+
+Files & File Search: Agents can search and retrieve data from Azure blobs or local/cloud-based file storage.
+
+Code Interpreter: Allows executing code for data analysis and automation, generating graphs, or performing computations.
+
+Action tools define what actions the agent can perform. Key integrations include:
+
+Azure Logic Apps: Enables workflow automation and process integration with over 1,400 connectors, including Microsoft Teams, Excel, Dynamics 365, and Azure App Service.
+
+OpenAPI 3.0 Specified Tools: Supports in-house APIs following the OpenAPI 3.0 specification for interoperability.
+
+Azure Functions: Provides serverless computing to run event-driven applications.
+
+On the right side, we have the Model Catalog. This is not limited to Azure OpenAI or GPT models. Microsoft now supports additional partners, including Meta (LLaMA), Mistral, and Cohere. Azure OpenAI provides access to the latest GPT models, while the Model-as-a-Service approach allows using third-party AI models like LLaMA, Mistral, and Cohere for natural language tasks.
+
+To summarize, Azure AI Foundry and the Agent Service enable enterprises to integrate AI-powered agents with secure storage, search, and processing capabilities. It offers a broad ecosystem of tools, enterprise-ready features, and access to top AI models, making it a powerful solution for AI-driven automation and decision-making.
+
+# **D) Assistants API Vs Azure AI Agent Service**
+
+As we study Azure AI Agents, you’ll notice many similarities with the Assistance API, which we covered extensively in the Assistance API module. If you haven’t gone through those lectures, I strongly recommend revisiting them first. In the Assistance API module, we studied several important concepts:
+
+Assistant: A custom AI that uses models.
+
+Thread: A conversation session between the assistant and a user.
+
+Message: Created by either the assistant or the user, messages can include text, images, or other files.
+
+Run: The activation of the Assistance API to begin processing based on the contents of the thread.
+
+Run Step: The detailed list of steps the Assistance API took as part of a run.
+
+When I looked at the Azure AI Agent documentation, I noticed that the structure is essentially the same. So, all the work you did learning the Assistance API has not gone to waste.
+
+In Azure AI Agents, the concepts are very similar, with slight enhancements:
+
+Agent: Equivalent to the assistant, a custom AI that uses models.
+
+Thread: A conversation session between the agent and a user.
+
+Message: Created between the agent or a user, just like messages in the Assistance API.
+
+Essentially, Microsoft has enhanced the Assistance API and replaced the term “assistant” with “agent.” The architecture remains the same, and all the core concepts — agent, thread, message, run, and run step — still hold true.
+
+The takeaway from this lecture is that Azure AI Agents is not a completely new paradigm. Everything you learned from the Assistance API module applies here as well. The architecture, the SDK usage, and the flow remain consistent, so your previous knowledge is directly transferable.
+
+# **E) Model & Region Support**
+
+This is a very important lecture on model and region support in Azure AI Agent Service. As we’ve seen with Azure OpenAI, not every model is available in every Azure region. The same applies to Azure AI Agent Service. I strongly recommend that you always visit the “Models Supported by Azure AI Agent Service” page to check availability. Keep in mind that what is available may change over time, so it’s important to verify this whenever you start working with Azure OpenAI or Azure AI Agent Service.
+
+The main thing to check on that page is the table that clearly states which deployment or model is available in which region. For example, if you are interested in GPT-4 (2024-1120), it is not available in East US but is available in Japan East. Similarly, GPT-3.5 Turbo is available in Australia East. Always refer to this table before creating any deployments.
+
+Apart from GPT models, another important point is that Azure AI Agent Service currently supports three partner models. These are Meta (LLaMA 3), Cohere (Command R / Command Plus), and Mistral. This means that non-Microsoft models are also supported, and you can create agents using these models as well. The process is similar to Azure OpenAI: you simply create a deployment, specify the model name (whether GPT-4, LLaMA 3, etc.), provide the agent name, and give the instructions for the agent.
+
+One important consideration is that certain tools may only be compatible with specific models. For instance, grounding with Bing Search is one of the knowledge tools for agents. Not every model supports this tool, so it’s crucial to check the documentation before using it. Currently, grounding with Bing Search works only with GPT-3.5 Turbo, GPT-4, and GPT-4 Turbo. If you try to create this knowledge tool with an unsupported model, you will receive a compatibility error.
+
+In summary, always consult the documentation for model and region support as well as tool compatibility. This ensures you select the correct model and region, and that the tools you plan to use will function as expected.
+
+# **F) Quotas & Limits**
+
+Okay folks, this is a quick lecture on Azure AI Agent Service quotas and limits.
+
+Since Azure AI Agent Service is a relatively new service, it’s very important to be aware of quotas and limits before starting production workloads. Microsoft has published these limits clearly, making it easier to plan your usage.
+
+The maximum number of files per agent or thread is around 10,000, whether you are using the API or the Foundry portal. Previously, in Azure OpenAI Studio, the limit was only 20 files. With the Foundry, Microsoft has increased this limit to 10,000 files per agent per thread, which is especially relevant when working with RAG (Retrieval-Augmented Generation) scenarios.
+
+Regarding file sizes, the maximum size for a single file is 512 MB. This applies both when providing knowledge sources to your agents or when using fine-tuning datasets for training or testing. While 512 MB is relatively small, it is expected that this limit may be relaxed in the future.
+
+For all uploaded files combined, the total size that you can upload to an agent should not exceed 100 GB. This includes all chunks or files uploaded together, so it’s important to keep this cumulative limit in mind.
+
+Finally, let’s discuss the agent token limit. Tokens represent chunks of text, such as words, subwords, or characters, that the AI processes. Roughly, one token corresponds to about four English characters, or approximately 750 words per 1,000 tokens. For Azure AI Agent Service, the maximum token limit for an agent is around 2 million tokens.
+
+Being aware of these quotas and limits is essential to avoid issues when creating agents or uploading knowledge sources. Always plan your workloads accordingly to stay within these boundaries.
+
+# **G) Azure AI Agent Service Pricing**
+
+So, obviously, if we are studying such an amazing service, it will come at a cost. You may have read several documents or blogs claiming that Azure AI Agent Service is free to use. Technically, yes, the service itself is free, but the resources and services utilized within the platform will incur costs according to their respective pricing models.
+
+A key component contributing to overall expenses is the Azure OpenAI Service. Azure OpenAI works at three levels:
+
+Standard / On-Demand: Pay-as-you-go pricing based on the number of input and output tokens processed. The cost depends on the large language model (LLM) you choose.
+
+Provisioned Throughput Units (PTUs): Reserved capacity offering predictable costs, suitable for consistent workloads.
+
+Batch API: Provides discounted rates for batch processing, but with a longer turnaround time.
+
+While the Azure AI Agent Service itself does not have a direct price, you will incur costs when using Azure OpenAI models, such as GPT-4, GPT-4 Mini, or GPT-103, as part of your agent deployment.
+
+In addition, certain tools and capabilities may generate additional charges:
+
+File Search and Code Interpreter: These features, part of the Assistance API, will incur separate billing. Even though using these tools may seem simple, such as performing a search query or running a code interpreter, additional costs apply.
+
+Azure AI Search: This is a managed service providing enterprise-scale search integration with AI agents for tasks like RAG. Pricing depends on the number of documents indexed and the query volume.
+
+Knowledge Connections: Integrations with services like Microsoft Fabric, SharePoint, Bing Search, or bringing your own licensed data may incur additional charges and require separate licenses.
+
+Automation Services: Using Azure Functions is currently available, and future integration with Azure Logic Apps may also involve additional billing.
+
+The key takeaway is to not be misled by the term “free”. While the Azure AI Agent Service itself does not have a cost, the underlying services, model usage, knowledge tools, and automation integrations all have separate charges. Always check the pricing pages and plan your usage carefully to avoid unexpected costs.
+
+# **H) Demo: Create a Hub & Project**
+
+First, go to the Azure AI Foundry. From the Foundry, ensure that all your resources are available. Usually, it opens with a prompt; click “Use with AI Foundry” and navigate to AI Hubs.
+
+In AI Hub, we start by creating a new hub, as projects are created inside a hub. You can choose your resource group, for example, Azure AI Resource Group, and select a region, such as East US. Give your hub a friendly name, like Azure AI Hub Agents. Make sure to use a simple name without hyphens, as friendly names are preferred. The default project resource group can be the same resource group you selected.
+
+When you create a hub, it automatically provisions a new Azure OpenAI Service for you. This service is managed behind the scenes by Microsoft and provides access to base models in your Azure subscription. You don’t need to configure anything manually. Once you’ve set the hub name and resource group, click Review and Create. After validation passes, create the hub.
+
+Once the hub is created, we can create a project. The project acts as an endpoint where you will create and deploy your agents. Depending on backend provisioning, this may take a few seconds or minutes. Behind the scenes, Azure also creates associated resources, including a Microsoft Cognitive Service, a storage account, and a key vault. Once deployment is complete, your hub will be fully ready.
+
+After the hub is ready, go to Resources and create a project inside the hub. Remember, the project is contained within the hub. Choose your subscription, assign a resource group, and give the project a name, for example, Azure AI Project for Agents. The project will inherit the hub as its container. Click Review and Create, and your project will be deployed.
+
+At this stage, both the hub and the project will be up and running. Once the project is created, you can start creating and deploying agents inside it. This setup forms the foundation for managing your AI agents within Azure AI Foundry.
+
+# **I) Demo: Create an Agent via Azure Foundry**
+
+Once your Azure AI Hub, project, and AI service are up and running, it’s time to see how to utilize the Azure AI Agent Service within the portal.
+
+Start by clicking on your project and then select “Launch Studio”. This opens the studio or Foundry interface. On the left-hand side, you will see an Agents section, which is what we are primarily interested in. Click on Agents, and you will be prompted to select an Azure OpenAI Service resource. Here, you can choose from the existing connected Azure OpenAI Service resources. This is also where all your agents will be stored.
+
+From this, it’s clear that the foundation of Azure AI Agent Service is still Azure OpenAI. The AI service that gets automatically created as part of your project utilizes Azure OpenAI under the hood. By selecting this auto-created service, you are essentially linking your agents to the Azure OpenAI deployment managed within your subscription.
+
+After selecting the service, you will enter the Azure AI Agent Service interface. Initially, after creating the hub and project, nothing is deployed yet. This screen allows you to deploy a model, as agents run against a specific deployment. The deployment can be a GPT model, such as GPT-4 Mini, or third-party models like Llama.
+
+To deploy, choose a model, for example, GPT-4 Mini, confirm your selection, and assign a deployment name if needed. The deployment type can be set to Global Standard, and then click Deploy. Once deployment completes, a new agent is created. Previously there were no agents, but now your workspace has a functioning agent.
+
+In the next video, we will explore the Agents Playground, where you can interact with your agent and see it in action.
+
+# **J) Demo: Understand the various Knowledge & Action Tools**
+
+
+In the previous video, we saw that your agent gets created automatically. If you look closely, it has been assigned a name, like Agent 672, and it also has an ID, which is based on the assistant. This clearly indicates that the agent is built on top of the Assistants API.
+
+The interface also shows which model or deployment your agent will use, such as GPT-4 Mini. This is why having a deployment in place is important. The deployment could be a Llama model, any of the third-party partners’ models, or the GPT models provided by Azure.
+
+Once you select the agent, you will notice on the right-hand side the agent ID, which is primarily used when interacting programmatically at the coding level. Additionally, it displays the name, the connected Azure OpenAI Service resource, and the deployment associated with this agent. If needed, you can create a new deployment—for example, Mistral or Llama—and connect it to the agent. You can also define a system prompt for the agent.
+
+An important feature to understand here is the distinction between knowledge tools and action tools. Microsoft has categorized these tools to enhance the agent’s capabilities. Under Knowledge Tools, you will see options such as file search, Azure AI search, and grounding with Bing Search. In some cases, a tool might not be compatible with the model you are using; for instance, grounding with Bing Search may not work with GPT-4 Mini in some deployments. Knowledge tools essentially form the knowledge base for the agent, providing the information that your LLM will use to respond intelligently.
+
+Action Tools, on the other hand, enable the agent to perform operations at runtime. Examples include the code interpreter, OpenAPI 3.0-specified tools (which allow integration with your own APIs), custom functions for real-time calculations, and Azure Functions for scalable, event-driven backend operations. By leveraging action tools, the agent can interact with external systems and perform complex tasks beyond simple question-answering.
+
+Overall, this setup gives a comprehensive view of your agent, including its ID, deployment, connected resources, and the tools it can use. In the next lecture, we will explore the Agents Playground, where you can interact with the agent and see these tools in action.
+
+# **K) Demo : Get a Response to your prompt via the Agents Playground**
+
+In this video, we’ll look at how to submit a prompt to your agent and get a response.
+
+To keep things simple, you can start by defining a system prompt or instructions for your agent. For example, you can simply say:
+“You are a helpful agent.”
+
+Next, click Try in Playground. This will automatically open the Agents Playground, and a new thread will be created for you.
+
+Remember, a thread is essentially a collection of messages. Each thread contains the conversation history between the agent and the user.
+
+For this example, after setting the system prompt as “You are a helpful agent”, you can submit a simple query. For instance:
+“Who is the Prime Minister of India? Give bullet points for his achievements.”
+
+The agent responds with information like:
+“As of October 2023, the Prime Minister is Narendra Modi,” along with a list of his achievements.
+
+Within the thread, you can also explore additional features, such as:
+
+Thread files – where you can attach or link files.
+
+Knowledge tools – like file search or code interpreter.
+
+Token usage – the agent provides information about input tokens (66 in this case) and output tokens (341), which is useful for monitoring usage and costs.
+
+You can also view the thread from the Agents tab. Clicking on the thread shows all messages in that session—the messages sent by the user as well as the agent’s responses. This helps you keep track of the conversation history.
+
+This example gives you a practical understanding of how to interact with your agent using the Agents Playground.
+
+In future videos, we will explore:
+
+Using different knowledge tools.
+
+Leveraging the no-code interface via the graphical portal.
+
+Submitting queries and commands using Python code for programmatic control.
+
+By the end of this series, you’ll be comfortable using Azure AI agents both in the portal and programmatically.
+
+# **V) Understanding Azure SDK for Python**
+
+# **A) Introduction to Azure SDK for Python**
+
+I know that if I had shown you just the Agents Playground without explaining how to do this programmatically with Python, it wouldn’t have been enough. So in this lecture, my goal is to give you a complete understanding of how to create and manage Azure AI agents using Python.
+
+We will focus on the Azure AI Projects client library. Currently, there is no separate library specifically for agents—everything is handled through the AI Projects client library. This may change in the future, but this is the current approach.
+
+Here’s what we’ll cover:
+
+Authentication Scenarios
+
+Using development/test environments.
+
+Using production environments (this is what we will focus on for the rest of the course).
+
+We will also demonstrate using the default Azure client methodology, which allows you to authenticate via Azure CLI.
+
+Setting Up Your Environment
+
+Create a Visual Studio Code environment.
+
+Set up Azure CLI in VS Code.
+
+Install the required Python libraries:
+
+azure-ai-projects
+
+azure-identity
+
+Sample Code Execution
+
+Run a simple example to ensure your environment is properly set up.
+
+Creating an Azure AD Application
+
+Register an intra-ID application in Azure AD.
+
+Grant the application the Contributor role within your Azure AI Foundry environment.
+
+By the end of this lecture, you will have a strong foundation for using the Azure SDK for Python to create, manage, and interact with Azure AI agents programmatically.
+
+This is a crucial step for automating your AI workflows and moving from the portal-based playground to a Python-driven development environment.
+
+# **B) What is Azure AI Projects client library for Python**
+
+I’m sure a question might be coming to your mind:
+"So far, we’ve seen how to work with Azure AI Foundry, the Agents Playground, creating agents, and attaching tools… but how do we do this programmatically in Python?"
+
+Well, for that, Azure provides the Azure AI Projects client library. This library is available for Python, and I strongly recommend that you read its documentation. As of the time of recording, it is still in preview mode, so things may change, but currently, this library is the way to work with agents programmatically.
+
+All the upcoming examples in this lecture series will use the Azure AI Projects client library.
+
+Key Highlights of the Library:
+
+Enables developing agents using the Azure AI Agent Service.
+
+Leverages an extensive ecosystem of models and tools:
+
+Models like OpenAI GPT, GPT-4 mini, and others.
+
+Tools such as File Search, Code Interpreter, and other knowledge/action tools.
+
+Support from multiple LLM providers like Microsoft, OpenAI, Meta, Cohere, etc.
+
+Supports a wide range of generative AI use cases.
+
+Prerequisites:
+
+Before using the SDK, ensure you have the following:
+
+Python 3.8 or later.
+
+An Azure subscription.
+
+A project in Azure AI Foundry.
+
+Access to the Project Connect string, which is needed to connect your SDK to the Azure AI project.
+
+Azure Active Directory (Azure AD) authentication via an app registration (Intra ID), which allows secure access.
+
+Authentication Overview:
+
+Token credentials: Interface for dynamically retrieving authentication tokens, so you don’t need to hardcode anything.
+
+DefaultAzureCredential: Simplifies authentication by automatically selecting the best method available:
+
+Environment variables
+
+Managed identity
+
+Azure CLI method
+
+The SDK handles OAuth 2.0 tokens, automatically retrieving, using, and refreshing them, without requiring manual intervention.
+
+Using the SDK:
+
+The main package used is azure-ai-projects.
+
+Authentication typically involves using the DefaultAzureCredential along with the Project Connect string.
+
+Once authenticated, you can create agents programmatically:
+
+Specify the model name (which corresponds to the deployment in Azure OpenAI).
+
+Give a name for the agent.
+
+Provide instructions/system prompts for the agent.
+
+Later, you can attach tools such as:
+
+Enterprise file search
+
+Code interpreter
+
+Bing grounding
+
+Custom functions and Azure Functions
+
+This library essentially gives you the same capabilities as the portal, but programmatically via Python, allowing you to fully automate agent creation, tool attachment, and deployment.
+
+In the upcoming lectures, we will go step by step into creating agents, attaching all types of tools, and using the Python SDK for advanced workflows.
+
+So rest assured—you are in safe hands and will be able to do everything via code just like you did in the portal.
+
+# **C) Demo: Create VSCode Environment & setup Azure-CLI**
+
+In this quick video, we’ll showcase how to use the Azure SDK with Visual Studio Code, specifically leveraging the Azure CLI method.
+
+As I mentioned earlier, there are two ways to authenticate:
+
+Azure CLI method – useful for development or test environments.
+
+Production method – involves creating an app registration and assigning it the contributor role. This will be covered later in the course.
+
+For now, let’s focus on the Azure CLI method and how it works with DefaultAzureCredential in Python.
+
+Step 1: Setting up Visual Studio Code
+
+Open Visual Studio Code.
+
+Create a new folder, for example, agents_practice.
+
+Open the folder in VS Code to start your environment.
+
+Step 2: Creating a Python Virtual Environment
+
+Open a new terminal in VS Code.
+
+Run the following command to create a virtual environment:
+
+python3 -m venv agents
+
+
+Here, agents is the name of your virtual environment.
+
+Activate the virtual environment:
+
+source agents/bin/activate
+
+
+Your terminal should now show that the virtual environment is active.
+
+Step 3: Installing Azure CLI
+
+On Mac, you can install Azure CLI using Homebrew:
+
+brew update
+brew install azure-cli
+
+
+brew update ensures your Homebrew is up to date.
+
+brew install azure-cli installs the Azure CLI.
+
+On Windows, follow the official Microsoft documentation for installation.
+
+Once installed, verify the version using:
+
+az --version
+
+Step 4: Logging into Azure
+
+Run the following command to log in:
+
+az login
+
+
+This will open a browser window for login.
+
+Complete the authentication, including MFA if prompted.
+
+Once logged in, you can close the browser window and return to VS Code.
+
+Select the Azure subscription to use (for example, subscription 1).
+
+The beauty of using DefaultAzureCredential is that your code will automatically pick up your CLI login credentials without hardcoding anything.
+
+Step 5: Ready to Use SDK
+
+Now that your virtual environment is active, Azure CLI is installed, and you are logged in, you are ready to start writing Python code to create and manage your agents.
+
+In the next lecture, we’ll dive into actually creating an agent programmatically using the SDK.
+
+# **D) Execute the Sample Code**
+
+In this video, we’ll go through a Python example (example.py) that demonstrates how to use the Azure SDK for Python to create and interact with an AI agent.
+
+Step 1: Understanding the Imports
+
+At the top of the code, we import some libraries:
+
+import os
+from azure.ai.projects import AIProjectClient
+from azure.identity import DefaultAzureCredential
+
+
+os: Standard Python module for interacting with the operating system.
+
+AIProjectClient: From the Azure AI Projects SDK, it allows you to manage AI agents and their operations.
+
+DefaultAzureCredential: From Azure Identity SDK, it automatically handles authentication using environment variables, managed identities, or Azure CLI login. Since we’re using Azure CLI, it will use that authentication path.
+
+Step 2: Project Connection String
+
+The project connection string is required to connect to your Azure AI project.
+
+You can find it in your Azure AI Foundry project.
+
+Simply copy it into your project_connection_string variable.
+
+The connection string contains:
+
+Region (e.g., East US)
+
+Project UUID
+
+Resource group (e.g., Azure OpenAI Resource Group)
+
+Service type
+
+This string provides credentials and metadata to connect to your project.
+
+Step 3: Initializing the AI Project Client
+project_client = AIProjectClient.from_connection_string(project_connection_string)
+
+
+This initializes the AI project client using your connection string and default credentials.
+
+Using a with statement ensures resources are properly managed and closed when done:
+
+with project_client:
+    # Your code here
+
+Step 4: Creating an AI Agent
+
+Inside the client session, you can create an AI agent:
+
+agent = project_client.create_agent(model="GPT-4-mini")
+
+
+model="GPT-4-mini": This deployment should already exist in your project.
+
+The agent will act as your conversational AI model.
+
+Step 5: Creating a Thread
+thread = agent.create_thread()
+
+
+A thread acts as a session or context for conversations.
+
+It keeps the conversation stateful.
+
+Step 6: Sending a User Message
+user_message = "Who is the PM of India?"
+thread.add_message(user_message)
+response = thread.run()
+
+
+Sends the message to the agent.
+
+The agent processes it and generates a response.
+
+Step 7: Handling the Response
+
+To extract the agent’s response from the thread, you can access the messages:
+
+messages = thread.messages
+for msg in messages:
+    print(msg.content)
+
+
+Important: If you don’t use messages[0].content or similar, you may get a raw JSON response.
+
+Step 8: Cleaning Up
+agent.delete()
+
+
+Deletes the agent to keep things simple after execution.
+
+Step 9: Required Libraries
+
+Make sure to install these libraries in your environment:
+
+pip install azure-ai-projects
+pip install azure-identity
+
+
+After installing, you can run the script.
+
+Expected output: the agent responds, for example:
+
+"As of my last knowledge, the Prime Minister of India is Narendra Modi..."
+
+# **E) Understand the Workflow for Agent Creation**
+
+Before we start creating agents, it’s important to understand the complete workflow and the steps involved in the process. Since we’ll be working inside the Azure AI Foundry with a project and a hub, it’s crucial to know how to authenticate properly and what additional artifacts come into play when creating agents.
+
+The first step is straightforward: we need to create a project and a hub. We’ve already seen in earlier lectures how to do this using the AI.Azure.com portal. In this series of lectures, I’ll also show you how to do it directly inside the portal itself and explain what happens if there’s no existing Azure OpenAI service running.
+
+Once the project and hub are created, the next step is to create a deployment for the model you intend to use. For instance, if you want to use GPT-4 or GPT-4-mini, you must create a deployment for that specific model. This deployment ensures that the model is available for your agent to interact with.
+
+After creating the deployment, you need to create an Azure Active Directory (Azure AD) application, also known as an app registration. This app registration is required for authentication purposes so that your code can securely access the Azure AI project and its resources. Once the app registration is created, you must also create a secret for the application. This secret will be used in your Python code or SDK calls to authenticate the client.
+
+A very important step is assigning the Contributor role to the application for the project you created. Without this, the app will not have sufficient permissions to interact with the project, and authentication will fail. This is often a tricky part where many users get stuck, so ensuring that the app has contributor access is essential for smooth agent creation.
+
+To summarize, the steps for agent creation are as follows: first, create a hub and a project in Azure AI Foundry; second, create a deployment of the model you wish to use, such as GPT-4-mini; third, create an Azure AD application (app registration); fourth, generate a secret for the app; and finally, grant contributor access to the app for the project. Following these steps ensures that authentication works seamlessly and that you can proceed with creating and interacting with your agents without any issues.
+
+# **F) Demo: Create Azure AI Project via Azure AI Foundry**
+
+Now we are ready to start with the first step: creating your project and hub. To do this, go to Portal.azure.com and navigate to Azure AI Foundry. Since no resources exist yet, you will see a plus icon. Inside the Foundry, you have the option to create both a project and a hub. We start by creating a hub. When creating a hub, it will ask for your subscription and resource group. You can either pick an existing resource group or create a new one. You also need to select the region, such as East US, and give your hub a friendly name. For example, we can call it Azure AI Hub Agents. The default project resource group will also be selected, and the system automatically provisions an Azure AI service as part of the hub creation. This service, behind the scenes, points to an Azure OpenAI service, which is automatically created for you. Once all the details are filled, click Review and Create. After validation passes, the hub will be created. It’s important to note that a hub must be created first because projects are created inside a hub.
+
+Once the hub is created, you can go back home and see that the hub now appears in your Foundry. Along with the hub, the pre-created Azure AI service will also appear, which is internally linked to an Azure OpenAI resource. Now that the hub is ready, you can proceed to create a project. Again, select the resource group, give the project a name, such as Azure AI Project for Agents, and make sure to select the hub you just created. This step is crucial because the project must be associated with a hub. After validation, the project creation will begin. The deployment usually takes less than a minute, and once it completes, your project will be up and running.
+
+At this point, you should have all three resources available in your Foundry: the hub, the project, and the Azure AI service created in the background. These resources form the foundation for creating and deploying agents. In the next lecture, we will dive into deployment configuration and see how to set up the model for the agents.
+
+# **G) Demo: Create Entra ID Application & Grant Contributor access**
+
+The step we are going to work on is crucial for authentication. This may be new to some, but it’s important to understand. We need to create an app registration, which will be used for authenticating our Azure AI project. As mentioned in the workflow, this app must also be granted contributor access to the Azure AI project we created. To do this, go to Microsoft Entra ID, then navigate to App Registration. Click on Add to create a new app registration. For the user-facing display name, enter something like Application for Agents, and click Register. Once the application is registered, the next step is to create a client secret, which will be used in our code for authentication. Go to the newly created application, navigate to Certificates & Secrets, and create a new client secret. Give it a name, such as MySecret, set an expiration (six months is common), and click Add. This secret will now appear in the list and will be used in your Python or SDK code for authenticating the app.
+
+After creating the app registration and the client secret, the final step is to grant contributor access to the project. Go back to your Azure portal, navigate to Azure AI Foundry, and open your Azure AI Project for Agents. Under Access Control (IAM), go to Role Assignments and click Add Role Assignment. In the role selection, choose Contributor, which grants full access to manage all resources without allowing role assignments. Next, for assign access to, select Service Principal, as our app registration is a service principal. Click Select Members, choose Application for Agents, and confirm. Finally, click Review and Assign to complete the process. Once done, you will see the application listed as a Contributor under role assignments with the type Service Principal. This step is extremely important; without it, authentication for Azure AI agents will fail, and you will face issues when interacting with your agents.
+
+# **VI) Azure AI Agent Service Action Tools- Function Calling**
+
+# **A) Intro to Function Calling**
+
+As I mentioned in the previous lecture, the Azure AI Agent Service includes knowledge tools and action tools. In this series of lectures, we will focus on the first action tool, which is function calling. I have chosen function calling as the first topic because we already covered a lecture on function calling with the Assistants API, and this allows us to draw comparisons between the number of lines of code required with the Assistants API versus what is actually needed for the Agents API. In this lecture, we will first understand the workflow for the agent that we will be creating. We will then review the various environment variables that are required, install the important libraries, and set up the environment. Following that, we will go through the “get weather” function and demonstrate how to call your Azure AI agent, specifically the weather agent, using function calling. Remember, function calling is one of the action tools provided by the Azure AI Agent Service. Looking forward to seeing you in the lectures.
+
+# **B) Demo: Create a new Deployment inside Project**
+
+This will be a very quick video where we will create a new deployment inside the Azure AI project. As we discussed previously with Azure OpenAI services, whenever you want to use an LLM or any model, you first need to create a deployment for it. This step is essential before you can start using the model in your agents or code.
+
+To start, select your project, which in this case is Azure AI Project for Agents, and go to Launch Studio. Once the studio launches, you will be inside the Azure AI Foundry, within the project. From here, navigate to Models + Endpoints, where you have the option to create a new model deployment.
+
+When creating a deployment, begin with a base model. For our example, you can select GPT-4 or Mini as the model. Confirm your selection, and it will provide you with details such as the deployment name and type. Choose the Global Standard deployment type. The capacity settings, such as 250K tokens per minute, are generally sufficient for most use cases.
+
+Once you finalize the options, click Deploy, and your deployment will be created with the name GPT-4 or Mini. This deployment name is crucial because, when you start coding, you will reference this exact deployment to access the LLM and utilize its generative capabilities in your agent workflows.
+
+# **C) Demo: Understand the Workflow for Weather Agent**
+
+This is a very quick video to understand the workflow of the weather agent that we’ll be creating. The workflow here is very similar to what we did previously with the Assistance API. The main difference is that, in this case, the user is making a call to an AI agent, not the Assistance API.
+
+With an agent, there are usually tools associated with it. For this example, the tool we are using is function calling. The function we will call is a third-party API, specifically the OpenWeatherMap API.
+
+The beauty of this approach is that the user can request information in natural language. For example, the user can simply say, “Get me the weather in London.” Normally, the OpenWeatherMap API requires latitude and longitude as input. In our code, we don’t provide the latitude and longitude directly.
+
+Behind the scenes, the LLM powering the agent understands that the API needs latitude and longitude. It converts “London” into its corresponding latitude and longitude, sends this to the third-party API, retrieves the weather information, and then generates a friendly, human-readable weather report.
+
+This is the core workflow of the weather agent, demonstrating how agents can seamlessly translate natural language input into API calls and return meaningful outputs.
+
+# **D) Demo : Understand the Environment Variables**
+
+Welcome back. In this lecture, we’ll understand the various environment variables that we’ll be using, which is a very important step when setting up your environment. You should follow along while building your environment to ensure everything works smoothly.
+
+The key environment variables we’ll be using include client ID, client secret, and tenant ID, which are all related to the app registration we created earlier. In addition, we need the project connection string, which is required to connect to our Azure AI Foundry project. Finally, since our agent will call a third-party API for weather data, we also need the OpenWeatherMap API key.
+
+To get the client ID, go to your app registration in Azure, copy the client ID, and add it to your environment variable file. The client secret is created under Certificates & Secrets in the app registration; copy the secret ending with the specified suffix and add it to your environment file. The tenant ID, also called the directory ID, can be retrieved from the same app registration and should be added to your environment file as well.
+
+Next, the project connection string can be found in your Azure AI project. Go to the portal, open your project, and click Launch Studio. The project details will display the connection string, which you can copy and add to your environment file.
+
+Finally, for the OpenWeatherMap API key, go to openweathermap.org, create a free account if needed, navigate to API keys, and create a key. Copy this key and add it to your environment file.
+
+With these environment variables set up, you now have a clear understanding of what is required. In the next steps, we will start implementing the code step by step to get your AI agents up and running.
+
+# **E) Demo : Install Libraries and Setup Enviornment**
+
+In this lecture, we’ll start going through our code step by step to understand how it works. One of the advantages of using Azure AI agents, as Microsoft documents, is that it requires significantly less code—hundreds of lines less compared to the Assistants API.
+
+The first step in the code is to install the necessary Python libraries. We install Azure AI Projects SDK and Azure Identity Library for authentication, along with python-dotenv to handle environment variables. You can install these using:
+
+pip install azure-ai-projects azure-identity python-dotenv
+
+
+The Azure AI Projects SDK is used to interact with Azure AI services, such as creating AI agents, managing tools, and handling conversations. The Azure Identity Library simplifies authentication with Azure services, handling OAuth 2.0 tokens securely without manual intervention. This is where our earlier setup with the app registration and secrets comes into play. Finally, python-dotenv is used to load environment variables from an .env file.
+
+The environment file, which in this case is API_settings.env, contains all the necessary variables like client ID, client secret, tenant ID, project connection string, and OpenWeatherMap API key. The code uses load_dotenv to load this file, and then the variables are fetched using os.getenv(). This ensures that all sensitive credentials and API keys are securely loaded from the environment and can be used in the program.
+
+After setting up the environment variables, the code initializes these variables with the fetched values. Once this is done, the setup is complete, and we are ready to move on to calling the function inside the program.
+
+# **F) Demo: Understand the Get_Weather Function**
+
+Now we move on to the second part of the program, and this part of the program is where we are setting up or showing our function definition for the get_weather function. This get_weather function is directly mapped to the OpenWeatherMap third-party API that we are going to use. The best way to understand this is to visit openweathermap.org and look at how its API call is made. If you notice, we are calling api.openweathermap.org and the API takes the input as latitude, longitude, and the API key. So nowhere are you mentioning any city here, and that’s the beauty I keep mentioning about OpenAI or the LLM here—you only give latitude and longitude, and the model handles the rest. So now let’s go back into the code and see how we do this. 
+
+First, we import the required libraries. We import os for accessing environment variables, then json to handle the weather data in JSON format. We also import requests, which is required to make HTTP requests to the OpenWeatherMap API, because the URL we create is essentially an HTTP request that is sent to their API. Then we import typing, which is used for giving type hints in Python. After that, we start defining our function. This function is meant to get weather information, and as I already showed you, the API takes latitude and longitude as inputs. So we define the function get_weather with parameters latitude and longitude, both as floats, and very importantly, this function returns the weather details in JSON string format. Then, we perform validation—we check whether the latitude and longitude are valid values; otherwise, errors could occur. After validating, we set up our API key because the API key needs to be passed as part of the request. We fetch this API key from the environment variables. Then we start building our actual API request. To call this API, we must construct the request URL. We first define the base URL, and then we construct the full URL by combining the base URL with the latitude, longitude, and API key parameters. After that, we handle API response errors. If the response status code is not equal to 200, we raise an error because something went wrong with the API request. Then we extract the weather details from the response JSON—specifically, we extract the weather condition (the current weather description) and the temperature (the current temperature). Finally, we return the weather details in JSON format. 
+
+As I said earlier, we give latitude and longitude as inputs, but the response we get back is a JSON structure containing the latitude, longitude, weather condition, and temperature. And now comes a very important part—this is something new with Azure AI Agents. Here, we add the get_weather function to a set of functions that can be used by the AI Agent. In the next part of the code, the agent will actually call this function. That is why it’s important to register this function so the agent knows which functions it is allowed to use. Right now, we have only one function, but if we want more in the future, we can simply add them using commas. So this part of the code executes fine, which is good. Now we can move on to the last part where we will see how to create the agent, call the agent, and where the real magic happens. Thanks for watching.
+
+# **G) Demo: Calling your Azure AI Agent**
+
+So finally, we are in the heart of the program where we actually create and call the Azure AI agent, so let’s take a look. The first thing we do is import the important libraries, starting with os, which allows us to interact with the operating system and is required because we need to access environment variables. Then we import json because we will be working with JSON data—remember, we are sending latitude and longitude information and receiving data back in JSON format. Next, we import requests, a very important library since we need to make HTTP or HTTPS requests to interact with APIs. Then we have three important imports from azure.ai.projects: we import the AIProjectClient, which is the main class for interacting with Azure AI Projects, and this is used to create agents, send messages, and manage conversations. After that, from azure.identity we import ClientSecretCredential, which is critical for authentication with Azure services; this is where all the earlier hard work around app registration and secret creation comes into play because this class uses the client ID, client secret, and tenant ID and simplifies acquiring the access token for secure API calls. Next, from azure.ai.projects.models we import FunctionTool and ToolSet. FunctionTool wraps a Python function so that the AI agent can use it as a tool—remember, the agent must have tools available to perform actions, and in this case we are using a function-calling tool. ToolSet represents a collection of tools available to the agent, and together these allow the agent to call custom functions such as our get_weather function.
+
+Then we move to the main execution block where we configure Azure credentials using environment variables. Here, we authenticate with Azure using a service principal, and the key parameters required are the tenant ID, client ID, and client secret. We use os.getenv to read these values from the environment, and then we create a ClientSecretCredential object, which handles obtaining OAuth tokens for our API calls—this entire section is purely on the authentication side. After that, we initialize the Azure AI Project Client, whose purpose is to create an authenticated client for interacting with Azure AI Projects. The key inputs here are the credential we created above and the connection (connectivity) string. The client establishes a connection using these inputs, enabling us to create agents, send messages, and manage conversations with Azure AI Services. Once the project client is ready, we then create the Azure AI Agent.
+
+Before creating the agent, we prepare the toolset with our custom function. This is done by wrapping our function using FunctionTool, referencing the function defined earlier, and then instantiating a ToolSet. We add our function tool to this toolset using toolset.add(). With the toolset ready, we move on to creating the Azure AI Agent. Here the purpose is to define and deploy the agent. The key parameters include the model (GPT-4 or GPT-4-mini), the agent name (WeatherAgent), and the instructions telling the agent that it is a helpful weather agent. While creating the agent, we also attach the toolset so the agent knows it can call the get_weather function when needed.
+
+Next, we create a conversation thread using project_client.agents.create_thread(), which sets up a new session with the AI agent. Then we enter an interactive conversation loop, where the system continuously waits for user input until the user types “end.” Inside this loop, the code sends messages to the agent using agents.create_message, where the user’s query is processed by the model and the tools if needed. We also have error handling in place. Then the run is created, and we check whether the run state has failed or not. We fetch the agent’s response using list_messages, which retrieves all messages in the thread and prints the agent’s reply. At the end, we optionally perform cleanup because if the code is run repeatedly, many agents may get created, and cleaning them up avoids unnecessary clutter. Finally, when we execute everything and test it by saying “Give me a friendly weather report for London,” we do not provide latitude or longitude anywhere. The agent internally resolves London to its coordinates, calls the OpenWeatherMap API, and returns the weather report. The output comes back like: “Wow, it’s a pleasant day with few clouds…” and so on, which matches the live weather because it just fetched the real-time information. The whole point is that we created an agent that could get a weather report for us exactly like we did with the Assistants API earlier, but now with Azure AI Agents the code is much shorter, cleaner, and more efficient. Thanks for watching.
