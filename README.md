@@ -128,6 +128,65 @@
 
 **G) Demo: Calling your Azure AI Agent**
 
+**VII) Azure AI Agent Service Action Tools - Code Interpreter**
+
+**A) Intro to Code Interpreter**
+
+**B) What is Code Interpreter ?**
+
+**C) Understand the Input Data - sales_data.csv**
+
+**D) Demo: How to use CI in Agents Playground**
+
+**E) Demo: Understand the Workflow for Graph Generator Agent**
+
+**F) Demo: Upload the sales_data.csv & Environment variables file**
+
+**G) Demo:Understand the Creation of Agent**
+
+**H) Demo: Create Thread and Message Convesation**
+
+**I) Demo: Run the Agent & Create Graphs**
+
+**VIII) Azure AI Agent Service Action Tools - OpenAPI 3.0**
+
+**A) What is OpenAPI 3.0 ?**
+
+**B) Understanding the Workflow for Yahoo Finance**
+
+**C) Demo: Create RapidAPI Key**
+
+**D) Demo: Create a Connection to RapidAPI in Azure**
+
+**E) Demo: Create a Stocks Agent and Attach OpenAPI 3.0**
+
+**F) Demo: Test the Stocks Agent in Playground**
+
+**G) Demo: Install the Libraries and Setup Environment**
+
+**H) Authenticate/Initialize/ Load OpenAPI Spec**
+
+**I) Get Connection / Create Auth Object / Create OpenAPI Tool**
+
+**J) Create Agent / Thread / Conversation Loop**
+
+**K) Execute the Program and run Queries**
+
+**IX) Azure AI Agent Service Knowledge Tools - Bing Search**
+
+**A) Intro to Grounding with Bing Search**
+
+**B) What is Grounding with Bing Search ?**
+
+**C) Demo : Create a Bing Search with Agent Service**
+
+**D) Demo: Create a Bing Resource & Create Connection**
+
+**E) Demo: Setup environment & install libraries**
+
+**F) Demo: Understand the Code**
+
+**G) Demo: Execute the Code**
 
 
 # **I) Intro to AI Agents:**
@@ -1496,3 +1555,477 @@ Then we move to the main execution block where we configure Azure credentials us
 Before creating the agent, we prepare the toolset with our custom function. This is done by wrapping our function using FunctionTool, referencing the function defined earlier, and then instantiating a ToolSet. We add our function tool to this toolset using toolset.add(). With the toolset ready, we move on to creating the Azure AI Agent. Here the purpose is to define and deploy the agent. The key parameters include the model (GPT-4 or GPT-4-mini), the agent name (WeatherAgent), and the instructions telling the agent that it is a helpful weather agent. While creating the agent, we also attach the toolset so the agent knows it can call the get_weather function when needed.
 
 Next, we create a conversation thread using project_client.agents.create_thread(), which sets up a new session with the AI agent. Then we enter an interactive conversation loop, where the system continuously waits for user input until the user types “end.” Inside this loop, the code sends messages to the agent using agents.create_message, where the user’s query is processed by the model and the tools if needed. We also have error handling in place. Then the run is created, and we check whether the run state has failed or not. We fetch the agent’s response using list_messages, which retrieves all messages in the thread and prints the agent’s reply. At the end, we optionally perform cleanup because if the code is run repeatedly, many agents may get created, and cleaning them up avoids unnecessary clutter. Finally, when we execute everything and test it by saying “Give me a friendly weather report for London,” we do not provide latitude or longitude anywhere. The agent internally resolves London to its coordinates, calls the OpenWeatherMap API, and returns the weather report. The output comes back like: “Wow, it’s a pleasant day with few clouds…” and so on, which matches the live weather because it just fetched the real-time information. The whole point is that we created an agent that could get a weather report for us exactly like we did with the Assistants API earlier, but now with Azure AI Agents the code is much shorter, cleaner, and more efficient. Thanks for watching.
+
+# **VII) Azure AI Agent Service Action Tools - Code Interpreter**
+
+# **A) Intro to Code Interpreter**
+
+Welcome to this series of lectures on the second action tool, which is the Code Interpreter.
+
+So, what is a code interpreter?
+
+The Azure OpenAI Code Interpreter is a tool that allows users to run Python code inside a secure sandbox environment. This enables safe data analysis, complex calculations, and automation directly within chat-based interactions. The beauty of the Code Interpreter is that it is designed specifically to help with data analysis, and that’s exactly what we are going to focus on throughout this set of lectures.
+
+Our plan is simple: we will first try everything inside the Agents Playground. I will show you how to use the Code Interpreter as an action tool within the agent environment. We will work with a sample sales dataset, upload the data, and then ask the Code Interpreter—through our agent, which will be a Graph Generator Agent—to explain what the dataset contains. After that, we’ll ask it to create some interesting visualizations, and you’ll be amazed by the quality of the graphs it generates.
+
+Once we explore this in the playground, we will replicate the entire workflow inside a Python script. I will provide you with the Python code that shows how to use the Code Interpreter action tool within your own agent programmatically. This will allow you to achieve the same results directly through your code.
+
+# **B) What is Code Interpreter ?**
+
+Now it’s time to take a look at one of the first tools in the Assistants API. In the previous videos, I mentioned that there are mainly three tools available today within the Assistants API:
+
+Code Interpreter
+
+File Search
+
+Function Calling
+
+In this video, we’ll focus on understanding what the Code Interpreter is.
+
+To begin with, I’ve taken one of the OpenAI tweets that announced this feature. I’ll read it out and then explain it in more detail so that the concept becomes clearer.
+
+The tweet describes the Code Interpreter as an experimental ChatGPT model that uses Python. This means that behind the scenes, everything it does is powered by Python. It can handle file uploads and downloads, which means you can upload files to it and you can also download output files that it generates.
+
+OpenAI explains that they provide the model with a fully functional Python interpreter running in a sandbox environment. This is a key point: the environment is sandboxed and completely firewalled, ensuring that any code running inside it remains fully isolated. It is also backed by a small, ephemeral disk space, which persists only for the duration of the chat session. So as long as the conversation continues, the session remains active, and subsequent actions can build on previous results.
+
+In simple terms, the Code Interpreter allows the assistant to write and execute Python code within an isolated execution environment. But what does this sandbox environment really mean? Whenever a service needs to execute code — such as Python scripts — it does so inside a sandbox to ensure isolation. This isolation prevents any harmful or unintended code from affecting the underlying system or accessing unauthorized data. So the Python execution happens in a safe, isolated space, which is extremely important when dealing with unknown or potentially risky code.
+
+The tool can process files with diverse data and formats. You’ll see that it can accept inputs in the form of CSV files, PDF files, and many other formats. It can even generate files with data — including visualizations and graphs. We’ll explore all of this in the upcoming demos.
+
+One of its core capabilities is code analysis. It can analyze a code snippet submitted through the API, understand the purpose of the code, and describe what it does. For example, if you provide a piece of Python code and ask what the code does, the Code Interpreter can not only explain it but also execute it safely inside the sandbox to verify the output. This becomes particularly useful when you're dealing with unfamiliar code or code from an untrusted source.
+
+A practical example might be using the assistant to execute Python code to analyze a dataset while ensuring that the integrity and security of your production environment are not impacted. Since the sandbox isolates all activity, there is zero risk of malicious code affecting your system.
+
+Next, we talk about supported languages. Even though the internal execution happens in Python, the Code Interpreter can understand and interpret code written in various programming languages. It can analyze code written in Java, C++, and many others. As the name suggests, it interprets the code — even if it cannot execute it natively. For example, you could provide Java code that sorts an array, and the tool will interpret or simulate the logic to show you the expected output, confirming the functionality across languages.
+
+It also supports various file formats. You can upload files containing code — such as .py, .cpp, or .java files — as well as plain text files. For instance, a user can upload a C++ script for debugging or review, and the tool will read and process it accordingly.
+
+Now comes one of the most impressive aspects: the capabilities that go beyond interpretation. Although the name suggests that it only interprets code, the Code Interpreter goes far beyond that. It can suggest code fixes, generate fresh code snippets, improve your existing code, and iterate on code that fails to run. If the assistant writes code that doesn’t execute correctly, it can automatically attempt different versions until it succeeds. This iterative intelligence makes it far more powerful than a simple code interpreter.
+
+When we move to parallel processing, the assistant can use the Code Interpreter alongside other tools such as File Search. This allows for more comprehensive workflows. For example, while processing a Python script, the assistant might simultaneously use File Search to look for related documentation or additional context, making problem-solving faster and more accurate. In programming scenarios, you define the tools the assistant can access, and the assistant intelligently selects them when required.
+
+Another important aspect is the model choice. Assistants API leverages the latest OpenAI or Azure OpenAI models, which come with larger context windows and more up-to-date training data. Using advanced models allows the Code Interpreter to understand more complex projects with multiple files, enabling it to provide highly accurate and helpful feedback.
+
+One crucial point that many people overlook is that the Code Interpreter is a billable service. While the Assistants API itself is free, the Code Interpreter and File Search tools are not. They incur additional charges on top of standard Azure OpenAI usage costs, which are based on input and output tokens. So you must account for additional charges while using the Code Interpreter.
+
+For example, if a company uses the Code Interpreter to review or enhance their software, they will incur charges based on the interpreter’s usage time and the resources consumed.
+
+So now, we have a complete theoretical understanding of what the Code Interpreter is. It doesn’t just interpret code — it analyzes, executes, debugs, fixes, generates files, generates graphs, and even iterates intelligently through code until it works. And all of this happens in a secure, isolated sandbox environment.
+
+In the next demos, we will explore these capabilities hands-on and see how powerful this tool truly is.
+
+# **C) Understand the Input Data - sales_data.csv**
+
+This will be a series of lectures focused on Azure AI Agents using the Code Interpreter. One of the strongest advantages of the Code Interpreter is its ability to perform data analysis and data visualization, and that is exactly one of the key use cases we will be putting to the test throughout this series.
+
+To demonstrate this, we need some input data. So I’ve prepared a sample sales dataset, which we will be working with. We’ll be uploading a file named sales_data.csv as the input to our agent. The Code Interpreter needs this dataset so it can analyze and visualize the information we provide.
+
+The structure of the dataset is very simple. It contains three or four columns: Date, Product, Revenue, Profit
+
+In essence, we are giving the model a list of dates, a list of products, and the corresponding revenue and profit numbers. Think of it as a company wanting to understand which product generated the maximum sales and which product contributed the highest profit. These are exactly the types of insights we will be looking for.
+
+Once the file is uploaded, we will test the Code Interpreter by asking our AI assistant—or AI agent—to analyze the data and generate some interesting visualizations for us. The exciting part is seeing what kinds of graphs and insights it produces automatically.
+
+# **D) Demo: How to use CI in Agents Playground**
+
+This lecture is going to be an interesting one because here we will explore how to use AI Agents together with the Code Interpreter, and we’ll also walk through the Agents Playground. To begin, you simply need to go to your Azure AI Foundry. From there, select the appropriate project — in our case, it is the Azure AI Project for Agents. Once selected, click Launch Studio.
+
+When the studio loads, you’ll notice that an agent has already been created automatically. It displays an agent ID and assigns a default name, which you can change to something like agent_code_interpreter. It also shows the associated Azure OpenAI resource. As discussed earlier, every Azure AI Agent is always linked to an Azure OpenAI resource. We will make use of an existing deployment, such as GPT-4 or GPT-4 Mini. In later lectures, we can experiment with additional deployments, but for now we’ll keep things simple.
+
+Next, you’ll see a section where you define your agent’s instructions. For this scenario, we’ll specify that the agent is responsible for data analysis and data visualization. These are the two primary capabilities we want from our agent.
+
+We won’t be using the Knowledge feature here, but we will make use of Actions. When you click Add, you’ll see that one of the available tools is the Code Interpreter. Select it. Then choose your input file—the same file we discussed earlier, sales_data.csv. Upload it and save the configuration.
+
+With that, your agent is fully set up. You can even check the Threads section, where you’ll notice that a thread has been created automatically. Now, return to Agents and click Try in Playground.
+
+In the playground, you’ll get a chat interface. For example, you can begin by asking: “What is the uploaded data all about?” The agent will process the request using the Code Interpreter and respond with a summary—explaining that the dataset contains columns such as date, product, revenue, and profit.
+
+Next, you can ask: “Can you create some interesting graphs for me?” The agent will analyze the data and suggest different types of visualizations. For instance, it may propose a pie chart showing the distribution of total revenue across products. If you like that one, you simply say: “This one.” It will generate the graph for you.
+
+You can then request another visualization — for example, a scatter plot — and the agent will create that as well. It’s incredibly intuitive and powerful.
+
+So that’s how you use the Code Interpreter inside AI Agents and interact with it through the Agents Playground.
+
+# **E) Demo: Understand the Workflow for Graph Generator Agent**
+
+This will be a quick video demonstrating the overall workflow for creating and running an agent using Azure AI Projects, specifically with the Code Interpreter tool. The idea is straightforward: the user submits a request to an Azure AI agent, and the agent—equipped with specific tools—in this case, the Code Interpreter—executes Python code, retrieves the results, and returns the response back to the user. This entire workflow is what we will be walking through in this session.
+
+The first step involves setting up the environment and credentials. For this, we will upload the sales_data.csv file into our Google Colab environment. We will also upload our credential file, the API settings environment file, just as we did in previous lectures. These two files are essential to ensure proper configuration and authentication.
+
+Next, we will create an AI agent using the Code Interpreter tool. As mentioned earlier, every agent uses a defined toolset, and the tool we are focusing on in this video is the Code Interpreter. After the agent is created, we work with concepts such as threads, runs, run steps, and messages. A thread represents a conversation session between the user and the agent. All exchanges—questions, responses, and any data—flow through messages within that thread.
+
+The agent will process the user’s input, execute the code through the Code Interpreter, handle its responses, manage file outputs, and also deal with any error handling. Since our goal is data visualization, we will provide the sales data, ask the agent to explain what the data is about, and then request it to generate various graphs—similar to what we did earlier in the Agents Playground. Whenever the agent creates a graph, it generates an image file such as a PNG, and that file will also be saved so you can access it later if needed.
+
+Finally, although optional, we will look at deleting the agent once we are done. This is good practice because if you repeatedly run code that creates agents, your Azure AI Foundry environment will accumulate a large number of unused agents. Clearing them helps keep your workspace tidy and efficient.
+
+With that overview covered, we are ready to move on and start working through the program.
+
+# **F) Demo: Upload the sales_data.csv & Environment variables file**
+
+This is going to be an important lecture.
+
+In this session, we’ll actually be uploading two essential files to our environment:
+the sales_data.csv and the environment variables file.
+
+Both of these are crucial—especially the environment file—because all authentication for our Azure AI agents will rely on those values.
+
+Let’s go step by step.
+
+First, inside Google Colab, click on the left panel and upload the required files.
+You’ll need to upload:
+
+The API settings file – this contains all the environment variables we’ll use.
+
+The sales data CSV – the dataset we already reviewed.
+
+Once uploaded, you’ll see both files listed in your workspace.
+
+The environment file contains values such as the client ID, client secret, tenant ID, and project connection string.
+We’ve already discussed each of these in earlier lectures—how to generate them and where they come from.
+These values are fetched from your Azure AD app registration and your Azure AI Project configuration.
+
+If you haven’t watched those lectures, I strongly recommend revisiting them, because everything we’re doing here builds on that foundation.
+
+Next, we’ll install the three essential Python libraries:
+
+azure-ai-projects → used to interact with Azure AI Projects via the API
+
+azure-identity → handles authentication using the credentials in your environment file
+
+python-dotenv → loads variables from the .env file into the notebook session
+
+Once these libraries are installed, we’ll load the environment file and set each parameter—client ID, client secret, tenant ID, and project connection string—so they’re available for the rest of our code.
+
+You’ll also see a quick confirmation printed out, showing that our environment variables are successfully loaded.
+
+With this setup in place, our Azure resources—like the AI Hub, Project, and associated components—are ready to be accessed by our agent.
+
+In the next lecture, we’ll move ahead with uploading the sales file to the agent, creating the agent instance, and initializing the thread.
+
+# **G) Demo:Understand the Creation of Agent**
+
+Let’s now break down the second part of the program, where we focus on authentication, uploading the file, creating the agent, and creating a thread. This is where the real magic happens. If you look at the code, it’s impressive how many steps we are able to handle with just a few lines. So let’s walk through each part carefully.
+
+We start by importing the required Azure AI libraries. The first key component is the AIProjectClient. This is essentially the core client used to manage everything related to AI Projects—agents, threads, and file uploads. It provides the methods we need, such as create_agent(), upload_file(), and create_thread(). Along with this, we import the CodeInterpreterTool and FilePurpose. The Code Interpreter Tool is the mechanism that allows our agent to interpret code, analyze data files like CSVs, and generate insights. The FilePurpose enum simply clarifies the intent of the uploaded file—for example, specifying that the file is meant for agent use, such as analysis or querying.
+
+Next, we have the ClientSecretCredential, which manages authentication. This uses the service principal credentials we configured earlier in Azure AD (or Entra ID). All the work we did during app registration now comes into play, enabling our program to securely access Azure AI resources. We also import Path from the pathlib module to handle file paths in a way that works consistently across operating systems.
+
+Once the imports are ready, we authenticate and initialize the AI Project Client. Using the ClientSecretCredential, Azure authenticates the service principal without any user interaction. Then, with AIProjectClient.from_connection_string(), we establish a direct connection to our Azure AI Project using the connection string we loaded from the environment file. This step just combines the tenant ID, client ID, and client secret, and hands them over to Azure for secure access.
+
+With authentication complete, we move on to uploading the sales CSV file. For this, we use upload_file_and_poll(). This method uploads the file and waits until the upload is fully complete before returning. Once done, it provides a file object containing metadata such as the file ID—which is what we’ll need for the next step.
+
+Finally, we reach the core section: creating the agent and creating the thread. With a single, clean create_agent() call, we instantiate a new AI Agent. We specify the model (our deployment), provide a name, and define the agent’s instruction—something like “You are a helpful agent that performs data analysis and visualization.” We also specify the list of tools, where we include the Code Interpreter Tool and pass the uploaded file’s ID so the agent knows which file to work with. The tool resources indicate that the code interpreter tool is the active tool for this agent.
+
+Once the agent is created, the program also creates a thread. The thread ID is returned, and this becomes extremely important because the thread maintains context across multiple interactions. This means our agent can remember the previous messages and continue the conversation seamlessly.
+
+# **H) Demo: Create Thread and Message Convesation**
+
+Now let’s move to the final part of the program, which focuses on starting an infinite loop to interact with the agent. This loop is what enables continuous conversation with the agent, processing messages until the user decides to end the session.
+
+The structure is simple: we start a while True loop. Inside it, we check if the user message is "end". If it is, the loop breaks, terminating the interaction. Otherwise, the loop keeps running, continuously reading messages from the user and processing them in the thread.
+
+For each user message, we call project_client.agents.create_message(), passing the thread ID, the role as user, and the content as the message itself. This is crucial because it ensures that the agent receives the user input correctly within the context of the ongoing thread.
+
+Next, we process the interaction by calling project_client.create_and_process_run(). Here, the concept of a run and run steps comes into play. Each run represents a single execution of the agent in response to the message. This method requires both the thread ID and the assistant (agent) ID. Once the run finishes, the status is checked. If the run fails, an error is raised indicating that the execution was unsuccessful.
+
+After processing the run, we fetch the agent’s responses. This is done by iterating over the messages in the thread to get the latest message, which is then saved. This ensures that all responses from the agent are captured for future reference or further processing.
+
+In cases where the agent generates visualizations or graphs, this section of the code also handles saving the generated images to a specific location. This is important because the images are not just displayed—they are stored for later use, allowing you to review or include them in reports.
+
+Finally, as a best practice, we include a cleanup step. Many agents can accumulate during testing, especially if you are repeatedly creating new agents. To avoid clutter in the Azure AI Foundry, it’s recommended to delete the agent once your testing is complete. This helps maintain a clean environment and avoids unnecessary resource usage.
+
+# **I) Demo: Run the Agent & Create Graphs**
+
+Now it’s time to actually execute our program. Before we run it, I recommend taking a quick look at the Azure AI Foundry under Agents. At this point, you will see only one agent currently active. Once we execute our program, new artifacts will start appearing—your agent will be created, a thread will be initialized, and other related items will be generated.
+
+Let’s run the program. When executed, three main actions happen simultaneously: the file gets uploaded, the agent is created, and the thread is initialized. After execution, you will receive the file ID, the agent ID, and the thread ID. These IDs are essential as they reference the uploaded data, the agent instance, and the conversation thread. Once you refresh your Foundry, you will see that the new agent and thread have appeared.
+
+Next, we can interact with the agent. For example, you can ask, “What is the uploaded data all about?” The agent will examine the uploaded CSV file and respond with a structured summary of the data. It identifies columns like date, product, revenue, and profit, and even provides a preview of the dataset. The formatting is neat and clear, making it easy to understand the contents at a glance.
+
+Let’s now look into the thread in Foundry. As we studied earlier, a thread contains all messages exchanged between the user and the agent. This maintains context across multiple interactions. For instance, the user’s message asking about the data is stored in the thread, and the agent’s response appears right alongside it. If you ask another question, it will continue under the same thread, keeping all communication organized.
+
+We can also request the agent to create a graph. For example, asking it to generate a graph for total revenue and profit by product will trigger the agent to process the data and create a visual representation. Once the run status shows as complete, the graph is generated and saved as a file. The file is stored in the content directory, usually with a unique identifier, and you can easily download it to view the visualization. In our case, it shows total revenue and profit for different products such as cameras, headphones, and tablets.
+
+Finally, since this is primarily a learning exercise, it’s a good practice to end the conversation and delete the agent afterward. This prevents unnecessary accumulation of agents in your Foundry environment and keeps it tidy. With this workflow, you now have a solid understanding of how Azure AI agents interact with the Code Interpreter, handle files, maintain context through threads, and generate outputs like graphs.
+
+# **VIII) Azure AI Agent Service Action Tools - OpenAPI 3.0**
+
+# **A) What is OpenAPI 3.0 ?**
+
+Now, as I promised, whenever Microsoft releases any new tools or features inside the Azure AI Agent Service, I will update you all. Today, I’m here to talk about the OpenAPI 3.0 specified tool. Recently, Microsoft introduced this tool, and just like we worked with the Code Interpreter previously, we will now explore how agents can work with the OpenAPI 3.0 tool.
+
+So, what is OpenAPI 3.0? For those new to this, it’s important to understand its purpose. OpenAPI is a standard, language-agnostic format for describing REST APIs, also known as RESTful APIs. The beauty of this standard is that it allows both humans and machines to understand the capabilities of web services without needing to look into the source code or documentation. Essentially, it lets developers define all aspects of an API in a structured way, including available endpoints, parameters, response types, and authentication methods. Originally, this format was known as Swagger, but the modern standard is now OpenAPI 3.0.
+
+There are a few key highlights of OpenAPI 3.0. It can be written in YAML or JSON format, and the current example we are using is in JSON. OpenAPI 3.0 was introduced in 2017 as the successor to Swagger. Understanding the structure of an OpenAPI 3.0 specification is important, so let’s break it down using a real example, which we will also use in our course.
+
+First, we have the info section, which provides API metadata such as the title, description, and version. For example, in our case, the API is the Yahoo Finance stock API. The title specifies the API name, the description gives a brief explanation of what the API does, and the version tells us the specific version of the API being used, such as v1.
+
+Next, we have the servers section, which specifies the base URL where the API is hosted. In our example, the API is hosted on Yahoo Finance via RapidAPI. We are using RapidAPI to access Yahoo Finance instead of calling the Yahoo API directly, as it provides a more convenient and reliable interface.
+
+The paths section defines the available endpoints of the API. Each endpoint specifies the operations you can perform, like GET for fetching information. For instance, the markets/code endpoint allows us to retrieve market information for a given stock. The GET operation contains several important pieces of information, such as the operation ID (a unique identifier for the operation), a summary (short description), and parameters. Parameters are particularly important because they define the inputs you need to send with your API request. For example, the ticker parameter specifies which stock you want to query, like Apple, Microsoft, or Tesla.
+
+With Azure AI Agent Service, OpenAPI 3.0 integrates seamlessly as a tool for agents. You can upload your YAML or JSON schema to Azure AI Agent Service, configure authentication using API keys (for example, from RapidAPI), and let the agent dynamically invoke API calls at runtime. The agent can then interact with these APIs and retrieve data as part of its workflow.
+
+To make an API call, here’s how it works in practice. The base URL might look like https://yahoo-finance15.p.rapidapi.com/api/v1/markets/code. You then specify the endpoint, such as markets/code, and pass the required parameter, for instance, ticker=Apple. This allows the agent to dynamically fetch stock information using the OpenAPI 3.0 specification.
+
+At this point, this explanation is theoretical, providing the foundation you need to understand OpenAPI 3.0. In the upcoming lectures, we will demonstrate how to practically work with OpenAPI 3.0 inside Azure AI Agent Service, upload the schema, configure authentication, and make API calls dynamically.
+
+# **B) Understanding the Workflow for Yahoo Finance**
+
+Let’s try to understand what we are aiming to achieve with this set of programs and videos. The goal is to work with the OpenAPI tool, which is connected to our Azure AI agent. But how does this actually work internally, or under the hood? Let’s break it down step by step to make it simpler.
+
+From a user perspective, all you need to do is provide a ticker symbol or ask for the current stock price for a company, say Tesla. You simply express your interest, and the Azure AI agent does all the heavy lifting to give you the final response. For the user, this is the only part that is visible.
+
+However, behind the scenes, the Azure AI agent is interacting with a tool that is based on OpenAPI. This tool connects to the Yahoo Finance API, which provides the stock data. But rather than calling the Yahoo Finance API directly, we use a service called RapidAPI, which acts as a portal or intermediary. The agent calls the RapidAPI, which in turn fetches data from Yahoo Finance. This layer simplifies access and provides additional features like authentication management and rate limiting.
+
+A key component in this process is the connector. The Azure AI agent needs a connector to communicate with the OpenAPI tool. This connector is configured using RapidAPI keys and the OpenAPI JSON schema. The JSON schema defines the API endpoints, parameters, and responses, while the RapidAPI key handles authentication. Once this connection is established, the agent can dynamically fetch data from RapidAPI, process it, and return the response to the user seamlessly.
+
+If this still sounds a bit confusing, don’t worry. In the upcoming videos, we will go step by step, showing how to create the connector, upload the OpenAPI schema, configure authentication, and make the API calls through the Azure AI agent. By the end, the workflow will become very clear and practical.
+
+# **C) Demo: Create RapidAPI Key**
+
+In this lecture, we’ll look at how to use RapidAPI in conjunction with your Azure AI agent. It is essential for your agent to have a connector, and to configure this connector, you need an API key. But where does this API key come from? The API key is generated through RapidAPI.
+
+To get started, go to rapidapi.com and create an account. You can either sign up directly or use a Google login, which is what I did. Once logged in, navigate to the console on the right-hand side. Here, you will see a section called Applications. Initially, no applications exist, so you need to create one. Give it a name, for example, “Yahoo Finance,” and add a description if needed. Once you click Create, the application is generated, and within a few seconds, your API key will appear.
+
+Previously, the authorization keys section would have been empty, but now you’ll see your RapidAPI key listed. This key is essential for connecting your Azure AI agent to RapidAPI, though it should always be kept private. The key typically starts with a string like d45…. We will use this API key in the next lecture when configuring our agent.
+
+The next step is to navigate to Collections on RapidAPI. Here, we will use a collection called Yahoo Finance. By searching for “Yahoo Finance,” you will find the relevant API collection. Clicking on it reveals the RapidAPI host and RapidAPI key, along with the full URL endpoint. This URL is the same as the one we discussed in the OpenAPI theory lecture: https://yahoofinance15.p.rapidapi.com/api/v1/markets/code.
+
+You can even test the endpoint directly in RapidAPI. For example, by specifying a ticker symbol like Apple, the API will return detailed stock information, including the exchange (NASDAQ), latest sale price, net change, and other key metrics. This is exactly the data we will be pulling into our Azure AI agent, allowing it to fetch real-time stock information dynamically.
+
+# **D) Demo: Create a Connection to RapidAPI in Azure**
+
+Now it’s time to create your connector. You might remember that we discussed the concept of a connector earlier. Essentially, a connector links two points—in this case, it connects RapidAPI to our Azure AI agent.
+
+To create the connector, go to your Azure AI Foundry and click on New Connection. You’ll need to select Custom Keys because this is where we will add our RapidAPI credentials. Once selected, click Add Key-Value Pair.
+
+Here, you need to provide a name and a value. The value comes directly from your RapidAPI account. Specifically, you will use the key called X-RapidAPI-Key. Copy this key from RapidAPI and paste it as the value in Azure. You can also give a descriptive connection name, for example, Yahoo-Finance.
+
+There’s an option to define access—by default, it’s shared with all projects in your workspace, but you can restrict it to the current project if needed. Once everything is filled in, click Add Connection.
+
+This step is very important because your connector will be required when creating a tool inside the Azure AI Agent Service. In the next lecture, we will use this connection to configure an OpenAPI 3.0 tool, enabling the agent to make API calls securely using your RapidAPI key.
+
+# **E) Demo: Create a Stocks Agent and Attach OpenAPI 3.0**
+
+The time has finally come to create your own stocks agent. To start, click on New Agent and give it a meaningful name. For example, you can call it Stocks Agent. This agent will be used to retrieve stock prices and other related information.
+
+Next, you need to choose a deployment. In this example, we are using GPT-4 or mini. You can also provide a brief description for your agent, such as: “A helpful agent based on OpenAPI 3.0.”
+
+Now, it’s time to configure the action tools. Microsoft has introduced the capability to use OpenAPI 3.0 as a tool. Click on Action Tool and select OpenAPI 3.0. Then, give your tool a name, for example, Yahoo Finance Tool, and add a description like “Based on RapidAPI for fetching stock prices.”
+
+The next step is to define the schema for this tool. This is where your OpenAPI JSON schema comes into play. If you’ve followed the previous lectures, you can copy the schema from the resources section and paste it here. For the authentication method, choose Connection and select the connector we previously created, which is Yahoo Finance.
+
+Paste your OpenAPI JSON schema in the designated area. This schema specifies important details such as version information, server URL, available paths like markets/code, and parameters such as ticker. Once everything looks good, click Next to review and then Create Tool.
+
+After this step, a tool will be created and associated with your Stocks Agent. This OpenAPI 3.0-based tool connects to RapidAPI, which in turn fetches data from Yahoo Finance. In the next lecture, we will put this agent to the test by running prompts and queries against it.
+
+# **F) Demo: Test the Stocks Agent in Playground**
+
+Now it’s time to put our Stocks Agent to the test and see if it can fetch the latest stock prices accurately. To do this, click on Try in the Playground. This will open a chat interface where you can interact with your agent and run queries.
+
+To start, you can try something simple. For example, just type “Tesla”. That’s it—you don’t need to specify anything else. The agent is intelligent enough to understand that you are interested in details about Tesla.
+
+As a result, the agent returns relevant information such as the company name, stock price, exchange (Nasdaq), and other details, all fetched from the RapidAPI data source.
+
+You can also ask the agent to create a table of the latest stock prices, including information like the 52-week low and 52-week high for Tesla. Notice that even without providing the ticker symbol, the agent is able to infer the correct stock based on the company name.
+
+In this test, the agent successfully generated a table summarizing the latest stock price and 52-week range for Tesla. For example, the latest stock price was $285, the 52-week low was $138, and the 52-week high was $488—a great time to buy!
+
+Overall, our Stocks Agent performed exceptionally well, delivering accurate, up-to-date information based on the latest stock prices.
+
+# **G) Demo: Install the Libraries and Setup Environment**
+
+Let’s go step by step and see how we can create the same Stocks Agent using Python code. The architecture remains the same: Yahoo Finance communicates with RapidAPI, and through the OpenAPI tool connected via the connector to the Azure AI Agent, we can execute our queries seamlessly.
+
+The first step is to install the required libraries and set up the environment. Some of these libraries we have discussed before, but let’s quickly review them. The Azure AI Projects library enables the creation and interaction with AI agents. Azure Identity provides different credential types for authenticating with Azure resources.
+
+A new library for you here is JSON Ref, which helps parse JSON files and supports $ref references commonly used in OpenAPI specifications. This is especially useful for working with OpenAPI JSON schemas. Once you execute the installation commands, all the required SDKs, agents library, and dependencies will be installed.
+
+Next, there are two files you need to upload as part of the setup. The first is your OpenAPI JSON file, the same one used when creating the tool or agent in the GUI. You can download this from the resources section and upload it for your code-based setup. The second is the API settings file, where you specify your client ID, tenant ID, project connect string, and other API-related details.
+
+For the setup in code, you will import os and load_dotenv to load the environment file. The client ID, client secret, tenant ID, and project connect string are then automatically picked from this file. Once this is executed, your environment is ready, and the Azure credentials can be configured.
+
+In the next video, we will focus on configuring the Azure credentials and initializing the Azure AI Project client so that the Stocks Agent can start executing queries programmatically.
+
+# **H) Authenticate/Initialize/ Load OpenAPI Spec**
+
+In this video, we will focus on authentication with Azure, initializing the Azure AI Project client, and loading the OpenAPI specification.
+
+First, we need to import the necessary libraries. These libraries are required to handle authentication, work with the Azure AI Project client, and parse OpenAPI specifications.
+
+Next, we configure the Azure credentials using the Client Secret Credential. This type of credential is used for confidential client applications, such as scripts or backend apps, rather than user-interactive applications. We provide three parameters to the credential: tenant ID, client ID, and client secret. These values are stored in the API settings.env file. The Client Secret Credential authenticates your app using Azure Active Directory (AAD), ensuring secure access to Azure resources.
+
+After authentication, we move on to initializing the Azure AI Project client. We use the AIProjectClient, which connects to your Azure AI project workspace using the project connect string. This string is also available in your API settings.env file. Once initialized, this client allows you to manage agents, tools, connections, and threads, making it a central piece of the workflow.
+
+Next, we focus on loading the OpenAPI specification. The OpenAPI spec serves as a blueprint for the Yahoo Finance API, describing endpoints, inputs, outputs, and other details. We use jsonref.load to load the specification, which also resolves any $ref pointers within the JSON. In this example, the file openAPI.json is read and loaded into the program.
+
+With the OpenAPI spec loaded, we are now ready to extract connection lists, create authentication objects, and initialize OpenAPI tools, which will be covered in the next lecture.
+
+# **I) Get Connection / Create Auth Object / Create OpenAPI Tool**
+
+In this lecture, we will cover three key tasks: extracting the connection ID, creating the authentication object for the OpenAPI tool, and initializing the OpenAPI tool with the Yahoo Finance API. Let’s go through these steps one by one.
+
+The first task is extracting the connection list. Here, we retrieve the list of connections already configured in your Azure AI project. We filter the connections by the name “Yahoo Finance” and store the result as a unique connection ID. This is necessary because there isn’t a direct way to fetch the connection ID. Essentially, this ID links your Azure AI project to the Yahoo Finance connection you created earlier.
+
+The second task is creating the authentication object for the OpenAPI tool. This step prepares the authentication schema, telling the assistant how to authenticate with the Yahoo Finance API during usage. We use the OpenAPI connection security scheme and pass the connection ID. Although it’s called Yahoo Finance here, it’s essentially the Rapid API key that we set up earlier. By doing this, we create an authentication object that will be used by the OpenAPI tool.
+
+The third and final task is initializing the OpenAPI tool with Yahoo Finance. Here, we call the OpenAPI tool and pass the following parameters: a name (“Get Yahoo Finance data”), the OpenAPI specification, a description (“Fetch real-time stock market and financial data from Yahoo Finance”), and the authentication object we just created. This step wraps the OpenAPI specification into a tool that the assistant can use, making it ready for the agent to consume.
+
+At the end of this setup, the tool becomes a reusable component for the assistant. When we later create our agent, it will make use of this OpenAPI tool, just like we did previously in the GUI. The tool acts as a wrapper around the OpenAPI spec, enabling the agent to fetch real-time stock data via Rapid API.
+
+In the next lecture, we will see how to create the agent and start the conversation thread, continuing the workflow we have been building in the previous sessions.
+
+# **J) Create Agent / Thread / Conversation Loop**
+
+In this final part of the program, we focus on creating the assistant, which in this case is our Azure AI agent, setting up the conversation thread, and implementing the interactive loop.
+
+First, we create the agent using project_client.agents.create_agent(). We pass the model name, which in our example is GPT-4 or mini. We also give the agent a name — “Yahoo Finance Assistant” — and a description: “You are an intelligent assistant that provides real-time financial and stock market data.” Since this is a stocks agent, it is specifically designed to fetch and provide financial data.
+
+Next, we specify the tools for the agent. Unlike previous examples where we used the code interpreter tool, here we use the OpenAPI tool definitions. This comes from the OpenAPI tool we initialized earlier with Yahoo Finance via Rapid API. This ensures that the agent can fetch real-time stock and financial data dynamically using the tool. The agent is now fully set up with its model, purpose, and tool assignment.
+
+After creating the agent, we create a conversation thread. The thread tracks all chat messages, which allows the agent to maintain context throughout a conversation. This is essential for intelligent, context-aware interactions.
+
+We then start the interactive loop. The loop continuously takes user input via input(). Each message is sent to the agent through the thread, triggering the assistant to think and respond using its tools. This is achieved using project_client.agents.create_and_process_run(). The agent processes the input, generates a response, and we retrieve and print the latest message back to the user.
+
+The loop continues until the user types “end”, at which point the interaction stops. Finally, the agent is deleted to release resources and prevent clutter in the Azure AI project. This ensures that agents with the same name do not accumulate unnecessarily.
+
+In the next lecture, we will demonstrate running the agent in action and testing its ability to fetch real-time stock and financial data.
+
+# **K) Execute the Program and run Queries**
+
+Now we have reached the stage where we can actually run or execute the program. Let’s see what happens when we do that.
+
+Upon execution, the program will create the agent and the conversation thread. If we check the Foundry workspace, we can confirm that a new agent has been created — the Yahoo Finance Assistant. One important thing to note is that the tool “Get Yahoo Finance Data” has been neatly attached to this agent. This ensures that the agent can fetch stock and financial data dynamically.
+
+Looking back at the source code, we see that the agent name is Yahoo Finance Assistant, and the tool name is Get Yahoo Finance Data. Everything is correctly configured.
+
+We can now test the agent. For example, we can input a simple query like Tesla, and the agent will fetch the relevant data from Rapid API via the Yahoo Finance API. Similarly, if we input Apple, the agent recognizes it as Apple Inc. (AAPL) listed on Nasdaq, and returns the latest stock price, 52-week range, and other financial details. The agent intelligently interprets company names even without explicit ticker symbols.
+
+Once we are done testing, we simply type “end”. The program will then end the conversation and automatically delete the agent, releasing resources and keeping the workspace clean.
+
+This demonstrates the complete workflow of integrating Azure AI agents with OpenAPI tools, using Yahoo Finance data via Rapid API, and creating a real-time, interactive stocks assistant.
+
+Thanks for watching, and I hope this gives you a clear understanding of how Azure AI agents, OpenAPI specifications, and the Rapid API work together to provide intelligent, real-time responses.
+
+# **IX) Azure AI Agent Service Knowledge Tools - Bing Search**
+
+# **A) Intro to Grounding with Bing Search**
+
+After exploring the various action tools in Azure AI agents, it’s now time to dive into the knowledge tools provided by Microsoft.
+
+The first knowledge tool we will focus on is grounding with Bing Search. Most of you are likely familiar with Bing as Microsoft’s search engine. What Microsoft has enabled is the ability for your agent to leverage Bing’s search capabilities to fetch real-time information and provide accurate responses.
+
+In this lecture series, we will cover:
+
+What grounding with Bing Search means and how it works.
+
+Supported models for Bing Search within Azure AI agents.
+
+Creating a Bing Search agent in the agents playground (no-code/low-code approach).
+
+Implementing the same functionality using Python code:
+
+Creating a Bing resource.
+
+Setting up a connection for the agent.
+
+Installing required libraries.
+
+Understanding and executing the Python code.
+
+As always, we will explore both the no-code/low-code approach and the full Python implementation, giving you flexibility depending on your workflow.
+
+Get ready to see how your agent can interact with real-time Bing Search to provide up-to-date knowledge in response to user queries.
+
+# **B) What is Grounding with Bing Search ?**
+
+Now it’s time to explore the knowledge tools available in the Azure AI Agent Service. The first tool we’ll discuss is grounding with Bing Search.
+
+To give some context, one limitation of large language models (LLMs) is that they are trained only up to a specific point in time. This means that if you ask a model questions like “What’s the weather today?” or “What’s the top news for today?”, it won’t be able to provide up-to-date answers.
+
+Microsoft and OpenAI identified this gap and proposed a solution: combining the generative capabilities of LLMs with live search capabilities. In other words, if the LLM cannot answer a question on its own, it can dynamically search the web to find the most current information. Microsoft leveraged Bing, its search engine, to enable this functionality. This integration is what we call grounding with Bing Search.
+
+There are a few important points to note about using this tool. First, costs: grounding with Bing Search incurs additional charges. Microsoft recommends checking the pricing details before using it. Currently, it allows up to 150 transactions per second or 1 million transactions per day, and the cost is $35 per 1,000 transactions. Essentially, this feature allows your AI agent to utilize the power of Bing Search APIs as a knowledge source to ground responses.
+
+Second, deployment restrictions: grounding with Bing Search is not available with every model deployment. It is supported only on specific GPT models, including: GPT-3.5-turbo, GPT-4-0-125, GPT-4-turbo, Certain versions of GPT-4
+
+Attempting to use unsupported models will result in failures, so it is important to select the correct deployment when configuring your agent.
+
+Finally, there are multiple ways to use grounding with Bing Search. You can create a Bing resource and connect it programmatically when using API calls, or you can leverage it directly in the Agents Playground, which is very straightforward and user-friendly.
+
+In the next video, we will demonstrate step by step how to configure and use grounding with Bing Search, both programmatically and in the playground. By now, you should have a solid understanding of what grounding with Bing Search is, why it’s useful, and the key considerations for using it effectively.
+
+# **C) Demo : Create a Bing Search with Agent Service**
+
+Now it’s time to put grounding with Bing Search to the test and see how it works in practice.
+
+Before we start, it’s important to remember that deploying the correct model is crucial. In this case, I am using GPT-4-0-513. If you check the models I have deployed, you’ll see that GPT-4-0-2 with version 0513 is the one supported by agents, and that is the model I will be using for this demonstration.
+
+Next, I navigate to Agents and choose the deployment. Since agents are based on deployed models, selecting the right one is critical. I select GPT-4-0-2 (0513) and then create a new agent. I give the agent a name—Agent Grounding with Bing—and provide system instructions: essentially, this agent’s role is to assist with Bing searches.
+
+Now, we move to the knowledge tools section. Here, you can see the “Knowledge” option; if it’s grayed out, it usually means the wrong model deployment was selected. With the correct model, I create a new connection for grounding with Bing Search. This involves creating a Bing Search resource in the Azure portal.
+
+During the resource creation, I select the appropriate resource group and give it a name, such as Web Searching. It’s important to choose the correct pricing tier, review the settings, and then create the resource. Once created, this Bing Search resource is visible when creating the connection. It comes with its own authentication key and clearly notes that any user in the same hub with access to the project can utilize this resource.
+
+After creating the connection, it shows as connected, and the Bing resource is now available as a knowledge tool for the agent. At this point, we can test it in the playground. Once loaded, you can verify the agent details, including the agent ID, name, deployment, and the linked knowledge resource, which in this case is Web Searching.
+
+To test the agent, I asked: “Please give me the latest news for today.” Normally, a large language model cannot provide real-time information. However, since this agent is grounded with Bing Search, it fetched the latest news by querying the Bing resource. The response included highlights such as the Ukraine conflict, gold smuggling cases, Supreme Court decisions in India, and political developments, along with references to credible sources like The Hindu and other news outlets.
+
+This demonstrates that the agent is now capable of performing real-time web searches, supplementing the limitations of the base language model. The integration of Bing as a knowledge base allows it to provide up-to-date information effectively.
+
+Thanks for watching, and now your agent is ready to perform live web searches using Bing Search.
+
+# **D) Demo: Create a Bing Resource & Create Connection**
+
+The aim of this lecture series is to demonstrate how to implement grounding with Bing Search using Python code. As shown in the diagram, the flow works as follows: the user submits a query or request to the Azure AI agent. The agent is intelligent enough to recognize that it needs to use the knowledge tool, which in this case is grounding with Bing Search. For example, if you ask, “What is the top news for today?”, the request is routed to the agent, which then interacts with the Bing Search knowledge tool. The tool retrieves the relevant information and sends the response back to the user.
+
+Before we start coding, there are a couple of prerequisites. First, you need to create a Bing Search resource in Azure. Since this is a separate entity from Azure AI services, you also need to create a connection to this Bing resource inside your Azure AI project. These two steps lay the foundation for using Bing Search with your agent programmatically.
+
+To create the resource, go to your Bing resources in the Azure portal and select Grounding with Bing Search. Choose a resource group (I usually pick a standard one), give your resource a name such as Web Search Coding, select the region as Global, and choose the pricing tier—typically the default, $35 per 1000 transactions. After confirming the details, click Review and Create, and then create the resource. Once deployed, you can verify the deployment progress and check the resource details. The resource should also appear in your Bing Resources list, confirming that Web Search Coding is now available.
+
+After the resource is created, the next step is to create a connection to it. Inside your Azure AI Foundry, navigate to Connected Resources in your hub. Click New Connection, and when prompted to add a connection to external assets, select Bing. It will display the Grounding with Bing Search option, and you can pick your newly created resource, Web Search Coding. Click Add Connection, and your connection will be established shortly.
+
+With the resource and connection set up, the groundwork is complete, and the foundation for using Bing Search in your Python code has been laid. In the next step, we will start writing code to interact with the agent and see how to query Bing Search programmatically.
+
+# **E) Demo: Setup environment & install libraries**
+
+Now it’s time to set up your environment and install the required libraries. We’ve already discussed most of the SDKs and libraries you need, but let’s quickly recap. The main library is Azure AI Projects, which provides the SDK for managing AI projects and interacting with AI agents on Azure. Next, we have Azure Identity, which handles authentication for Azure services using different credential types. Finally, load_dotenv is used to load environment variables from your .env file, making it easier to manage sensitive information like keys and IDs. You can execute the installation, and it will check your requirements and install any missing libraries.
+
+The next step is to configure your API settings by setting all the necessary environment variables. These include your Client ID, Client Secret, Tenant ID, Project Connection String, and a new piece for this setup—the Bing connection name. One important note that often confuses people (myself included) is the distinction between the resource name and the connection name.
+
+For example, your Bing resource might be named web-search-coding, but the connection name you created in your connected resources could be Web Search Coding. It’s crucial that the connection name is correctly specified in your environment variables, otherwise your code will fail to execute properly. I even recommend printing the value after loading it to verify that it matches your connection name exactly.
+
+In this part of the setup, we are simply specifying the Client ID, Client Secret, Tenant ID, and the Bing connection name. Once this is done, we will move on to the next stage: creating the agent and integrating it with the knowledge tool.
+
+# **F) Demo: Understand the Code**
+
+Welcome back, folks. Now it’s time to dive into the main part of the program and understand the logic step by step. The first part involves importing the Azure SDK and authentication classes. The AIProjectClient is the main class for managing AI projects and interacting with agents, while the ClientSecretCredential handles authentication using the Client ID, Client Secret, and Tenant ID that we set up during app registration. A new addition here is the Bing Grounding Tool, which allows integration with Bing search services to enhance the AI agent’s capabilities.
+
+The next step is configuring Azure credentials. Here, we create a ClientSecretCredential object for secure authentication. This uses a service principal approach to authenticate with Azure Active Directory, and the credential is later passed to the AI Project Client for making API calls securely.
+
+Once credentials are set, we initialize the Azure AI Project Client using AIProjectClient.from_connection_string. This sets up secure access to the project using the connection string stored in environment variables. The client is responsible for managing agents, messages, and tools within the Azure AI project.
+
+Next, we focus on retrieving the Bing Search Resource Connection ID. The purpose of this step is to access the Bing search resource using its connection name, in this case, Web Search Coding. The unique connection ID is necessary for linking the Bing search tool to the AI agent. A simple print statement confirms that we’ve successfully retrieved the connection ID.
+
+With the connection ID in hand, we initialize the Bing Grounding Tool. This creates an instance of the tool that allows the AI agent to use Bing search results as part of its responses.
+
+The core of the program is creating the AI agent. The model used is GPT-4-2, which supports the Bing grounding tool. We give the agent a name and simple instructions, such as “You are a helpful assistant that provides coding assistance using Bing searches.” We pass the Bing search tool to the agent for external information retrieval. Additionally, headers are used to enable preview features for enhanced capabilities.
+
+Every agent is associated with a conversation thread, which maintains context across multiple interactions. This is critical for ensuring that the agent remembers the ongoing conversation. Once the thread is created, we move into the interactive loop, which continuously interacts with the user.
+
+Inside the loop, the user’s input is sent to the agent as a message within the current conversation thread, distinguishing between user messages and agent responses. The agent processes the message, and the run’s status is checked to ensure processing was successful. If it fails, the error message is printed, and the loop exits. Finally, the agent’s response is retrieved and displayed to the user.
+
+The purpose of this program is to provide an interactive experience where the agent can fetch the latest information using Bing as a knowledge tool, maintaining context throughout the conversation. In the next video, we will execute the program and observe its functionality in action.
+
+# **G) Demo: Execute the Code**
+
+The time has finally come to execute our code. First, if you go to your agents and refresh the page, you will notice that there is only one agent created so far, named agent_CL.
+
+Now, let’s return to our code and reconnect. Executing the code will print the connection ID, which we can verify, and it will create a new agent along with a conversation thread. After refreshing the agents page, you will see that a new agent has been created, named “my agent for Bing coding”.
+
+At this point, the code is waiting for user input. For example, if you type “Give me the top news for today”, the agent activates the Bing search capabilities. It searches for the latest news and provides a summary. The response might include headlines such as political developments, legal news, or global events, clearly demonstrating how the Bing tool integrates with the agent to fetch real-time information.
+
+Once you are done testing, typing “end” will terminate the conversation. This not only ends the interactive session but also deletes the agent, helping maintain a clean workspace. Without this step, running the code repeatedly would create multiple agents, cluttering your Azure AI project. One limitation to note is that the agent portal does not allow bulk deletion—you need to delete agents individually if done manually.
+
+This approach ensures that your code and project environment stay clean, while still allowing you to create and test agents as needed. By automating agent deletion at the end of the session, you avoid unnecessary accumulation of agents and keep your workspace organized.
