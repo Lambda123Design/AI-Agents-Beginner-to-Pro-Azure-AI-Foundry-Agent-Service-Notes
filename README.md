@@ -188,6 +188,94 @@
 
 **G) Demo: Execute the Code**
 
+**X) Azure AI Agent Knowledge Tools - File Search**
+
+**A) Intro to File Search**
+
+**B) What is File Search ?**
+
+**C) Demo: Utilize File Search with AI Foundry**
+
+**D) Demo: Understand the workflow**
+
+**E) Demo: Install Libraries & Setup Environment**
+
+**F) Demo: Initialise the Project Client & Upload the File**
+
+**G) Demo: Create Vector Store / Agent**
+
+**H) Demo: Create Thread and Process Messages**
+
+**I) Demo: Run the Code and ask Questions**
+
+**XI) Azure AI Agent Knowledge Tools - Azure AI Search**
+
+**A) Intro Azure AI Search**
+
+**B) What is Azure AI Search ?**
+
+**C) Understand the Workflow**
+
+**D) Demo: Create a Storage Account & Upload Document**
+
+**E) Demo: Ensure / Create you have Azure OpenAI Service**
+
+**F) Demo: Create Embeddings Deployment**
+
+**G) Demo: Create Azure AI Search Resource**
+
+**H) Demo: Create an Index**
+
+**I) Demo: Create an Agent & Attach the Knowledge Tool**
+
+**J) Demo: Run Queries in Agents Playground**
+
+**K) Demo: How to use AI Search in Python Code**
+
+**L) Demo: Install Libraries and Setup Environment**
+
+**M) Demo: Initialise the Project Client**
+
+**N) Demo: Create Agent**
+
+**O) Demo: Execute the Code**
+
+**XII) Real World Scenario - Freshdesk Agent**
+
+**A) Understand the Workflow and what we shall Build**
+
+**B) Create a login on freshdesk & Setup API Key**
+
+**C) Install Binaries & Setup Environment**
+
+**D) Understand the Custom Function create_freshdesk_ticket**
+
+**E) Initialize Azure AI / Create toolset**
+
+**F) Create the Freshdesk Agent**
+
+**G) Execute the Program and Check the Tickets**
+
+**XIII) Real World Scenario - Streamlit Application**
+
+**A) What is Streamlit ?**
+
+**B) Demo: Testing some Simple Sample Apps**
+
+**C) Setup a Virtual Environment in VSCode & Install Requirements**
+
+**D) Setup the Environment File**
+
+**E) Understand the Streamlit Configuration**
+
+**F) Understand the Freshdesk Ticket Creator**
+
+**G) Demo: Executing the Code & Running Prompts**
+
+
+
+
+
 
 # **I) Intro to AI Agents:**
 
@@ -2029,3 +2117,799 @@ At this point, the code is waiting for user input. For example, if you type “G
 Once you are done testing, typing “end” will terminate the conversation. This not only ends the interactive session but also deletes the agent, helping maintain a clean workspace. Without this step, running the code repeatedly would create multiple agents, cluttering your Azure AI project. One limitation to note is that the agent portal does not allow bulk deletion—you need to delete agents individually if done manually.
 
 This approach ensures that your code and project environment stay clean, while still allowing you to create and test agents as needed. By automating agent deletion at the end of the session, you avoid unnecessary accumulation of agents and keep your workspace organized.
+
+# **X) Azure AI Agent Knowledge Tools - File Search**
+
+# **A) Intro to File Search**
+
+It's now time to talk about the next knowledge tool, which is File Search.
+
+Historically, file search has always been present as part of the Assistance API from OpenAI. What Microsoft has done is bring file search into the Azure AI Agent Service, integrating it as part of their knowledge tools ecosystem.
+
+So, what exactly does file search provide? File search is one of the best solutions if you want to search against your own documents, particularly if your documents are stored on Azure Blob Storage. It is designed to help implement RAG (Retrieval Augmented Generation), enabling more intelligent querying and retrieval from your data.
+
+As part of this lecture series, we will go through the workflow for file search and how you can utilize it with the Azure AI Agent Service. Similar to other tools, we will cover both no-code and code-based approaches. In the no-code scenario, you can leverage the Foundry interface, while in the code-based approach, you will need to create your vector store, build your agent, and manage your threads to process messages.
+
+To make this practical, we will take an example using a GPT-4 system card. This document will be uploaded into file search, and we will demonstrate how to query against it to retrieve relevant results. This set of demos will help you understand how file search works end-to-end and how it can enhance your document querying and knowledge retrieval capabilities.
+
+# **B) What is File Search ?**
+
+This is your instructor, Joy. First, I’d like to really appreciate the love and support you have shown for the course. A big thanks for all the comments and compliments you have shared.
+
+Now, we are studying the Assistance API. So far, we have looked at function calling and the code interpreter. Today, it’s time to explore another type of Assistance API tool called File Search.
+
+So, what exactly is file search? File search augments the assistant with knowledge from outside its model, which is very important. The word augment might ring a bell because it connects with RAG (Retrieval Augmented Generation). Essentially, file search provides the same capabilities as RAG. It allows the assistant to use generative capabilities while relying on your private data for retrieval.
+
+OpenAI automatically parses and chunks your documents, identifies important keywords, creates embeddings, and stores them. As we know, any document, sentence, or word needs to be converted into embeddings to be stored in a vector database. This functionality is what makes file search powerful.
+
+Let’s talk about chunking. Chunking is the process of breaking a large document into smaller pieces, or chunks, which makes processing and searching much easier. File search uses both vector search and keyword search to retrieve relevant information. Vector search enables semantic search, understanding the context of a query, whereas keyword search simply looks for exact words or phrases. For example, searching for “real estate” will match the phrase in keyword search, but vector search understands the context and relevance of queries.
+
+It’s important to note that file search incurs additional charges beyond the token-based fees for Azure OpenAI usage. Currently, it costs $0.10 per GB of vector storage per day, indicating that a vector storage or database is used behind the scenes, although Microsoft hasn’t publicly disclosed the exact database.
+
+The vector store stores embeddings created from your documents. When you perform a search, your query is converted into an embedding, and the vector store identifies the chunks most similar in meaning. When a file is added to a vector store, it is automatically parsed, chunked, embedded, and stored. This store supports both keyword search and semantic search.
+
+Another key feature is automatic updates. When new files are uploaded to Azure OpenAI file search, they are automatically processed for future searches without additional setup. You don’t need to manually handle chunking or embedding — everything happens under the hood, making it easy to search newly added files.
+
+To better understand, let’s consider the workflow diagram:
+
+User Interaction: The user submits a query, for example, “What is the refund policy?”
+
+Query Handling: The query is sent to the OpenAI or Azure OpenAI model. The assistant understands the user’s intent and retrieves the required information.
+
+Vector Store Lookup: Uploaded files are chunked, converted into embeddings, and stored in the vector store. The assistant queries this vector store, performing a vector similarity search to find the closest matches.
+
+Response Generation: The retrieved information is then used to generate a coherent, context-aware response. The assistant leverages its generative capabilities to craft a final response. For example, it might reply, “Refunds are allowed within 30 days of purchase,” based on the uploaded document.
+
+# **C) Demo: Utilize File Search with AI Foundry**
+
+With Azure AI Agents, it’s now time to explore another knowledge tool: File Search.
+
+The easiest way to use file search through the GUI is to create a new agent. You can give it a name, for example, Agent-FileSearch. The system automatically assigns an Agent ID, which is fine. Next, you need to select a deployment; here, we can use GPT-402. You can also provide instructions or a system prompt, such as: “Help me with RAG and file search, and display results only from the contents of the document.” This ensures the agent uses retrieval augmented generation (RAG) and limits results to the document content.
+
+Next, under Knowledge, you click Plus. Unlike the grounding we saw with Bing Search, this is File Search. Here, you upload your documents. This introduces an important concept: the Vector Store. A vector store enables semantic search, not just text-based keyword search. It works by converting text into vector embeddings and storing them for efficient retrieval.
+
+To demonstrate, let’s upload a file, for example, a GPT-4 system card, which will also be available in the resources section. When uploading, Azure OpenAI processes the text, chunks it, converts it into vector embeddings, and stores it in a vector database. Behind the scenes, the vector store is powered by this database. When you later query the system, your query is also converted into an embedding, which is then compared with the stored embeddings to find the most relevant chunks of data.
+
+During retrieval and response generation, the retrieved text chunks act as context for the model, allowing it to generate an accurate answer. The best way to test this is via the Playground. Here, your knowledge tool — the agent and vector store — is directly embedded, and the file is uploaded.
+
+For example, you can input a query like: “Summarize the document in five lines.” Even if the document is large (10–20 pages), the agent processes it and returns a concise summary. Another query could be: “I am concerned about cybersecurity. Give me some tips based on this document.” The agent then provides relevant advice, such as phishing prevention, vulnerability monitoring, secure algorithms, and using HTTPS for communication — all based on the content of the uploaded document.
+
+You can even explore further. For instance, if you want more details about secure algorithms, the agent provides references, such as Bcrypt or Argon2, along with the sources it used.
+
+Overall, this demonstrates how File Search with Azure OpenAI and the Azure AI Agent Service can be effectively used to query documents and retrieve contextually relevant information using RAG and vector-based semantic search.
+
+# **D) Demo: Understand the workflow**
+
+It’s now time to explore how the File Search tool can be integrated with Azure AI Agent using Python code.
+
+As part of this lecture, the goal is to keep things simple and focus on understanding the workflow and the steps required to implement it programmatically.
+
+From the workflow perspective, it’s straightforward: the user sends a request to the Azure AI agent. The agent intelligently determines that it needs to interact with a tool, and in this case, the tool is the File Search tool. Behind the scenes, a vector store or vector database is created, but the user only receives a vector store ID — the details of the underlying database are abstracted away.
+
+The File Search tool allows the agent to perform semantic searches against the uploaded files, not just simple text-based searches. Once the relevant information is retrieved, the Azure AI agent sends the response back to the user. This response can be formatted as bullet points, tables, or any other structure based on the user’s request.
+
+The key features of this approach include:
+
+Uploading files to create a vector store for search and retrieval.
+
+Performing semantic search on the uploaded documents.
+
+Generating context-aware responses based on the retrieved content.
+
+In this example, we will upload the GPT system demo file (the system card file) and create an AI agent powered by GPT-4 Mini integrated with the file system. As emphasized before, you will use a deployment, in this case probably GPT-4 or GPT-4 Mini.
+
+Next, you set up a conversation thread. Threads are crucial because they maintain context for the conversation. Messages are attached to these threads, and the uploaded files are linked to messages to enable content-based responses. The agent processes user queries and retrieves relevant responses using the uploaded files.
+
+This example demonstrates a very simple workflow: you upload a file, query against it, and observe the results generated by the agent using the File Search tool. It provides a clear, hands-on understanding of integrating file search with Azure AI Agent using Python.
+
+# **E) Demo: Install Libraries & Setup Environment**
+
+This will be a very quick video focused on installing the Azure AI Projects SDK and the Azure Identity library for authentication. The lecture covers how to install the necessary libraries and set up your environment.
+
+As we’ve discussed in previous lectures, we won’t go into too much repetition. The process is straightforward: simply run pip install for azure-ai-projects, azure-identity, and python-dotenv. You already know the importance of these libraries from earlier discussions.
+
+One important thing to remember is that you need to upload two files. The first file is the API settings .env file, which contains all your environment settings, such as client ID, client secret, tenant ID, and project connection string. The second file is the document against which you want to run your queries or perform semantic search.
+
+The uploaded document will eventually be processed into the vector store, where it will be chunked and embedded. However, as a physical file, it first needs to be uploaded manually. The rest of the processing and embedding will happen automatically within the program, which you’ll see in the demonstration.
+
+Once the files are uploaded, you can configure your environment. After configuring the environment variables, the next steps involve creating the vector store, setting up your AI agent, and proceeding with query processing and response retrieval.
+
+# **F) Demo: Initialise the Project Client & Upload the File**
+
+In this lecture, we’ll explore how to import the required modules, configure Azure credentials, initialize the Azure AI Project client, and upload a file that will be used for vector store creation. Let’s go through each step one by one.
+
+The first step is importing the required modules. This includes:
+
+AIProjectClient, which is the main client used to interact with Azure AI Projects.
+
+FileSearchTool, which allows searching within uploaded files.
+
+MessageAttachment, which is used to attach files to messages, enabling interaction with the agent.
+
+FilePurpose, an enum that defines the reason for uploading a file, such as for the agent to use.
+
+ClientSecretCredential, which handles authentication using Azure credentials.
+
+Next, we move to configuring the Azure credentials. This involves providing:
+
+Tenant ID, which identifies your organization in Azure.
+
+Client ID, which refers to the application you created.
+
+Client Secret, which authenticates the application.
+
+These parameters ensure secure access to Azure resources.
+
+Once the credentials are configured, we initialize the Azure AI Project client. Here, we create an instance of AIProjectClient using the project connection string obtained from Azure AI Foundry, which identifies the specific Azure AI project to connect to. This step links your Python script with your Azure AI project.
+
+The final step is uploading a file for the vector store. While the file can be uploaded in your local or Colab environment, it must also be uploaded to Azure via Python. In this example, we upload the GPT-4 system card file, which will be used for AI agent interaction. When uploading, you specify the file purpose as FilePurpose.AGENTS, indicating that the file will be used by the AI agent.
+
+After uploading, the file ID is printed. This is important because the AI agent needs this as a knowledge source for retrieval. Essentially, this step uploads a document that will later be used for semantic search via the File Search tool.
+
+In the next lecture, we will see how to create a vector store, set up your File Search tool, and integrate it with your AI agent.
+
+# **G) Demo: Create Vector Store / Agent**
+
+In this lecture, we will focus on three key steps: creating a vector store, building a File Search tool, and creating an AI agent. Let’s go through each step one by one.
+
+The first step is creating a vector store. The vector store is used for storing and searching embeddings. As explained earlier, when a file is uploaded, it is parsed, broken into chunks, converted into embeddings, and stored in a vector store (or vector database). In this step, we create a vector store and link the uploaded file to it. Using code like vector_store = project.agents.create_vector_store(...) and providing the file ID, we ensure the file is connected to the vector store. Printing the vector store ID confirms that the vector store has been successfully created. The vector store allows the AI agent to perform semantic search within the documents.
+
+Next, we move on to creating the File Search tool. This tool enables the agent to search inside the uploaded files. In the code, we instantiate the File Search tool and provide the vector store ID. This setup allows the agent to deliver context-aware responses based on the uploaded document. Creating the File Search tool is straightforward and is essential for the AI agent to utilize the vector store for semantic search.
+
+Finally, we create the AI agent. This is the heart of the program. Using agents.create_agent(...), we define the model/deployment, give a name to the agent, and provide a system prompt. For example, the system prompt might be: “You are a helpful agent for file searches or RAG. Keep responses only to the uploaded file.” This ensures that the agent responds only using the uploaded document and not from any other data the model was trained on.
+
+Next, we provide the tools to the agent. Here, we link the File Search tool definitions and resources to the agent, which allows the agent to perform document lookup efficiently. Once the agent is created, we receive an agent ID, confirming successful creation.
+
+In the next lecture, we will cover creating a conversation thread, interacting with the conversation loop, attaching files as message attachments, processing messages, and retrieving responses from the agent.
+
+# **H) Demo: Create Thread and Process Messages**
+
+Now we have reached the final part of the program, where we will focus on creating a conversation thread and implementing an interactive conversation loop. This allows users to interact with the AI agent in real time. If the user types end, the agent will be deleted and the conversation will terminate.
+
+First, we create a conversation thread. Threads are important because they track the conversation and maintain context across multiple messages.
+
+Next, we implement a continuous loop for user interaction. If the user types end, the loop breaks, and the agent is deleted. Otherwise, the loop continues to process messages.
+
+A key step here is uploading the file as a message attachment. The uploaded file, such as the GPT-4 system card, is attached to the user’s message. Using upload_file_and_poll, the file path and file purpose (for agent use) are specified. The attachment is created with the file ID and linked tools, such as FileSearchTool.definitions. This ensures the AI agent can reference the uploaded document when responding.
+
+After attaching the file, we create the message. Each message is linked to the thread ID to maintain context. The role is set to user, and the content includes the user input. The attachment travels along with the message, allowing the AI agent to process both the query and the associated file simultaneously.
+
+The next step is processing the agent’s response. Using create_and_process_run, we pass the thread ID and agent ID. The system handles everything under the hood — it retrieves the relevant information, generates a response, and checks the run status. If the run fails, the process breaks; otherwise, it continues.
+
+We then retrieve and display the messages. Using list_messages with the thread ID, we access the AI-generated responses and display the latest reply. This ensures that the most recent response is always shown, whether it’s a summary, a table, or any other requested format.
+
+Finally, as an optional cleanup step, it is important to delete the vector store and the agent. Since vector stores incur additional cost, deleting them prevents unnecessary Azure charges. Cleaning up also ensures that no unused resources are left running.
+
+With this, we reach the end of the program. In the next lecture, we will run the code and observe the complete workflow in action.
+
+# **I) Demo: Run the Code and ask Questions**
+
+The time has finally come to run the code and see the workflow in action. Once you press run, you will notice that the vector store, thread, and agent are all created automatically. Each of these components generates a specific ID for tracking and integration: a file ID for the uploaded document, a vector store ID, an agent ID, and a thread ID. These IDs are essential for the smooth interaction between the components.
+
+Once everything is set up, we can ask a simple question. For example, we might say: “Can you summarize the document into five lines?” Since the document is quite large, the AI agent saves us time by quickly providing a concise summary. In the background, the agent parses the uploaded file and retrieves the relevant information to generate the summary. For instance, it might summarize the document as discussing safety challenges associated with GPT-4, including hallucinations, generation of harmful content, and other key concerns.
+
+Next, we can test the context awareness of the thread by asking the agent to provide bullet points. Because the conversation thread keeps track of previous messages, the agent can maintain context and respond accurately. The output demonstrates that the AI agent can extract and present the key bullet points from the uploaded document efficiently.
+
+To test the retrieval-augmented generation (RAG) functionality, we can perform a negative test. For example, if we ask, “Who is the PM of India?”, the agent should not provide unrelated answers. Ideally, it will indicate that this information is not available in the uploaded document. In this test, the agent confirms that the document does not contain information about the current Prime Minister, showing that it strictly follows the uploaded content for retrieval and response.
+
+This demonstrates the power of Azure AI agents with File Search: they can perform semantic search, maintain conversation context, generate structured outputs, and follow the instructions to rely solely on the uploaded documents.
+
+With this, we have come to the end of the series of lectures on Azure AI agents using File Search. Thank you for watching!
+
+# **XI) Azure AI Agent Knowledge Tools - Azure AI Search**
+
+# **A) Intro Azure AI Search**
+
+It’s now time to discuss the next knowledge tool, which is Azure AI Search. Many people have asked why one would use AI Search if File Search already allows you to implement RAG. The reason is that Azure AI Search is a full-fledged search and indexing service, whereas Azure OpenAI File Search is more lightweight and primarily focused on retrieving content for OpenAI models.
+
+With File Search, you can work with Azure Blobs, but Azure AI Search significantly extends your capabilities. For instance, you can search against your SQL databases, Cosmos DB, and other structured or unstructured data sources. Another advantage is that Azure AI Search is a managed service, so you don’t need to worry about infrastructure, scalability, or security. This makes it the preferred solution for enterprises.
+
+However, using Azure AI Search can sometimes be more complicated than File Search. There are multiple steps required before you can create an agent that utilizes AI Search. To make it easier, a complete workflow has been provided.
+
+Before creating your agent, you need to:
+
+Create a storage account.
+
+Upload your document.
+
+Ensure you have an Azure OpenAI service running.
+
+Set up an embeddings deployment, which is essential for converting your documents into vector representations.
+
+In this lecture, we will use a CrowdStrike threat report as our document and demonstrate how to search against it. After uploading the document, you need to create an index, which is the backbone of Azure AI Search.
+
+Once the setup is complete, we will follow the same approach as before: first, using the no-code approach within Azure AI Foundry, and then performing a deep dive into the Python code to understand how it can be implemented programmatically.
+
+# **B) What is Azure AI Search ?**
+
+Today, we are going to deep dive into the concept of RAG (Retrieval-Augmented Generation) and explore some practical demos to understand how it works. For this, we will be using a service within Azure called Azure AI Search.
+
+So, what exactly is Azure AI Search? Azure AI Search was originally based on Azure Cognitive Search, and Microsoft has rebranded it. It provides secure information retrieval at scale and is a fully managed service, meaning you don’t have to worry about the underlying infrastructure. When performing searches, it can automatically scale the infrastructure, while working on user-owned content.
+
+This connects directly to the concept of RAG. In RAG, you are not searching generic databases or content that OpenAI has trained on; instead, you are searching your private documents. This ensures that your AI responses are based specifically on your own data.
+
+To understand Azure AI Search better, imagine three components: your content, the Azure AI Search service, and your application. Your application sends queries to Azure AI Search, which retrieves and processes relevant information from your content.
+
+When we say “content,” we are referring to your private data that you want to make searchable. This data can be in various formats, such as files in the cloud, content in Azure Blob Storage, or entries in a Cosmos DB database.
+
+The next step is data ingestion. Azure AI Search uses indexers to automatically retrieve data from your chosen sources. It also supports AI enrichment, which performs tasks such as image processing, language processing, and extracting key phrases. Concepts like OCR (Optical Character Recognition) and named entity recognition fall under AI enrichment.
+
+Azure AI Search also supports full indexing and refresh indexing. Refresh indexing becomes necessary if the underlying data changes, ensuring that your indexes are always up to date.
+
+Under the hood, Azure AI Search has two main engines: the indexing engine and the query engine.
+
+The indexing engine creates an inverted index, which is a highly efficient way to store and organize data. Instead of storing every word in every document, it stores unique words and tracks which documents contain them and how often. This improves both storage efficiency and ranking of search results.
+
+The query engine retrieves the documents most relevant to a search query and ranks them using relevance scoring techniques. This ensures that the most contextually appropriate content is returned to the user.
+
+When a user sends a query, the request goes from your application to Azure AI Search. The response returned becomes part of the RAG prompt: it combines the user query, the knowledge retrieved from your private data, and then feeds this to the language model (LM) to generate a response.
+
+Azure AI Search works on data chunking, breaking large documents or files into smaller segments such as paragraphs, sections, or sentences. This allows the system to process and retrieve data more efficiently.
+
+It also supports AI-powered indexing, automatically extracting text, key phrases, and entities from documents, such as PDFs stored in Azure Blob Storage.
+
+Another key feature is semantic search, which goes beyond exact keyword matching to understand the intent and meaning behind queries. For example, a query containing the word “bank” is interpreted based on context, such as financial “bank” versus “river bank,” ensuring more relevant results.
+
+Azure AI Search also incorporates cognitive skills, such as OCR, language detection, entity recognition, and the creation of custom skills. For instance, you can extract text from scanned images and identify technical terms using entity recognition.
+
+One of the major advantages is that you don’t have to worry about infrastructure management. Microsoft automatically handles scaling to accommodate varying data volumes and query traffic, ensuring efficient and consistent search performance, even during peak loads.
+
+Finally, Azure AI Search integrates seamlessly with the Azure ecosystem. For example, you can use Azure Functions to trigger data processing whenever new content is added to Azure Blob Storage, which is then automatically indexed by Azure AI Search.
+
+In summary, Azure AI Search acts as the bridge between your private content and your application. It indexes, enriches, and semantically searches your data, enabling context-aware, accurate RAG applications. This makes it a powerful tool for integrating private data into AI workflows.
+
+# **C) Understand the Workflow**
+
+Today, our aim is to learn Azure AI Search and understand how to create an AI agent using this knowledge tool. Since Azure AI Search is a bit more complex than the simpler file search, I thought it would be useful to show a complete workflow—a step-by-step guide highlighting the essential artifacts and objects required to make it work.
+
+Unlike file search, which is relatively straightforward, Azure AI Search involves multiple components that need to be properly configured before you can create an AI agent and attach the knowledge tool. It’s crucial to follow these steps in order, to avoid issues later in the process.
+
+So let’s go step by step. The first step is to create a storage account in Azure. This storage account will host the documents that your AI agent will search over. Once you have the storage account, you need to upload your document. In our demo, we’ll be using a CrowdStrike cybersecurity analysis report for 2025, which covers breaches and cybersecurity insights. This will be the knowledge source for our agent.
+
+The next important step is to ensure that you have an Azure OpenAI service. If you don’t already have one, you will need to create it first. Within this service, it is critical to set up an embeddings deployment. This is necessary because Azure AI Search will use embeddings to convert your document into vectors, which are essential for semantic search and retrieval. For our demo, we will use the text-embedding-ada model for this deployment.
+
+After setting up the embeddings deployment, the next step is to create the Azure AI Search resource. This will allow us to manage indexing, search queries, and retrieval over the documents stored in the storage account. Once the search resource is ready, we will create an index and an indexer. These are critical for enabling Azure AI Search to efficiently organize, retrieve, and rank the content from your documents.
+
+Only after completing all these steps can you move to the final step, which is creating an AI agent and attaching the knowledge tool. Following this sequence ensures that the agent can successfully interact with the Azure AI Search resource and provide context-aware, relevant responses.
+
+Throughout this workflow, we’ll take it in small, manageable steps, with short videos of one to two minutes each. It’s important to follow along carefully to ensure everything is set up correctly before creating the agent.
+
+# **D) Demo: Create a Storage Account & Upload Document**
+
+Right, so the aim here is to implement RAG (Retrieval-Augmented Generation) using our own knowledge base. In this example, the knowledge base is a document shared by CrowdStrike for the 2025 Global Threat Report. We will query against this document, and it will act as the knowledge source for our AI agent.
+
+This document is quite large—around 50 pages—and that’s the beauty of Azure AI Search. It can handle documents at scale, so even if you upload hundreds of pages, the service can efficiently search and process the content for relevant responses.
+
+The first step is to create a storage account in Azure. Once the storage account is ready, we can upload the document we want to query. To create the storage account, you need to provide a resource group—in this case, I’ll use my existing Azure OpenAI resource group. Next, give a name for the storage account, such as Azure AI Agent Store, and select the region (e.g., East US).
+
+For the primary service, I’ll use Azure Blob Storage, which is suitable for large files and Azure Data Lake integration. You can also select other options like Azure Files, but Blob Storage works well for this scenario. Next, you can choose the performance tier; I’ll select standard instead of premium to avoid unnecessary costs. For redundancy, I’ll go with locally redundant storage to keep it cost-effective. After reviewing the settings, you can create the storage account. Within a few minutes, it should be ready.
+
+Once the storage account is created, the next step is to upload the document. You can upload the document as a blob inside the storage account. You can either select an existing container or create a new one—for example, Azure CrowdStrike Report. Set the container as private and leave other settings, like block size and blob type, as default. Upload the document to this container.
+
+At this point, the first two steps are complete: you have created a storage account and uploaded the document that the AI agent will query against. This prepares the foundation for creating the AI agent and configuring Azure AI Search in the next steps.
+
+# **E) Demo: Ensure / Create you have Azure OpenAI Service**
+
+According to our workflow, the first two steps—creating a storage account and uploading the document—are already completed. The next step is to create an Azure OpenAI resource.
+
+If you haven’t created an Azure OpenAI service yet, you can do this easily from the Azure portal. Simply search for “Azure OpenAI” in the search bar, and it should bring up the Azure OpenAI service. If no service exists, you’ll need to create a new one.
+
+Creating the service is straightforward. You’ll need to specify some basic details: choose your resource group (for example, your existing Azure OpenAI resource group), give a name for the service, and select a pricing tier—typically, the standard tier is sufficient. After filling in these details, just proceed to the next steps, and your Azure OpenAI service will be created.
+
+In our case, I will be using an existing service called Azure OpenAI – Udemy, so I won’t be creating a new one.
+
+It’s very important to note that Azure AI Search requires an Azure OpenAI resource to function. Within that resource, you will also need an embeddings deployment, which is essential for generating embeddings from your documents. In the next lecture, I will show you how to create the embeddings deployment step by step.
+
+If you are following along, go ahead and create a new Azure OpenAI service now, and then we can move forward with the workflow
+
+# **F) Demo: Create Embeddings Deployment**
+
+I think you’ve been following along well so far. Now it’s time to move ahead and focus on creating a deployment, specifically an embeddings deployment.
+
+With Azure AI Search, when you upload a document or create an AI search resource, it needs to know which embeddings deployment to use. The reason is simple: when the document is provided as a source, it must be chunked, and embeddings must be created for the content. These embeddings are eventually stored in a vector database to enable retrieval and search functionality. That’s why specifying the embeddings deployment is crucial.
+
+To create an embeddings deployment, first go to your Azure OpenAI resource. Click on the resource and navigate to the Deployments section. The easiest way to do this is via the Azure AI Foundry Portal. If this is a new service, you won’t see any existing deployments yet.
+
+Click Deploy Model, then select Deploy Base Model. Here, we will choose a base model for our deployment. I recommend picking something like the text-embedding-ada model from OpenAI. This model is designed specifically for embeddings and outperforms earlier embedding models for text and code search. Embeddings are essentially numerical representations of concepts, converting text into number sequences that the AI can work with.
+
+After selecting the model, confirm the deployment. For the deployment type, you can stick with Global Standard, and you can use the default name or pick your own. Click Deploy, and within seconds to a few minutes, your deployment will be ready.
+
+Once the deployment is created, we can move on to the next step: creating the Azure AI Search resource. All the steps we’ve done so far—creating a storage account, uploading the document, creating the OpenAI resource, and deploying embeddings—are essential prerequisites for this. In the next video, I’ll show you exactly how this comes together.
+
+# **G) Demo: Create Azure AI Search Resource**
+
+In this video, we will focus on creating the Azure AI Search resource. Our ultimate goal is to attach an AI agent with a knowledge tool that uses Azure AI Search. To do this, we first need to set up the search resource itself.
+
+The easiest way to start is by searching for AI Search in the Azure portal. You’ll see an option under Azure AI Services, and AI Search is a part of that. From there, simply click Create.
+
+One important point to remember is that Azure AI Search can get expensive, so you should be careful when creating the resource. First, choose your resource group—for example, the “Azure OpenAI Resource Group” that you might already be using. Next, give your search service a name; it can be anything meaningful, such as AgentSearchRAG. Choose your location, like East US.
+
+A critical step is to change the pricing tier. By default, Azure picks the Standard tier, which can become costly if left running for a long time. While there is a free option, it often comes with latency issues and limitations. The Basic tier is generally a safer and more cost-effective choice. Remember, once you are done using the resource, it’s best to delete it to avoid unnecessary charges.
+
+After specifying all details, click Review + Create. Azure will validate your configuration, and once validated, you can create the search service.
+
+Once your Azure AI Search service is ready, the next step is to create an index and an indexer inside the service. These are essential components for enabling document search functionality and supporting your AI agent. In the next lecture, we’ll go step by step on how to create the Azure AI Search index.
+
+# **H) Demo: Create an Index**
+
+In this lecture, we will focus on creating the Azure AI Search index. The search index forms the backbone of searching and the Retrieval-Augmented Generation (RAG) process that we utilize with Azure AI Search and the knowledge tool.
+
+To start, go to the Azure AI Search resource that you previously created. There are multiple ways to create an index, but for our approach, we will use “Import and Vectorize Data”. Click on this option to begin.
+
+You will be guided through a workflow where you first connect to your data and then vectorize it. Vectorizing essentially means creating embeddings for your data, which is why we previously set up the Azure OpenAI embedding models. This step ensures that the textual information can be transformed into numerical vectors for semantic search. You also have the option to vectorize and enrich images, but in our case, we are focusing on hybrid text-based and semantic search.
+
+Next, you need to set up your data connection. Azure AI Search allows you to connect to multiple data sources, including Azure Blob Storage, Azure Data Lake, Cosmos DB, or even Azure SQL Database. This flexibility distinguishes Azure AI Search from the simpler file search, as it allows integration with databases and enterprise-grade storage solutions.
+
+For our example, we will select Azure Blob Storage. Choose your subscription, storage account, and the container where the document resides (for example, the “Azure CrowdStrike Report” container). There are optional settings such as document layout detection and deletion tracking, but for simplicity, we can leave them at default.
+
+Once the data connection is set, you will proceed to vectorize the text. Here, you connect to the Azure OpenAI service and select the embedding model. This is why we created the embeddings deployment in earlier steps. You choose your subscription, the Azure OpenAI resource, and the deployment name. The authentication type is usually set as API key, which establishes a secure connection between Azure OpenAI and Azure AI Search. Acknowledge that this will incur additional costs for both AI Search and Azure OpenAI services.
+
+If you do not have images in your data, you can skip image-related settings. You can enable the semantic ranker and optionally configure a schedule for automatic indexing if you plan to add more documents later. Once everything is set, click Create.
+
+Azure AI Search will then create several resources: the index, the indexer, and a skill set. Once complete, you will see that the index has been created, with a default name such as “vector”. This index will later be referenced programmatically when implementing RAG with Azure AI Search.
+
+In summary, by following these steps, we have successfully created an Azure AI Search index, which is a critical component for enabling semantic search and RAG workflows on our knowledge base.
+
+# **I) Demo: Create an Agent & Attach the Knowledge Tool**
+
+Now, we can proceed to create an Azure AI agent that will be based on our knowledge tool, which in this case is Azure AI Search. All the preparation work we’ve done so far—creating the storage account, uploading the document, setting up Azure OpenAI embeddings, and creating the search index—will now come into play.
+
+To start, go to your Azure AI Foundry project for agents and open Launch Studio. Here, we will create a new agent. Click on “New Agent” and give it a name, for example, Agent Rag I Search. You can then select the deployment model, such as GPT-4 or GPT-4 Mini, depending on what you have available. You can also provide a brief description, like “A RAG-based agent helping me using Azure AI Search tools.”
+
+Next, navigate to the Knowledge section and click Add, then select Azure AI Search. This step is crucial because it connects your agent to the search index you created earlier. Azure AI Search uses this index to allow the agent to quickly retrieve relevant information from your documents. The connection ensures that the agent can leverage the full power of the index you prepared.
+
+You will now need to connect to an index. Here, you have two options: indexes already part of the project, or indexes that are not yet part of this project. In our case, we will create a new connection. Click Select Azure AI Search Resource Connection, then Add Connection. Choose your Azure AI Search resource (for example, Agent AI Search Rag).
+
+Once connected, you can select your Azure AI Search index. In our example, the index we created earlier was called vector, but you can give it a more descriptive name, like Vector Index – CrowdStrike, since it’s based on our CrowdStrike document.
+
+Finally, choose the search type. You have the option for text-based search, semantic search, or a hybrid approach. For our scenario, select Hybrid (Vector + Keyword) to leverage both semantic embeddings and traditional keyword matching. Once selected, click Connect, and your agent will now be fully linked to the Azure AI Search index.
+
+This completes the setup of your Azure AI agent with the knowledge tool, allowing it to perform RAG-based queries on your uploaded documents efficiently.
+
+# **J) Demo: Run Queries in Agents Playground**
+
+Once your vector index is connected to the agent, you will see it appear as part of the knowledge section. All the connections you created and the vector index you prepared should now be visible here. This confirms that your agent is properly linked to the Azure AI Search index.
+
+Now, to test it, click “Try in Playground.” This will open the agent’s playground, allowing you to interact with it just like a normal chat interface. You can start by asking a simple query, such as “What is the uploaded document all about?” The agent will retrieve information using Azure AI Search and provide a summary based on the document you uploaded.
+
+Once you see the agent correctly summarizing the document, you can try more specific queries. For example, ask “Which countries are majorly being attacked?” The agent will again use the Azure AI Search index to retrieve relevant information. It will respond with the findings from your knowledge base, noting regions such as North America, Western Europe, and East Asia, and even highlight particular advisories or activity trends, like increased intrusions by Chinese actors.
+
+This demonstrates the power of RAG (Retrieval-Augmented Generation). Your agent is now able to leverage the Azure AI Search index to query your private document effectively, providing accurate and contextually relevant answers.
+
+# **K) Demo: How to use AI Search in Python Code**
+
+In this section, we will explore how to work with Azure AI Agents and Azure AI Search using Python code. Essentially, we will replicate the same exercise we did in the agents playground, but this time programmatically. The idea is to go step by step so that you can follow the workflow in a structured manner.
+
+All the resources you created in the portal—such as the Azure Storage account, uploaded document, and Azure AI resources—will be used here. The Python code will connect to these resources and perform the same operations we did manually, allowing the agent to query your knowledge base.
+
+The key feature here is that we are creating a conversational AI agent powered by GPT-4 or GPT-4 Mini. The agent uses the Azure AI Search index as its knowledge base, leveraging the knowledge tools we configured earlier. When a user sends a request, it goes to the AI agent, which understands that its knowledge tool is Azure AI Search. Behind the scenes, it interacts with the search index and indexers to retrieve relevant data and provide the response.
+
+By doing this programmatically, you can integrate the Azure AI agent workflow into your applications, automate queries, and scale your RAG-based solution beyond the portal interface. This makes it straightforward to leverage your private knowledge base for retrieval-augmented generation with Python.
+
+# **L) Demo: Install Libraries and Setup Environment**
+
+The first part of the program is quite similar to what we have done previously. Here, we start by installing the essential libraries, including the Azure AI Projects SDK, Azure Identity, and python-dotenv. These libraries are necessary to interact with Azure services and manage environment variables securely.
+
+In this setup, we use an .env file to store API settings such as client_id, client_secret, tenant_id, and the project connection string. This file also allows you to specify names for your vector indexes or other resources if needed. For now, the configuration is straightforward and focused on connecting to the Azure AI Project and Azure AI Search.
+
+Once the libraries are installed, we configure the environment so that the program picks up the correct credentials and connection settings. This ensures that all subsequent calls to Azure services, including the AI project and search index, are authenticated and authorized properly.
+
+In the next part of the lecture, we will see how to initialize the Azure AI Project client and set up the Azure credentials programmatically, which is the next crucial step to enable interaction with your search index and knowledge base.
+
+# **M) Demo: Initialise the Project Client**
+
+In the first part of the program, we begin by importing the necessary Azure SDK modules, which are essential for interacting with Azure services. We set up authentication using the ClientSecretCredential, which uses your tenant_id, client_id, and client_secret to authenticate against Azure. This credential is then used for all subsequent API requests to ensure they are authorized.
+
+Next, we initialize the Azure AI Project client. This initialization requires two things: the authenticated Azure credentials and the Project Connection string. The credentials allow secure access to Azure, while the connection string, which you obtain from the Azure AI project in the Foundry, links your program to the specific AI project. These values are typically stored in environment variables for security and convenience.
+
+One very important aspect here is retrieving your connection ID. This is often a point of confusion because the connection ID links your AI project (Foundry) to the Azure AI Search resource. Azure AI Search is a separate service, so establishing this connection is crucial. The connection ID is not directly visible in the Foundry or Azure portal, so you need to retrieve it programmatically.
+
+In the code, we retrieve the connection ID by scanning through the metadata fields of each connection in the AI project, filtering for connections of type Azure AI Search, and then storing the relevant connection ID in a variable (con_ID). If you have multiple AI Search connections, it’s best to explicitly assign the correct one in your environment file. The retrieved connection ID comes in a format like search/subscriptions/..., which is essential to pass when initializing your search tool.
+
+In the next part of the program, we will use this connection ID to initialize the AI Search tool with the index we created earlier. This step is necessary to enable your AI project to query the Azure AI Search index effectively.
+
+# **N) Demo: Create Agent**
+
+Now we come to the final part of the program, where we initialize the AI Search tool with the index name. Essentially, we are creating the AI Search tool and specifying two things: the index connection ID and the index name. The connection ID is what we retrieved in the earlier part of the program, as discussed at length. The index name refers to the index we created when setting up the Azure AI Search resource. You can cross-check this by going to your AI Search resource and looking under the indexes section. In this example, the index name ends with 7439, which we have already copied for use in the code.
+
+Next, we move to the creation of the AI agent, which is a critical part of the program. We utilize the GPT-4 or mini model, and the agent is given a name—in this case, my_agent_search. We also provide instructions, acting like a system prompt, telling the agent that it is a helpful assistant designed to perform RAG queries using Azure AI Search. At this stage, it is important to specify the tools the agent will use. Here, tools is set to I_search.definitions, which defines the search tool, and tool_resources is set to I_search.resources, linking the agent to the actual AI Search tool. After this, the agent ID is printed for reference.
+
+Once the agent is created, the program moves on to conversation threads, where messages between the user and the agent are exchanged. Each conversation takes place within a unique thread, and a thread ID is assigned. The program includes an interactive loop that waits for user input. The loop continues until the user types end, at which point the agent session is cleaned up. This ensures proper resource management and avoids leaving unnecessary active threads.
+
+The last part of the program involves sending user messages to the agent. Each user input is sent to the AI agent within the conversation thread, with the role parameter set to user to indicate the source. The agent then processes this message using create_and_process_run, which triggers the AI to generate a response. After processing, the program checks whether the run was successful. Finally, the agent’s response is retrieved and displayed using a function that fetches the latest messages from the thread, extracts the agent’s reply, and presents it to the user.
+
+This completes the explanation of the program, covering how the AI Search tool is initialized, how the agent is created and linked to the tool, and how user interactions are handled through conversation threads. In the next video, the code will be executed to demonstrate the workflow in action.
+
+# **O) Demo: Execute the Code**
+
+Finally, the time has come to run the code. Let’s execute our program and see it in action. When we run the code, the first thing it does is print the connection ID, which, as discussed earlier, is crucial for establishing the connection between the Azure AI agent and the Azure AI Search service. This connection ID appears as a long string, which will be used throughout the program.
+
+Next, the program proceeds to create the agent, printing the agent ID and the conversation thread ID. Once the agent is ready, we can start sending inputs. For example, I ask, “What is the uploaded document all about?” The agent responds immediately, showing the power of the integrated system. It correctly identifies the document as the CrowdStrike 2025 Global Threat Report and summarizes its focus on various aspects of cybersecurity.
+
+We can then test the agent’s summarization capabilities. I ask it to “Summarize the document in five lines”, and the agent generates a concise summary covering key aspects of the threat report and threat detection measures. The summarization is clear and captures the essence of the 50-page document.
+
+Next, we can ask a more specific question, such as “Which countries are the major threats?” The agent quickly responds, listing countries like China, North Korea, Russia, Iran, along with other notable mentions such as Vietnam, Pakistan, and Syria. It even highlights significant statistics, like China’s cyber activity surge by 150%. This demonstrates how effectively the agent can query and synthesize information from large, unstructured documents in seconds.
+
+Finally, once we are done with our queries, we simply type end, and the conversation ends, automatically deleting the agent and cleaning up resources.
+
+Overall, this demonstrates a complete workflow of using the Azure AI Search knowledge tool with Azure AI agents. A large, unstructured document is transformed into a queryable knowledge base, and the agent efficiently retrieves and summarizes relevant information, showcasing the power and flexibility of RAG (Retrieval-Augmented Generation) with Azure AI.
+
+# **XII) Real World Scenario - Freshdesk Agent**
+
+# **A) Understand the Workflow and what we shall Build**
+
+In this series of lectures, we will build a practical use case that applies the knowledge we’ve gained about OpenAI function calling. Specifically, we will see how function calling can be used in a real-world scenario with an Azure AI agent.
+
+Here’s the idea: Imagine a user interacting in natural language, saying something like:
+
+"Hey, can you create a support ticket for me? The file system usage is above 90%. Also, send me an email confirmation."
+
+The goal is for the AI agent to understand this request, perform the necessary backend operations, and respond appropriately. In our case, the backend service we’ll be using is Freshdesk, a ticketing tool. The Freshdesk API will be triggered via Azure AI agent through function calling, automating ticket creation and notifications.
+
+To understand the workflow:
+
+User Interaction – The user sends a request in natural language, for example, asking to raise a ticket.
+
+Azure AI Agent – This is the central AI layer that processes the request. It is powered by OpenAI models via Azure OpenAI. The agent understands the intent of the user.
+
+Function Calling – Based on the intent, the agent decides if any backend service calls are required. Here, it triggers function calling to call the Freshdesk API.
+
+Backend Service Execution – The Freshdesk API receives the request and performs the action, such as creating or updating a support ticket using the details provided by the agent.
+
+So essentially, the agent acts as the intelligent intermediary, connecting the user’s natural language request to real backend actions.
+
+Don’t worry if it sounds a bit complex at first. In the upcoming lectures, we will go step by step, building this Azure AI agent and integrating it with Freshdesk using function calling. By the end, you’ll see a complete, working example of an AI agent that understands user requests and performs backend operations automatically.
+
+# **B) Create a login on freshdesk & Setup API Key**
+
+So, as part of this workflow, we need to utilize the Freshdesk API. The first thing you need to do is create a Freshdesk account.
+
+Here’s how you can do it:
+
+Visit Freshworks – Freshdesk is part of Freshworks, and they provide a 14-day free trial, which you can use to get started.
+
+Sign Up – Click on “Try it free”. You’ll see a simple form asking for:
+
+First name
+
+Last name
+
+Work email (Note: You cannot use Gmail or Hotmail for this; it must be a company email)
+
+Company name
+
+Phone number
+
+Activate Your Account – After submitting the form, you’ll receive an email from Freshdesk. Click the activation link to complete your account setup. Once activated, you’ll have your username and password.
+
+Once your account is set up and activated, you should see a dashboard indicating your trial period, e.g., “14 days left”.
+
+Now, there are two pieces of information that are crucial for our API integration:
+
+API Key –
+
+Go to Profile Settings in Freshdesk.
+
+You’ll see your email listed there; click to reveal the API key.
+
+Copy this key as we will use it in our code to authenticate API requests.
+
+Helpdesk Domain –
+
+Go to Admin → Helpdesk Settings.
+
+Here, you’ll find your helpdesk URL, for example: cloudalchemy.freshdesk.com.
+
+This domain is needed when making API calls to Freshdesk, so make sure to note it down.
+
+Once you have your Freshdesk login, generated API key, and helpdesk URL, you are ready to proceed and integrate Freshdesk with your Azure AI agent using function calling.
+
+# **C) Install Binaries & Setup Environment**
+
+The very first step is to install the required libraries and set up our environment. This is always an important step, so take it slow and go step by step.
+
+Here’s what we’ll do:
+
+Fix library versions –
+I’m specifying exact versions for the libraries we’ll be using. The reason is simple: if you try to run this code a few months from now, the libraries might have changed, and it could break the code. By fixing the versions, we ensure that the code works as expected.
+
+Libraries we’ll install –
+
+azure-ai-projects
+
+azure-identity
+
+python-dotenv (for environment variables)
+
+We’ve already discussed these libraries in detail in previous lectures, so I won’t go into each again.
+
+Environment file setup –
+We’ll use a .env file called API settings to store our credentials. This includes:
+
+CLIENT_ID, CLIENT_SECRET, TENANT_ID → From your Azure app registration
+
+PROJECT_CONNECT_STRING → Your Azure AI project connection string
+
+New additions for this workflow:
+
+FRESHDESK_DOMAIN → The helpdesk URL from Admin → Helpdesk Settings in Freshdesk
+
+FRESHDESK_API_KEY → From Profile Settings → View API Key in Freshdesk
+
+Once we have this setup, we can load the environment variables in Python using dotenv and verify that everything is picked up correctly.
+
+After that, we’ll move on to the next step, which is to understand what function we’ll be calling and which Freshdesk API endpoints we’ll use.
+
+# **D) Understand the Custom Function create_freshdesk_ticket**
+
+Now we shall go ahead and start creating our own custom function for Freshdesk ticket creation. The first step in this process is to import some type hints from Python’s typing module. We do this using the line:
+
+from typing import Any, Callable, Set
+
+Here, Any represents any type of value, Callable represents a function or method, and Set represents a set containing elements of a specific type. These type hints are useful for static type checking and improving code clarity.
+
+Next, we define our custom function create_freshdesk_ticket. This function is responsible for creating a support ticket in Freshdesk. It takes two inputs: email and subject, both of which are strings, and returns a string. Essentially, the function says: “Create a ticket in Freshdesk via its API using the provided email and subject, and return the ticket information as a JSON string.”
+
+In order to authenticate with Freshdesk, the function requires the Freshdesk domain and API key, both of which are stored in our environment file. Using these credentials, we construct the API endpoint URL, which is required to create a ticket. According to the Freshworks developer documentation, the endpoint we use is api/v2/tickets. The complete URL is constructed as:
+
+url = f"https://{FRESHDESK_DOMAIN}/api/v2/tickets"
+
+Here, FRESHDESK_DOMAIN is the domain associated with your Freshdesk account.
+
+Once the endpoint is defined, we need to prepare the ticket data. This includes the email, subject, a description indicating the ticket was created via the Azure AI agent service, status (open), priority, and optional tags such as "api" or "python". This structured data forms the payload that will be sent to Freshdesk via an API request.
+
+Next, we set up the HTTP headers for the request. The headers specify that the content type is JSON and that the response should also be accepted as JSON. After this setup, we send a POST request to the Freshdesk API using the requests library. Authentication is done using the Freshdesk API key, which is passed along with the headers and the JSON-formatted ticket data.
+
+# **E) Initialize Azure AI / Create toolset**
+
+Now that we have created our custom function, the next step is to import the additional required modules, initialize the Azure AI Project client, and set up the toolset. These components are essential before we can create the Azure AI Agent that will ultimately use the Freshdesk ticket function automatically. All of this work prepares the foundation for the agent we will build in the next lecture.
+
+We begin by importing a set of modules that our script relies on. The first import is the os module, which allows our Python script to interact with the operating system and access environment variables. Next, we import json, which is necessary because we are interacting with external APIs that return responses in JSON format. The requests library is also imported, as it enables us to make HTTP calls to third-party APIs such as Freshdesk. Following this, we import AIProjectClient from azure.ai.projects, which is the main client required to interact with the Azure AI Project service. For authentication, we rely on Azure Identity, which allows us to authenticate securely using client credentials. Finally, we import FunctionTool and ToolSet from azure.ai.projects.models; these are needed because our agent requires tools, and this is where we define and register our custom Freshdesk ticket-creation function.
+
+Next, we move to the main execution block of the script. This block ensures that the code inside it only runs when the script is executed directly, not when it is imported elsewhere. Inside this block, the first major step is to configure the Azure credentials. We do this by creating a credential object using the client ID, tenant ID, and client secret—all fetched from our environment file. This provides a secure way to authenticate with Azure services without hardcoding sensitive information.
+
+Once authentication is correctly set up, the next step is to initialize the Azure AI Project client. This client requires a secure connection string, also stored in our environment file, and the credential we configured earlier. By establishing this connection, the script is now linked to the Azure AI Project where the agent lives and where the tools will be registered.
+
+After establishing the connection, we move on to creating the toolset. This toolset contains all the custom functions that our Azure AI agent can use. To do this, we wrap the user-defined function—our Freshdesk ticket creation function—inside a FunctionTool. This wrapper helps the Azure agent understand how to call the function. Once wrapped, the function is added to a ToolSet, which serves as a collection of tools available to the agent. This step is essential, as it ensures the agent can call create_freshdesk_ticket whenever the user asks it to perform an action that requires creating a Freshdesk ticket.
+
+Finally, we enable a new and important feature:
+
+project_client.agents.enable_auto_function_calling()
+
+This setting activates automatic function calling, which means the agent does not need explicit instructions to trigger the Freshdesk API function—it will automatically detect when the user’s request requires the tool and will invoke it on its own. This makes the agent more intelligent and capable of responding naturally to user queries.
+
+With all these components in place—imports, authentication, project client initialization, toolset creation, and auto function calling—we are fully prepared to move on to the next stage. In the upcoming lecture, we will finally start building our Azure AI Agent and connect all these elements together to create a working solution.
+
+# **F) Create the Freshdesk Agent**
+
+Let’s walk through what this part of the program is doing.
+
+We start by calling project_client.agents.create_agent, where we define the core configuration for our agent.
+Here, we specify the model deployment we want to use — in this case, GPT-4 Mini.
+Make sure you already have this model deployed inside your Azure AI Foundry project; otherwise, the agent won’t work.
+
+Next, we provide the agent name — Freshdesk-agent — and set a simple instruction:
+“You are a helpful agent who can create support tickets.”
+This instruction guides the agent’s behavior during conversations.
+
+Remember that every agent comes with a tool or toolset.
+Here, we attach a toolset that includes our function create_helpdesk_ticket, which we defined earlier.
+This function acts as the agent’s capability to generate support tickets.
+
+Once the agent is created, the next step is to initialize a conversation thread.
+This creates a new thread that maintains context for all interactions with the agent.
+
+After that, we move into our interactive chat loop.
+The user can input messages, and the loop continues until they type "end".
+
+Inside the loop, we do two key things:
+
+Create a message
+We call create_message, provide the thread ID, set the role as "user", and include the user’s input.
+This adds the message to the thread.
+
+Run the agent
+We trigger the agent using create_and_process_run, passing the thread ID and agent ID.
+This executes the agent with the latest message and allows it to generate a response using the tools and instructions provided.
+
+We also include a simple failure check. If anything goes wrong, we display the error.
+
+Finally, we retrieve the agent’s latest output from the thread messages and print it to the console.
+
+As a best practice, once the interaction is complete, we optionally delete the agent using its agent ID.
+This helps keep your Azure environment clean and avoids accumulating unused agents.
+
+In the next step, we’ll run this end-to-end and see the agent in action.
+
+# **G) Execute the Program and Check the Tickets**
+
+Now it’s time to execute the code and see our Azure AI agent in action.
+
+After running the program, you’ll immediately see the Agent ID and the newly created Thread ID displayed in the console.
+With our agent initialized and the thread ready, we can now interact with it.
+
+Let’s try a sample request:
+
+“Create me a support ticket for /u01 file system usage exceeding 90% and send an email to cve.joy@cloudalchemy.uk
+.”
+
+Imagine this scenario:
+You notice that the /u01 filesystem on your server has reached 90% utilization.
+As part of your company’s workflow, you want to raise a support ticket and receive an email confirmation.
+Our Azure AI agent should be able to handle this end-to-end.
+
+Once we submit the request, the agent processes it using the defined toolset and responds:
+
+“I have successfully created a support ticket regarding the /u01 file system usage exceeding 90%.
+The ticket details have been sent to cve.joy@cloudalchemy.uk
+.”
+
+And that’s exactly what we expect.
+
+Next, let’s check the email inbox.
+Perfect — the email has arrived from Cloud Alchemy Limited confirming that the request has been logged, along with the ticket reference number (in this case, Ticket #5).
+If we click the link, it takes us straight to our Freshdesk portal.
+
+Inside the Freshdesk dashboard, the newly created ticket is clearly visible.
+It shows:
+
+The source: Reported via portal
+
+A note indicating that the ticket was created via Azure AI Agent Service
+
+The complete metadata we included earlier (e.g., Python, API-based request)
+
+This demonstrates how smoothly the entire flow works — from natural language input, to ticket creation, to email delivery, and finally to logging inside the support portal.
+
+When you're done interacting, simply enter “end” in the console.
+This exits the chat loop, deletes the agent from the environment, and completes the process cleanly.
+
+This example perfectly showcases a real-world use case.
+With our Azure AI Agent Service, a user can describe a support need in plain language, and the system intelligently handles everything — creating tickets, sending notifications, and integrating with existing support tools.
+
+# **XIII) Real World Scenario - Streamlit Application**
+
+# **A) What is Streamlit ?**
+
+Before we begin building our Azure AI Agent Service with Streamlit—and before I show you how the front end will actually look—it’s important, especially for beginners, to first understand what Streamlit is. When I was creating this course, Streamlit was new to me as well, so everything I’m explaining here is based on my own learning experience.
+
+Streamlit is an open-source Python library designed to make it incredibly easy to build interactive web applications, particularly for data science and machine learning projects. The beauty of Streamlit lies in its simplicity: you can build fully functional web apps with just a few lines of Python code. Since it is specifically created for data scientists, the framework focuses on enabling fast, interactive, and visually appealing applications with minimal effort.
+
+One of the biggest advantages of Streamlit is that it requires no front-end development experience. You don’t need to know HTML, CSS, JavaScript, or even modern frameworks like React or Angular. If you can write Python, you can build web apps. Streamlit seamlessly converts your Python scripts into usable web interfaces, which makes the development process extremely beginner-friendly.
+
+Streamlit also offers a wide range of built-in interactive widgets. These include sliders, buttons, text inputs, date pickers, dropdowns, radio buttons, and more. These widgets allow you to update your app in real time, creating highly dynamic and responsive user interfaces. This makes Streamlit ideal for rapid prototyping, enabling you to build interactive applications within minutes rather than weeks. In the next lecture, you’ll see just how easy it is to create simple components with minimal code—something that would require large amounts of HTML or JavaScript in traditional web development.
+
+Another key strength of Streamlit is that it is heavily focused on data. The framework is designed with the needs of data scientists in mind, making it perfect for tasks such as data visualization, machine learning demos, dashboards, and more. It integrates smoothly with popular Python libraries like Pandas, NumPy, TensorFlow, and PyTorch. This makes it a natural choice for anyone working in analytics or machine learning.
+
+Streamlit also provides live reloading, which means the app automatically refreshes whenever you modify your code. This real-time feedback loop greatly speeds up development and makes experimentation effortless. Simply save your Python file, and the browser reflects your changes instantly.
+
+Creating a Streamlit app is incredibly simple. With just a few lines of code—such as importing Streamlit, writing a title, printing text, or adding a text input—you can create a complete interactive page. Many of the common functionalities you would normally implement with HTML or JavaScript are readily available through Streamlit’s Python APIs.
+
+Streamlit supports a variety of input controls including buttons, checkboxes, sliders, number inputs, text fields, date pickers, dropdown selectors, multiselect widgets, and radio buttons. More advanced features like file uploaders, drag-and-drop functionality, and multi-file support are also built in. These capabilities make it easy to build rich, interactive interfaces without specialized front-end knowledge.
+
+Overall, Streamlit empowers you to create clean, interactive, and visually appealing web applications very quickly. In the next lecture, I’ll walk you through some simple Streamlit examples to help you understand how easily you can build basic front-end components using only Python.
+
+# **B) Demo: Testing some Simple Sample Apps**
+
+In this video, you’ll get to see Streamlit in action. To begin, simply visit the Streamlit website by going to streamlit.io. Once the site loads, you’ll notice the tagline: “The fastest way to build and share applications.” Streamlit immediately showcases how effortless it is to create interactive apps. For example, by writing just a few lines—import streamlit as st, followed by st.write("Hello World")—a complete web interface appears instantly. You can update code, add a slider, and watch the app refresh automatically. This simplicity is what makes Streamlit so powerful: the UI responds directly to your Python code.
+
+Streamlit also makes deployment incredibly easy. Once your app is ready, you can deploy it to the cloud or even package it into a mobile application. Everything—from development to deployment—can be done without writing any HTML, CSS, or JavaScript. Another great feature is the Streamlit Playground, which lets you experiment with Streamlit components live in the browser. The playground shows simple examples: importing the library, adding a title, writing markdown, and instantly seeing the output side-by-side. It’s an excellent way to learn and understand how each widget behaves.
+
+For example, you can add playful elements like st.balloons(), which triggers an animated balloon celebration when a button is clicked. Streamlit previews all of this visually in the playground. You can also explore built-in charts and visualizations. With barely 15 lines of code, Streamlit can generate clean and interactive charts directly from Pandas data. The left side displays the code, and the right side shows the rendered chart instantly, making it a perfect tool for data exploration and visualization.
+
+To demonstrate how easy it is to run Streamlit locally, I copied a simple code example from the playground into a Python file. To set it up, you only need to run pip install streamlit, which installs the framework in seconds. After that, you can run your app using the command streamlit run charts.py, and Streamlit will automatically open the app in your browser. The same chart and interface you saw in the playground now appear on your local machine. You can interact with the chart—hide or show series, adjust inputs, and explore the data in different ways.
+
+Streamlit offers many additional components such as dataframes, sliders, inputs, live charts, computer vision demos, and even geospatial visualizations. All these examples are available for you to explore in the playground. You can browse through them in your free time to get comfortable with the wide range of possibilities Streamlit provides.
+
+Now that you’ve seen Streamlit in action and understand how simple and powerful it is, the next lecture will show you how to integrate Streamlit with the Azure AI Agent Service. We’ll build a full application using both technologies, and this time, we'll use Visual Studio Code to develop the project.
+
+# **C) Setup a Virtual Environment in VSCode & Install Requirements**
+
+In this lecture — and the upcoming ones — our goal is to build an application using Streamlit. The application we’ll be working on is the same Freshdesk-based support ticket generator that we previously created. We will reuse the same code logic, but this time we will enhance the application by adding an interactive Streamlit user interface on top of it.
+
+This also gives us the opportunity to demonstrate how the same solution can be built and executed using Visual Studio Code, since many of you have asked to see the workflow outside Google Colab. So, as always, your wish is my command.
+
+To get started, you first need to have Visual Studio Code installed on your machine — whether it’s Windows, macOS, or Linux. Once VS Code is installed, open the application and create a new folder where your project will live. You can name this folder something like StreamlitApp. Open that folder in VS Code, and when prompted, click “I trust the authors” so the workspace can initialize properly.
+
+Next, open a new terminal inside VS Code. By default, any Python package you install would go into your system’s main Python environment. However, best practices recommend keeping your project dependencies isolated. That’s why we create a virtual environment. You can do this by running:
+
+python3 -m venv streamlit_ai_agent
+
+This command creates a new virtual environment named streamlit_ai_agent. Once created, you will see folders like bin, include, and lib generated inside it. Even after creation, your terminal still points to the base environment, so the next step is to activate your new environment:
+
+source streamlit_ai_agent/bin/activate
+
+Once activated, your terminal prompt will update, confirming that you are now working inside the virtual environment. Any packages installed now will be contained within this environment.
+
+Inside the course resources, you will find a requirements.txt file. This file lists all the Python libraries your application will need. The libraries include requests, streamlit, azure-ai-projects, azure-identity, and python-dotenv. These are the same modules we have already discussed earlier, and now we simply need to install them.
+
+To install all required dependencies in one go, run:
+
+pip install -r requirements.txt
+
+This command instructs Python to install every library listed in the file. The installation process may take a little time because some of the Azure-related libraries have multiple internal dependencies.
+
+Once the installation is complete, your development environment is fully prepared. This setup — creating a virtual environment and installing the necessary libraries — is the first and most essential step before we begin building the Streamlit application.
+
+# **D) Setup the Environment File**
+
+Once your libraries are installed, you can always re-run the installation command to verify everything is in place. Simply execute:
+
+pip install -r requirements.txt
+
+If all dependencies were installed earlier, the terminal will confirm that each requirement is already satisfied. This ensures your environment is correctly prepared and no packages are missing.
+
+The next step is to bring two important files from the course resources into your project folder. These files are:
+
+API_settings.env
+
+Streamlit_Freshdesk.py
+
+The API_settings.env file contains environment variables that hold your Azure and Freshdesk configuration details — such as your client ID, client secret, tenant ID, project connection string, Freshdesk domain, and Freshdesk API key. For security reasons, you must use your own credentials. The file included in the course is only for reference so you know exactly what variables you need.
+
+This .env file is identical to the one we used earlier when building the Freshdesk integration in Google Colab. Nothing changes here — the values and structure remain the same.
+
+Next, open your Streamlit_Freshdesk.py file. As soon as you open it in Visual Studio Code, you’ll notice that VS Code automatically selects the correct Python interpreter — the one associated with the virtual environment you created earlier. For example, you might see something like Python 3.11 or 3.12 mapped to the streamlit_ai_agent environment under bin/python. This ensures your script will run using the exact environment where we installed all required packages.
+
+One important thing to check is the path to your .env file. Inside your script, you must explicitly specify where the API_settings.env file is located so that your application can correctly load your credentials. Adjust this path if needed so your script can find the file.
+
+Other than that, the code should look very familiar. You're simply importing the same libraries we previously discussed, loading the environment variables, and pulling in values such as client ID, client secret, and tenant ID. This part of the script remains unchanged from the earlier Colab-based version.
+
+Once you’ve confirmed that your environment variables are correctly set and the interpreter is pointing to the right environment, you’re ready for the next stage — integrating Streamlit with your Python logic.
+
+From the next lecture onward, we’ll move into the Streamlit-specific implementation and see how to wrap our Freshdesk logic inside a user-friendly Streamlit interface.
+
+# **E) Understand the Streamlit Configuration**
+
+Let’s now break down the Streamlit portion of the application and understand how the layout and interface are configured. The first key section is the Streamlit layout configuration. In the code, we call st.set_page_config and specify layout="wide". This simply means the application should utilize the full width of the browser window instead of a narrow, centered layout. We also set the initial sidebar state to "collapsed", which means that when the app loads, the sidebar will start in a minimized state.
+
+You can see this behavior in the actual application UI. The page spans the full width of the browser for a clean and spacious interface, while the sidebar remains collapsed when the page first loads. Users can expand it later when needed.
+
+Next, the code defines a custom banner header. Streamlit allows the use of HTML-like and CSS-like syntax inside st.markdown, and I’ve used this capability to create a more polished UI. This is optional — you can remove the HTML/CSS portion if you prefer a simpler, native Streamlit style. However, for presentation purposes and to create a visually appealing layout, the code includes custom HTML styling.
+
+To render this styled header, we pass the HTML block into st.markdown with unsafe_allow_html=True. This instructs Streamlit to render raw HTML inside the markdown block. While powerful, this should not be used in production environments because it can introduce security vulnerabilities such as script injection. For local testing and demonstration purposes, it’s acceptable.
+
+The banner also uses an image—loaded from a URL—to enhance the visual appeal. You can replace this with any image of your choice depending on your brand or preference. The banner title and description, such as “Freshdesk AI Agent” and “Instantly assist customers and create Freshdesk support tickets,” are also defined here. These mirror exactly what you see displayed in the UI. The sidebar header, labeled “Chat with Agent,” is similarly defined and mapped to what appears on the actual sidebar.
+
+The next part of the code deals with styling the chat interface. Using custom CSS within a markdown block, we define the appearance of chat bubbles, message alignment, avatar positioning, and the fixed input bar. This CSS-based customization is what gives the chat UI its structured and modern look.
+
+Streamlit also provides a powerful concept called containers. In the code, you’ll see chat_container = st.container() and input_container = st.container(). The chat container holds the conversation messages, while the input container holds the text box and the send button. This separation keeps the interface organized — what you see as the chat history section and the input area in the UI are built using these containers.
+
+Finally, we initialize Streamlit’s session_state, which is crucial for maintaining chat history across reruns (Streamlit reruns your script on every interaction). The code checks whether a chat history already exists in the session; if not, it initializes an empty one. This ensures that previous messages remain visible even when the page refreshes or when new inputs are submitted.
+
+In the next lecture, we’ll walk through the Freshdesk ticket creator portion of the application. Since you are already familiar with most of this logic from previous sessions, we will quickly recap the existing code and then focus on the parts that integrate directly with Streamlit.
+
+# **F) Understand the Freshdesk Ticket Creator**
+
+Okay, so next we talk about the Freshdesk ticket creator. I won’t go into every single line of the code because we already discussed it in detail earlier when we covered the Freshdesk Support Agent. If you missed those lectures, it’s best to go back and watch them first, because the concepts there will help you understand this section better. Here, we will quickly skim through the important parts of the code used in this module.
+
+In this file, the first thing we do is create a Freshdesk ticket-creation function, which we call create_fresh_ticket. This function is responsible for authenticating with Freshdesk using the API key, sending a POST request to create a ticket, and then returning the Freshdesk response in JSON format. This is the function that bridges our Azure AI agent with the Freshdesk backend.
+
+Next, we move on to the Azure AI agent setup. Here we specify the credentials, such as the ClientSecretCredential, which allows our application to authenticate with Azure using service-principal details. We also connect to the project client by reading the project connection string from environment variables. One of the most important steps in this setup is the tool registration. As discussed earlier, every agent can have its own tool or set of tools. In our case, the tool we want the agent to use is the user-defined function we just created, which is the Freshdesk ticket creator. So we wrap this Python function as a callable tool so that the LLM agent can autonomously invoke it whenever needed.
+
+After registering the tool, we proceed to create the agent. While creating the agent, we specify the model deployment from Azure Foundry—here we use GPT-4o-mini. We also provide system-level instructions and pass the toolset with function calling enabled. Once the agent is created, we initialize a conversation thread. As you know, an agent operates using a thread, and the thread stores all messages exchanged in the conversation. So we create a new thread using create_thread, which will track the back-and-forth between the user and the agent.
+
+Then, we discuss the chat display loop, which controls how messages appear in the UI. For this, we use Streamlit. Inside the loop, we have added some Markdown and CSS to make the chat interface look nicer, though these customizations are optional—you can remove them if you prefer a simpler UI. The purpose of this loop is to display both user and agent messages as chat bubbles with avatars, giving the interface a clean conversational look.
+
+Below that, we define the user input field and the send button. We use two columns in Streamlit—column one holds the text input box and column two holds the send button. So in the UI, the text box is on the left and the send button on the right.
+
+The most important part comes next: message processing. Remember, every message coming to or from the agent has to flow through Streamlit so it can be displayed. Therefore, when the user clicks the send button and provides input, we take that input and send it to the agent. The agent then runs using the run call, processes the request, triggers the Freshdesk function if needed, and returns a response. We then fetch this response message from the agent.
+
+Once we have both the user message and the agent response, we append them to st.session_state.chat_history, because Streamlit needs a stored history of messages to display them properly in the UI. The agent handles all backend logic—intent detection, function calling, and API communication—while Streamlit simply manages what the user sees. Finally, we call st.rerun() to refresh the interface so the newly added messages appear immediately.
+
+That’s pretty much the entire flow for this code. In the next lecture, I’ll show you how to actually run this app end-to-end. Keep watching!
+
+# **G) Demo: Executing the Code & Running Prompts**
+
+Okay, so the time has finally come to actually run our code and see the magic in action. All you need to do is open your terminal and simply run the command streamlit run Streamlit_Freshdesk.py—or whatever your Python file is named. Once you hit Enter, Streamlit will automatically start up and open a web browser window for you. You will see the app launch exactly like the interface I have been showing you throughout the walkthrough. I could have kept it as a surprise reveal at the end, but since we were mapping everything—like the banner, the image, the sidebar, and the styling—I wanted you to see how each piece fits together with the code.
+
+Now let’s actually try chatting with the Streamlit app and see how it behaves. When I type a simple greeting like “Hello” and hit the Send button, you’ll notice that the interface shows “Running…” for a moment. It is slightly slow, which I observed earlier too. But once the agent responds, you can clearly see the interaction in the chat bubbles. The user message appears with the user avatar, and the agent’s response appears with the agent avatar. This is exactly what we discussed in the CSS styling part of the code, where we defined different visual layouts for user and agent messages.
+
+Next, I try sending another message, like “Okay, so what can you assist me with?” because I want to understand what capabilities this agent is presenting as a Freshdesk AI assistant. The agent responds by saying that it can help with creating Freshdesk support tickets for any issues or requests the user might have. Perfect—now I want to actually test this functionality end to end.
+
+So let’s give it a real-world support request. I type: “Okay. Create me a support ticket for my SQL Server instance that is running slow and send an email to kvjoy@cloudalchemy.uk
+.” This simulates a situation where someone working with a SQL Server database notices performance issues and wants to raise a support ticket. After clicking Send, the app begins processing. It shows the running indicator once again, and after a moment, the agent replies: “A support ticket has been successfully created regarding SQL Server instance running slow, and an email has been sent.”
+
+To verify this, I switch back to my Freshdesk Helpdesk portal and refresh the tickets page. Sure enough, I see a new ticket—Ticket #8—with the title “SQL Server instance running slow.” That confirms the ticket creation worked perfectly. Next, I check my email inbox to confirm whether the notification email was actually sent. And yes, there it is: an email acknowledging the request and confirming that a support ticket has been created.
+
+So with this demonstration, I believe I’ve addressed a question that many people asked: “You’ve shown AI agents and chatbots running in Python and Google Colab, but can you show a real-world application?” This example is exactly that—a complete, practical, real-world use case, built with Streamlit, Azure AI Agents, Freshdesk API integration, and a proper UI workflow.
