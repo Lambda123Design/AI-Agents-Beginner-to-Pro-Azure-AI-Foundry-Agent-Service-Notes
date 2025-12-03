@@ -272,6 +272,51 @@
 
 **G) Demo: Executing the Code & Running Prompts**
 
+**XIV) Azure AI Foundry Agent Service (Post GA)**
+
+**A) Agent Service in GA Mode**
+
+**B) Importance of AI Foundry Project**
+
+**C) Demo: Create Azure AI Foundry Project**
+
+**D) Demo: Create an Agent using Foundry**
+
+**E) Azure AI Projects client library for Python b11 Changes**
+
+**F) Demo: Create VSCode Environment & Understand Code**
+
+**G) Demo: Execute a Simple Code**
+
+**H) Demo - Entra ID Method**
+
+**XV) Azure AI Agent Knowledge Tools - Tripadvisor**
+
+**A) What is Tripadvisor & Microsoft Patnership**
+
+**B) What are we going to build ?**
+
+**C) Work on the Pre-reqs**
+
+**D) Demo: Create a Connection**
+
+**E) Demo : Create Your Tripadvisor Agent**
+
+**F) Demo: Execute Prompts against the Agent**
+
+**G) Demo: Look into the pre-reqs for the code**
+
+**H) Demo: Install Packages and Import Libraries**
+
+**I) Demo: Load Environment Variables**
+
+**J) Authenticate AI Client & Load OpenAPI Schema**
+
+**K) Create openAPI Tool & Agent**
+
+**L) Demo: Create Thread & Handle Conversations**
+
+**M) Demo: Execute the Program**
 
 
 
@@ -2913,3 +2958,198 @@ So let’s give it a real-world support request. I type: “Okay. Create me a su
 To verify this, I switch back to my Freshdesk Helpdesk portal and refresh the tickets page. Sure enough, I see a new ticket—Ticket #8—with the title “SQL Server instance running slow.” That confirms the ticket creation worked perfectly. Next, I check my email inbox to confirm whether the notification email was actually sent. And yes, there it is: an email acknowledging the request and confirming that a support ticket has been created.
 
 So with this demonstration, I believe I’ve addressed a question that many people asked: “You’ve shown AI agents and chatbots running in Python and Google Colab, but can you show a real-world application?” This example is exactly that—a complete, practical, real-world use case, built with Streamlit, Azure AI Agents, Freshdesk API integration, and a proper UI workflow.
+
+# **XIV) Azure AI Foundry Agent Service (Post GA)**
+
+# **A) Agent Service in GA Mode**
+
+It’s now time to talk about the next knowledge tool, which is File Search. Historically, File Search has always been available as part of the OpenAI Assistance API. What Microsoft has now done is integrate File Search directly into the Azure AI Agent Service, placing it under the umbrella of knowledge tools.
+
+File Search is one of the best solutions when you need to search against your own documents, especially if those documents are stored in Azure Blob Storage. It’s also extremely useful for implementing RAG (Retrieval-Augmented Generation). In this series of lectures, we’ll walk through how File Search works, how its workflow looks inside the Azure AI Agent Service, and how you can utilize it effectively.
+
+As always, we’ll look at both the no-code option using Azure AI Foundry and the code-based option, where you’ll create your vector store, create your agent, and process messages through threads. To make the demo practical, we will use a GPT-4 system card as the sample document, upload it, and run queries against it to see how File Search retrieves information. This will be an interesting hands-on set of demonstrations.
+
+Now coming to the major announcement from Microsoft Build 2025. Satya Nadella revealed that the Azure AI Agent Service is now GA (Generally Available). With GA, the service is officially renamed to Azure AI Foundry Agent Service. If you check the documentation, you’ll notice terminology and structure changes to reflect this new branding.
+
+The good news is that 90% of what we have learned so far still remains exactly the same. Only about 10% has changed, and I’ll walk you through those updates so you can adapt smoothly. One important point to note is that if you are using the Azure AI Project client library version B10 or below, nothing breaks — everything will continue to work as before.
+
+The changes affect the B11 beta version, where Microsoft has introduced a new concept called Project Endpoint, replacing the Project Connection String we’ve been using until now. Don’t worry — I’ll show you exactly how this new approach works. Also, all the sample codes in the course will continue to run without issues because the library versions in the pip install commands have been intentionally fixed.
+
+So overall, everything still works the way we’ve been doing it. The only changes are in how agents are created using the new GA-compatible client library, and I’ll guide you through that transition step-by-step.
+
+# **B) Importance of AI Foundry Project**
+
+So the first question that naturally comes to your mind is: what has actually changed after the GA release of the Azure AI Foundry Agent Service? The biggest change lies in how you create a project. If you visit the updated Azure AI Foundry documentation, you will now see a clear distinction under the section “Work in an Azure AI Foundry Project” and “Which type of project do I need?”. This is exactly where the impact becomes visible.
+
+Since our focus is on building agents, the documentation clearly states that the Foundry Project is now the recommended and generally available option. That means if you want to create an agent using the GA version of the service, you must use a Foundry Project. This is different from how we were doing things earlier with the preview version.
+
+Previously, during the preview period, we created hub-based projects — first creating a hub and then creating a project inside that hub. If you or your organization are still using that preview setup, then only preview features will work for you. In that case, you will not get access to the new GA features related to agents.
+
+This is very important because many people have reached out saying they are using the latest client libraries but still cannot see the new endpoint requirement introduced by Microsoft. The reason is simple: hub-based projects do not show endpoints. Endpoints are only exposed in Foundry Projects, and that is why the new GA agent-flow does not appear for users still on hub-based setups.
+
+So the key takeaway is: from now onwards, you must create a Foundry Project, not a hub-based project. This is the primary change you need to be aware of.
+
+Beyond that, the Foundry portal is organized into sections like Define & Explore and Build & Customize, which we will walk through step by step. In the next lecture, I’ll show you exactly how to create your Foundry Project, so stay tuned.
+
+# **C) Demo: Create Azure AI Foundry Project**
+
+Hello and welcome. In this lecture, I’ll show you how to create your Azure AI Foundry project, which is now required for working with the GA version of the Azure AI Agent Service. To begin, go to portal.azure.com. Once you’re inside the Azure Portal, look for Azure AI Foundry and click on it.
+
+You’ll immediately notice a new interface that wasn’t available before GA. This interface displays sections like “All Resources” and “Overview.” To continue, click on Foundry. If this is your first time using it, you may not see any resources listed here. In that case, you’ll need to create a new Foundry resource.
+
+Click on + Create, and you’ll be prompted to select your subscription and resource group, just like you normally do when creating Azure OpenAI resources. Next, you need to provide a name for your Azure AI Foundry resource. For example, I’ll name mine AI Agent Post GA. Choose a region such as East US 2, and then move to the next key input.
+
+You’ll now be asked to specify a Project Name. This step is extremely important because with the GA release, your agents must connect using a Project Endpoint, and that endpoint is tied to the project you create here. So I’ll name my project something like AI Agent Post GA Project.
+
+Next, you’ll see an option for the Content Review Policy, which gives Microsoft permission to log and monitor content to detect and mitigate harmful use of Azure OpenAI services. We can keep the default settings here. For networking, we’ll also keep the default — allowing all networks including the Internet — since this setup is mainly for learning. Identity and data encryption settings can be left unchanged as well.
+
+Azure will then run a quick validation to ensure everything you entered is correct. Once validation passes, the service will be created for you. After completion, you will see your new Azure AI Foundry resource inside your environment.
+
+This step is crucial because from here onward, you’ll be able to enter Foundry, create agents, and also see how to work with the new GA-compatible client library. More on that in the next part — so don’t go anywhere!
+
+# **D) Demo: Create an Agent using Foundry**
+
+In this video, I’ll show you how to create your agent post the general availability (GA) of Azure AI Foundry. Once your Foundry project deployment completes, you’ll see a notification saying it’s ready. Simply click Go to Resource. Remember, we are inside the AI Agent Post GA resource.
+
+Next, you’ll enter the Azure AI Foundry portal. Here you’ll notice some changes compared to the preview version. For example, the connection string that used to be visible previously is no longer shown here. Another noticeable update is the Agents section — it now shows standard agents without any “Preview” tag. If you had used the previous hub-and-project method, you would have seen something like Agents Preview. This clearly indicates that GA agents are now active.
+
+To create an agent, click Agents. Since this is a new deployment, we don’t have any existing agents yet. First, we need to deploy a model — let’s go with GPT-4 Mini as we have done before. Select GPT-4 Mini, click Confirm, and deploy it. Remember, an agent requires a deployment before it can be created.
+
+After deployment, click New Agent. The interface will look familiar. You’ll see fields like Agent ID, Agent Name, deployment selection, instructions, description, and knowledge tools. Knowledge tools include options like Files, Azure AI Search Fabric, and even some new ones like Morningstar. There are also familiar options for actions, such as Code Interpreter, Open API, and Azure Logic Apps. Overall, the changes here are minor.
+
+One interesting addition is Connected Agents, which hints at potential multi-agent functionality in the near future — something not available in the preview mode. Other updates include model settings and voice-enabled agents, which is also a new feature.
+
+Finally, you can test your agent in the Playground. For example, you can ask a simple question like, “Who is the PM of India?” The agent responds correctly: “As of October 2020, the Prime Minister of India is Narendra Modi.”
+
+So that’s it! This lecture was focused on showing you how to create agents post-GA, and confirming that the normal chat functionality works as expected. I hope you found it helpful. Thanks for watching.
+
+# **E) Azure AI Projects client library for Python b11 Changes**
+
+Hello and welcome. One of the significant changes in Azure AI post-GA is related to the client library, specifically the Azure AI Projects client library. If you are using version B10 or earlier, everything you’ve done so far will continue to work fine. All your existing code will run without issues.
+
+However, with the GA release, there’s a major update in B11. One of the most notable changes is that you can now create and run agents using the .agents property of the client. This is a big structural change. While other options are still available, Microsoft has introduced breaking changes, which means some older code snippets may no longer work as they did before.
+
+Agents are now implemented as a separate package called Azure AI Agents, which is installed automatically when you install Azure AI Projects. Essentially, Azure AI Agents has become part of Azure AI Projects, so you can still perform agent operations through the Azure AI Projects client, but with some changes in syntax and method calls.
+
+Another major change is related to the project endpoint. Previously, in preview mode, you used the Project Connection String that was easily available from the Foundry. Many users have reached out saying they cannot locate the new Project Endpoint in GA. Don’t worry — this will be shown clearly in the next steps.
+
+To give you a quick comparison: in older code (B10 or earlier), you would pass the Project Connection String directly. Now, this has changed to using a Project Endpoint. Additionally, method calls for threads have slightly changed. Previously, you might have used project_client.agents.create_thread, but in B11, it is now project_client.agents.threads.create. These subtle differences are critical to note when migrating your code.
+
+Finally, while the underlying functionality remains largely the same, you must now update your code to use Project Endpoint and follow the new client library structure. In the next lecture, I’ll show you step by step how to implement these changes and execute your agent operations post-GA. So don’t go anywhere!
+
+# **F) Demo: Create VSCode Environment & Understand Code**
+
+So the time has finally come — the moment you’ve all been waiting for: how to use the B11 client library and its new functionality. Let’s go through it step by step.
+
+First, open Visual Studio Code. Create a new folder — for example, I Agent Post GA — and open it. Next, open a new terminal and create a new Python virtual environment using:
+
+python3 -m venv agent_post_GA
+
+Once the environment is created, activate it with:
+
+source agent_post_GA/bin/activate
+
+Now, we install the required libraries. We need Azure AI Projects and Azure Identity:
+
+pip install azure-ai-projects azure-identity
+
+Note that Azure AI Agents is included automatically as part of the Azure AI Projects library. Once installed, you can verify that all required packages are downloaded successfully.
+
+Next, bring your existing code into this folder and open it. Let’s review the structure. The main class you’ll use is AIProjectClient, and your instantiated object is typically named project_client. This object provides properties like agents, threads, and messages, which allow you to perform agent operations. Methods such as create_agent, create_thread, and create_message are used to perform the respective actions.
+
+One key piece is the Project Endpoint. To get this, go to portal.azure.com, navigate to your Azure AI Foundry, and enter the AI Foundry Portal. Select the project you created, and you’ll find the endpoint under the project details. Copy this and use it in your code as the project_endpoint.
+
+In the code, you first import the necessary packages: os, Azure AI Projects, and Azure Identity. Then you create the client with the following:
+
+project_client = AIProjectClient(endpoint=project_endpoint, credential=DefaultAzureCredential())
+
+All operations are performed within a with block. First, create your agent (for example, using the GPT-4 Mini model), set its name and instructions, and then create a thread, which will contain messages. Note that in B11, the syntax has changed slightly — you now use:
+
+project_client.agents.threads.create()
+
+instead of the old create_thread. Similarly, when creating messages and running the agent, use the updated create and process methods instead of the older create_and_process_run. Finally, you can print the response to verify that your agent works.
+
+# **G) Demo: Execute a Simple Code**
+
+Since we are using DefaultAzureCredential, the client library will try different authentication methods. You can either set up credentials in Azure Active Directory or simply log in using Azure Login. To keep things simple, we’ll use Azure Login. It will prompt you to pick your account, then you can close the login window, select the correct subscription, and you’re all set.
+
+Once authentication is complete, executing the code is straightforward. Run your Python script, and you’ll see the following happen automatically: the agent is created, a thread is created, messages are added, and the run completes successfully. Using this method, I was able to get a response from my agent using the new B11 client library, with the agent deployed via the Azure AI Foundry Agent Service, as announced by Satya Nadella.
+
+I’m sure many of you will be happy to see this because I’ve received numerous questions about issues with the new client library. As mentioned earlier, all the existing course code will still work because we fixed the library versions. However, if you want to work with the latest B11 library, this is the correct way to do it.
+
+Looking ahead, any new code I work on in the coming weeks will be based on these new libraries. Keep in mind that B11 is still a beta version, so there may be some changes when it officially reaches GA. It’s interesting to see the service is fully functional, but the underlying library is still evolving.
+
+# **H) Demo - Entra ID Method**
+
+Hi folks, welcome back. In the previous video, we went through the Azure CLI method. Since then, there have been some changes to the Azure Active Directory (AAD) method, and I’ve noted them carefully. Previously, we could use Contributor access, but that is no longer sufficient. I had published steps in a document, but many of you requested a video walkthrough so you could follow along step by step. As always, your wish is my command.
+
+In this session, we’ll focus on the Microsoft AAD method, which allows you to create and execute your agent services. The key change is visible when you look at the B11 client library documentation (May 2025), which was updated after the service became generally available (GA). If you scroll down to Role-Based Access Control (RBAC), you’ll notice the major update: hub-based projects previously allowed contributor access to create agents. With Foundry-based projects, this is no longer sufficient.
+
+Now, you must assign the Azure AI User role instead. Contributor roles can create Foundry projects or accounts and have read access, but they cannot build or develop agents, which caused the permission issues many users faced. From now on, whenever you see code labeled Post GA, it incorporates these updates.
+
+For example, in my previous code connecting to a third-party API like OpenWeatherMap, we define API settings and keys. The core changes are related to B11: we install the Azure AI Projects SDK and Azure Identity library, set up environment variables, and define our functions — such as get_weather, which takes latitude and longitude and returns a string. Authentication is done using tenant ID, client ID, client secret, and the project endpoint, as discussed in previous videos.
+
+When running the code with the old permissions, you might encounter an error stating insufficient permissions. To fix this, go to your Azure AI Foundry, select your project (AI Agent Post GA), navigate to IAM > Role Assignments, and click Add Role Assignment. Choose the Azure AI User role, select your service principal (or application), and assign the role. Refreshing the portal will show the changes. Note that it may take a few minutes for the permissions to propagate, and sometimes it helps to restart your session before re-running the code.
+
+Once the permissions are properly assigned, your code should execute successfully. For example, you can now ask your agent for a funny weather report:
+"Give me a funny report for the current weather in London."
+The agent responds creatively:
+"Good day Londoners! Grab your umbrellas and sunglasses. It's one of those peculiar days where you might need both."
+
+In summary, this session shows how to run your code post-GA with the proper role permissions. The updated code is available in the resources section, and from now on, any new agents I work on (such as the upcoming TripAdvisor project) will incorporate these changes.
+
+# **XV) Azure AI Agent Knowledge Tools - Tripadvisor**
+
+# **A) What is Tripadvisor & Microsoft Patnership**
+
+Hi folks, welcome back. In this video series, we’ll be exploring the Azure AI Foundry Agent Service and how it integrates with TripAdvisor, providing a way to work with licensed data. Before diving into the technical details, let’s first understand what TripAdvisor is.
+
+TripAdvisor is the world’s largest travel guidance platform, hosting over a billion traveler reviews, ratings, photographs, and content covering hotels, restaurants, attractions, and experiences. For example, if you search for “London,” TripAdvisor provides travel advice on the best areas to stay, the best time to visit, and essential activities in the city. It contains a plethora of data, all of which is considered licensed content that travel agents or developers can access for use in applications.
+
+In April 2025, TripAdvisor became one of the first licensed data partners for the Microsoft Azure AI Agent Service. This partnership allows developers using Azure to access TripAdvisor’s proprietary data, including reviews, ratings, and other relevant travel details. The benefit of this integration is that Azure-powered AI agents can now deliver richer and more trustworthy travel recommendations by combining TripAdvisor’s licensed content with other sources like Bing Fabric.
+
+Within the Azure AI Foundry interface, developers can add TripAdvisor as a knowledge tool. By supplying a TripAdvisor API key, an AI agent can call TripAdvisor’s data on demand. In the upcoming lectures, we’ll go step by step to show how to use your API key, how to integrate it into your AI agent, and how to access the licensed content safely.
+
+The integration also includes enterprise-grade security and controls. Everything runs on Azure with identity pass-through authentication, ensuring that agents only access the TripAdvisor data that the end user is authorized to see.
+
+By the end of this lecture, you should have a clear understanding of what TripAdvisor is, what licensed data means, and how to bring it into Azure AI Foundry as a knowledge tool for your agent. Don’t go anywhere — keep watching.
+
+# **B) What are we going to build ?**
+
+Okay, let’s try and understand the architectural diagram and what we are going to build. In this series, we’ll be creating a TripAdvisor agent. First, let’s look at the important artifacts involved in this architecture.
+
+The key components are the Azure AI Agent and the Azure Foundry Connector. You can relate this connector to what we learned in the Open API lessons. In those lessons, we created a connection or a connector manually using a JSON file. The good news here is that things are more automated. The Open API specification comes by default, so you don’t need to manually create a JSON file. Eventually, the connector communicates with the TripAdvisor API.
+
+Here’s how the workflow works: a user initiates a query, for example, “What are the top five hotels in Paris?” The query is directed to your Azure AI Agent, which then communicates with the Azure Foundry Connector. The connector acts like a middleware, linking the Azure AI Agent to the external TripAdvisor service. It understands how to interact with the TripAdvisor Open API specification, which includes structured data about hotels, reviews, restaurants, and more.
+
+The TripAdvisor Open API spec is essentially a JSON interface exposed by TripAdvisor. If you haven’t already, I recommend reviewing the Open API lectures, where we discussed how agents can support Open API 3.0 interfaces. The connector queries TripAdvisor through this spec, retrieves structured response data, and sends it back to the Azure AI Agent.
+
+The Azure AI Agent then processes this raw data. Since it’s connected to an LLM like GPT-4 or any other AI model, it can perform tasks such as summarization, formatting, and natural language generation, creating a clear and human-friendly final response. This response is then sent back to the user.
+
+To summarize, this architecture demonstrates how TripAdvisor licensed data can be programmatically accessed using the Azure AI Agent Service and Azure Foundry. It allows users to receive intelligent, real-time travel recommendations powered by AI.
+
+In the next lecture, we’ll dive into implementing this architecture step by step. Thanks for watching.
+
+# **C) Work on the Pre-reqs**
+
+Before we actually start creating our agent, it’s important to understand some prerequisites, and the main one is that you need to have a login to the TripAdvisor website because we need access to the Content API key. The process is straightforward: you need to go to Tripadvisor.com like we did previously, but this time go to tripadvisor.com/developers, click on Login to get started, and upon logging in you will be taken to a checkout page where you must fill in your billing information and click on Confirm Order. Follow the instructions and you can get your API key, and remember that for our learning purposes you don’t need to spend anything — it will be $0 or £0 for you. When you click on TripAdvisor Developers, you’ll see information about the Content API, which gives access to reviews, photos, and more than 8 million locations worldwide. After logging in, you’ll see a page showing an estimated monthly cost of $150, but you should reduce the monthly API requests to a low amount — if you set it to around 3000 API requests per month, then you won’t have to pay anything, which is perfect for learning. After entering the billing information, you will gain access to your API. Then go to My API, and one important thing to remember is the API key restriction. For our learning, you should set the IP address to 0.0.0.0, which means the API key can be accessed from anywhere. TripAdvisor uses this to protect their data, and the page even mentions that you should insert IP ranges separated by commas. For testing, 0.0.0.0 is fine, but in a production environment you would need to provide your actual domain or specific server IP to prevent unauthorized access. Once you set this up, the value will appear on the page. Next, you need to copy your API key — if this is your first time, click Generate New API Key (you can only have one key per account). Since I already have one, I won’t generate a new key, but you can simply click Copy to Clipboard to copy yours. Now the API key is ready, and we can use it in our connector. In the next video, we will see how to use this key with the connector, so keep watching.
+
+# **D) Demo: Create a Connection**
+
+# **E) Demo : Create Your Tripadvisor Agent**
+
+# **F) Demo: Execute Prompts against the Agent**
+
+# **G) Demo: Look into the pre-reqs for the code**
+
+# **H) Demo: Install Packages and Import Libraries**
+
+# **I) Demo: Load Environment Variables**
+
+# **J) Authenticate AI Client & Load OpenAPI Schema**
+
+# **K) Create openAPI Tool & Agent**
+
+# **L) Demo: Create Thread & Handle Conversations**
+
+# **M) Demo: Execute the Program**
