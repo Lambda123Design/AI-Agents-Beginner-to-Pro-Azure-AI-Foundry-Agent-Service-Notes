@@ -318,6 +318,72 @@
 
 **M) Demo: Execute the Program**
 
+**XVI) Azure AI Agent Service Action Tools - Azure Logic Apps**
+
+**A) What is Azure Logic Apps ?**
+
+**B) Demo: Create a Simple Agent and Try Send an Email**
+
+**C) Demo: Add Logic App Action**
+
+**D) Demo: Test the Agent in the Agents Playground**
+
+**E) Title - Coding Send an Email with Logic Apps**
+
+**F) What we will be building ?**
+
+**G) Demo: Install / Import Libraries & Set Env**
+
+**H) Demo: Understand Send Email Function**
+
+**I) Demo: Create Agent**
+
+**J) Demo: Process Conversation with Tool Calling**
+
+**K) Demo: Understanding the main function**
+
+**L) Demo: Execute the Code**
+
+**M) Title - Azure Sql & Logic Apps**
+
+**N) What are we going to build**
+
+**O) Demo: Create Sql Database Server**
+
+**P) Demo: Create Sql Database**
+
+**Q) Demo: Create Agent**
+
+**R) Demo: Create Logic App Action**
+
+**S) Demo: Execute Queries against the Sql Database**
+
+**XVII) Semantic Kernel**
+
+**A) What is Semantic Kernel ?**
+
+**B) Architecture of Kernel**
+
+**C) What is Plugin ?**
+
+**D) Various Orchestration Frameworks in Semantic Kernel**
+
+**E) What are we going to build ?**
+
+**F) Demo: Setup the Project in VS Code**
+
+**G) Demo: Import Dependencies & Load Env Variables**
+
+**H) Demo: Understand the Functions Defined**
+
+**I) Demo: Understand the role of each Agent**
+
+**J) Demo: Define Function run_business_post_example**
+
+**K) Demo: Understand the main block**
+
+**L) Demo: Execute the Agents**
+
 
 
 
@@ -3136,20 +3202,822 @@ Before we actually start creating our agent, it’s important to understand some
 
 # **D) Demo: Create a Connection**
 
+Now it’s time to create our connection, or connector, in Azure AI Foundry. I’ve listed all the steps for this process. First, go to the Azure AI Foundry portal and select your AI project. Then navigate to the Management Center and select New Connection in the settings. Here, you need to choose Custom Keys and enter the required information to create a connection to TripAdvisor or Store Advisor.
+
+It’s very important to provide a name key-value pair. In the key, you should enter key as a keyword, and in the value, you provide your API key. After this, you can set up the connection.
+
+To do this practically, go to your Azure portal and click on Azure AI Foundry. Open your Foundry resource—you might remember creating a resource called post GA AI agent. From there, go to the Azure AI Foundry portal, which will take you directly into your project.
+
+Inside the project, navigate to the Management Center and then go to Connected Resources. Here, you will see an option to manage connected resources in your project. Click on Create a Connection.
+
+Remember, you have to use Custom Keys for authentication. Add the key-value pair, where the key is key and the value is your TripAdvisor API key. For example, if your API key ends with 6A, make sure the value you enter matches exactly. Once done, go back and give the connection a name, such as TripAdvisor-connector. Make sure the connection access is limited to this project only, then click Add Connection.
+
+Once you complete these steps, your TripAdvisor connector is successfully created using the custom key based on your API key from TripAdvisor. In the next lecture, I’ll show you how to create an agent using this TripAdvisor connector. So stay tuned for that!
+
 # **E) Demo : Create Your Tripadvisor Agent**
+
+Now the time has come to create our TripAdvisor agent in Azure AI Foundry. To start, go to your Azure AI Foundry portal and open your project. Once inside, click on Agents and then select New Agent. An agent ID will be automatically generated, and you can give your agent a name, such as TripAdvisor-agent.
+
+If you don’t already have a deployment, you can create one from the available base models. Azure provides options like GPT-4, GPT-4-mini, GPT-3, Llama models, or Deep SIC models. In my case, I am using GPT-4-mini. You can also set the instruction, for example: “TripAdvisor agent” or “Advisor user agent.” Optionally, you can provide a description to explain the agent’s purpose.
+
+The next step is to set up the knowledge tool for the agent. Click Add, and you will see TripAdvisor as a data source option. This is where you specify the functionality you want the agent to access, such as travel data, guidance, and reviews.
+
+When adding the tool, you need to give it a name that identifies it, for example, TripAdvisor-advisor-agent-tool. You can also provide a description, such as “The tool helps to read TripAdvisor licensed data.” The system is straightforward and will generate the required JSON for you automatically. You don’t need to manually build anything.
+
+Microsoft automatically uses OpenAPI 3.0.1, and the JSON includes details such as the server URL (api.content.tripadvisor.com/API), supported languages, location IDs, currency codes, and response formats. This means all the technical API integration is handled automatically.
+
+The only step left is to select your connector. Choose the TripAdvisor connector you created earlier, click Next, review the schema, and then click Add Data Source. Once this is done, your TripAdvisor agent will be created, and the tool (TripAdvisor agent tool) will be connected to it.
+
+In the next video, I will show how to actually run the agent and use it to retrieve travel insights.
 
 # **F) Demo: Execute Prompts against the Agent**
 
+Now we are ready to test our TripAdvisor agent. Before testing, I want to show you the difference between checking TripAdvisor manually and using our agent. For example, if you go to the TripAdvisor website today and ask for something like: “Give me the top five-star hotels in Vienna with their rating and the latest price for one night, shown in a table,” the website will show you a list of hotels. However, you won’t immediately see the prices; you need to click into each hotel, open the details, and manually check the price. This takes more time and effort.
+
+Now let’s put our agent to the test. We already created the TripAdvisor agent earlier, so all we need to do is click Try in Playground. This opens the Agents Playground, where you can test your agent's behavior. You will notice that the knowledge source attached to the agent is the TripAdvisor agent tool. In the agent instructions, I deliberately wrote that it is a TripAdvisor agent based on licensed TripAdvisor data and the attached tool. I included this on purpose so that the agent is forced to use the tool when responding, instead of relying only on its pre-trained knowledge.
+
+Now I can type the same query:
+“Give me top five-star hotels in Vienna with rating and the latest price for one night in a table.”
+When we execute this query, the agent should call our tool instead of using its built-in training data. That’s exactly what we want to verify.
+
+As soon as you run the query, you will notice the agent calling the TripAdvisor agent tool. It will reference the external TripAdvisor API and give you results such as hotel names, ratings (for example, 4.8), and prices (e.g., $240 per night). The main goal of this test is not the exact values, but confirming that the agent is actually using our licensed TripAdvisor data source.
+
+After the response completes, Azure will provide evidence showing which tool was used. If you look at the bottom of the response, you’ll see confirmation that the tool was invoked. Additionally, on the right-hand side, you can expand the Tools tab. There you will see details like how many times the tool was called, the OpenAPI schema being used, and each specific request made to the TripAdvisor API.
+
+You can even click View run info to see the sequence of tool calls. These tool calls clearly show that the agent contacted the TripAdvisor API through the connector we created, instead of relying on any built-in training data. This proves that the information is being fetched live from TripAdvisor’s licensed data source.
+
+With this, you now fully understand how to use TripAdvisor licensed data with your Azure AI agent.
+
 # **G) Demo: Look into the pre-reqs for the code**
+
+Now it’s time to see how we can address the same requirement using code. Before we begin, there are a few prerequisites you must be aware of. You will need a couple of files prepared in advance, similar to what I have already done.
+
+The first required file is your API settings file. I won’t go too deep into every line since many people mention it becomes repetitive, but for those who are new, here’s the quick overview. In this file, you will store your Client ID, Client Secret, Tenant ID, and Project Endpoint. The first three values come from the Azure Entra ID application you created earlier. If this part feels unfamiliar, please revisit the earlier lectures where I explained the entire process in detail.
+
+The main new addition — which I have discussed previously — is the Project Endpoint. This value has changed with the Generally Available (GA) release of Azure AI Foundry, so make sure you use the updated endpoint. And where do you find it? Simply go to Azure AI Foundry, open your project, and check the Overview page. There you will see the Azure AI Foundry Project Endpoint. Just copy that and add it to your environment file along with the other credentials.
+
+The second file you need is the TripAdvisor API schema JSON. I have already provided this file in the course resources section. All you need to do is download or copy the contents and attach it directly to your Google Colab notebook. As I mentioned earlier, the advantage of the Microsoft–TripAdvisor partnership is that you do not need to manually create this schema. Microsoft automatically generates an OpenAPI JSON file for you as part of the connector setup. So just copy the provided JSON and upload it into your Colab environment.
+
+These two files — the API settings file and the TripAdvisor schema JSON — must be ready before we start writing code.
+
+In the next lecture, we will walk through the installation steps and import all the required Python libraries. Let’s continue there.
 
 # **H) Demo: Install Packages and Import Libraries**
 
+Now we move on to installing the required packages and libraries that our code will depend on. The first package we install is jsonref. This library is important because it helps in parsing and working with JSON schemas, especially when dealing with OpenAPI specifications. Earlier I showed you the TripAdvisor OpenAPI schema, and since it contains references ($ref) within the JSON structure, the jsonref library is needed to correctly resolve and interpret those references.
+
+Next, we install the Azure AI Projects library. You may notice that I am using version 1.0.0-b11, which corresponds to the version released after Azure AI Foundry became generally available (GA). This version includes all the updated APIs you need to work with Azure AI Agents, Projects, and tools.
+
+We also install Azure Identity, which is necessary because we must authenticate against Azure Entra ID using our client ID, client secret, and tenant ID. Without this, our script cannot securely access the Azure AI services.
+
+In addition, we use a library to load environment variables — typically load_dotenv — which allows us to cleanly read values from our environment file, such as the project endpoint and Entra credentials.
+
+Together, these packages form the foundation of the code. Without them, your scripts would not be able to:
+• connect to Azure AI Foundry,
+• authenticate using Entra ID, or
+• read and interpret the OpenAPI schema needed for our TripAdvisor tool.
+
 # **I) Demo: Load Environment Variables**
+
+Next, we bring in all the essential classes and methods required for Azure authentication and for interacting with Azure AI Projects. The first major component we import is the ClientSecretCredential, which handles authentication using your Client ID, Client Secret, and Tenant ID from Azure Entra ID. This allows your script to securely authenticate before calling any Azure AI services.
+
+We also import the AIProjectClient, which is a key class used to interact with Azure AI Projects. Along with this, we include the necessary models for working with AI Agents and OpenAPI tools, since our TripAdvisor connection relies on the OpenAPI schema to communicate with the TripAdvisor API.
+
+In addition to Azure-specific libraries, we import a few utilities such as Pathlib’s Path, which is helpful for handling file paths cleanly. These utilities support asynchronous tasks, file navigation, and environment variable loading — all of which are necessary parts of the script.
+
+After importing everything, we proceed to load the environment variables. This is a very important step. The environment file (for example, API_SETTINGS_V2) contains all the critical details like the Client ID, Client Secret, Tenant ID, and the Project Endpoint. As mentioned earlier, the first three values come from Azure Entra ID, and the Project Endpoint comes from the Azure AI Foundry project overview screen.
+
+Next, we load the OpenAPI schema file, which in this case is the TripAdvisor API schema JSON. This JSON file matches the one generated automatically through the Microsoft–TripAdvisor integration, and it is essential for our tool to understand how to interact with the TripAdvisor API.
+
+We also define the connection name, which must exactly match the name of the connector you created in Azure AI Foundry. If you go to the Foundry → Management Center → Connected Resources, you will see the connector listed — in our case, it is named TripAdvisor connector. That exact name must be used in the code to ensure the correct resource is referenced.
+
+With these pieces ready, the next step is to initialize the Azure identity connection and load the API schema. We will explore that in the upcoming lecture.
 
 # **J) Authenticate AI Client & Load OpenAPI Schema**
 
+Next, we move on to initializing the connection to Azure using the credentials we loaded. This step has two important parts:
+
+Initializing the Azure AI Project Client
+
+Loading the OpenAPI schema for the TripAdvisor tool
+
+To begin, we create the Azure client by initializing the authentication credentials. We use the ClientSecretCredential class, passing in the Tenant ID, Client ID, and Client Secret — all of which come from the environment variables we loaded earlier. This credential object will be responsible for authenticating our code with Azure using the service principal we configured.
+
+Once the credential object is ready, we create the project_client, which is an instance of the AIProjectClient class. This object is initialized by supplying two values:
+
+the authenticated credential object
+
+the project endpoint (which you copied from your Azure AI Foundry project overview screen)
+
+This effectively scopes the client to your specific Azure AI Project. The reason this step is crucial is that all API calls to Azure AI Project services — including those involving agents and tools — will go through this client.
+
+With the Azure connection now set up, the next major step is loading the OpenAPI schema for the TripAdvisor API. This is extremely important because the agent needs the full API specification in order to correctly understand and call the TripAdvisor endpoints.
+
+To handle this, we define a function called load_openapi_schema. This function does the following:
+
+Opens the OpenAPI schema JSON file — in our case, the TripAdvisor_API_schema.json file that we previously downloaded.
+
+Reads the JSON contents into memory.
+
+Uses the jsonref library to parse the file. This is where jsonref becomes essential, since the OpenAPI specification often contains $ref links pointing to internal or external components. The library resolves these references, providing a clean, fully-expanded schema that the agent can use.
+
+This step matters because, without a proper OpenAPI schema, the agent will not know how the TripAdvisor API works — what endpoints exist, what parameters to accept, what responses to expect, and so on.
+
 # **K) Create openAPI Tool & Agent**
+
+Okay, so now it’s time to actually create our API tool and also the AI agent.
+When we talk about a tool, think of it as something the agent can use whenever it needs to take an action. In this case, our agent should be able to interact with the TripAdvisor API, and to do that, it needs a tool that understands the API structure and how to call it. That is exactly what the OpenAPI tool helps us achieve.
+
+We start by defining a function named create_api_tool, which accepts the connection_id as an input. This function will return an OpenAPI tool object. Inside this function, the first step is to load the OpenAPI schema — this is the JSON file that describes all the API endpoints, parameters, and operations for TripAdvisor. After loading the schema, we attach Azure authentication via the given connection ID. Remember: this connection ID maps to a securely stored API key or token in Azure, which we previously created inside Connected Resources. Finally, the function returns the created tool object with a name, a specification, and the API title — in this case, "TripAdvisor API for travel content and recommendations."
+
+Once the tool is ready, the next step is to create our AI agent. This is very straightforward. The agent needs two main things:
+
+Instructions describing its role,
+
+Tools that it will use to take actions.
+
+First, we retrieve the connection information by listing project client connections and filtering them by the connection ID. After that, we call our create_api_tool function to generate the OpenAPI tool instance that represents TripAdvisor’s API. Then we define the agent’s instructions. Here we clearly state: “You are a travel assistant with direct access to the TripAdvisor API.” We also tell it what kind of tasks it should perform — such as searching for locations, hotels, restaurants, and more.
+
+Finally, we instantiate the agent. We specify the model (GPT-4), its name, a short description, and a temperature value of 0.7 to allow some creativity in its responses. The most important part is the tools parameter, where we attach the OpenAPI tool’s definitions. This is exactly the same concept we discussed earlier in the OpenAPI module — tools are linked using the definitions attribute.
+
+At the end, the function returns the agent object, fully wired with TripAdvisor API access through the OpenAPI interface.
+So now you have a complete Travel Assistant, powered by GPT-4 and backed by real-time TripAdvisor data.
+
+In the next lecture, we move on to handling threads, which is where we start sending and managing conversations through this agent.
 
 # **L) Demo: Create Thread & Handle Conversations**
 
+Okay, so moving forward, we now focus on creating the conversation thread, handling the core conversation logic, performing cleanup, and understanding the main execution flow of the program. We'll break this down step by step so it’s easy to understand.
+
+We begin with the concept of a conversation thread. A thread is basically what maintains the full chat history between the user and the agent. To create one, we call a function—create_conversation_thread—which internally makes a call to the thread creation API and returns the newly created thread object. Once the thread exists, we can start adding messages to it. When the user sends a prompt, we call messages.create with three details: the thread ID, the role as "user", and the content as the user message. This ensures every user query is correctly pushed into the thread before the agent processes it.
+
+After the message is added, we initiate the processing run. This is done by creating a run object using the agent ID and thread ID. The agent then starts thinking and generating a response. At this point, the program simply waits until the run reaches the "completed" state. Once it’s completed, we fetch the latest assistant message from the thread. If anything goes wrong and the run fails, the program can notify the user and optionally allow them to try again. This entire flow ensures the user prompt is sent, processed, and the response is retrieved cleanly.
+
+Next, we have the cleanup logic. Cleanup is quite simple but very important. If the user types "exit" or "quit", we break out of the user interaction loop and immediately run the cleanup function. Cleanup deletes the thread from the server so that we don’t leave unnecessary objects lying around. This is especially important when working with real environments where unused threads might accumulate.
+
+Finally, let's talk about the main execution flow of the program. The script starts by initializing the Azure project client. Using this client, we then create our travel agent by calling the create_travel_agent function. After that, we create a new conversation thread and print a message like "TripAdvisor assistant is ready!" to indicate everything is set up.
+
+From this point onwards, the program enters a continuous interaction loop. It repeatedly waits for user input, sends that input to the Azure agent, retrieves the assistant’s reply, and prints it to the console. This loop continues indefinitely until the user explicitly types "exit" or "quit". Once that happens, the loop ends, cleanup is executed, and the thread is properly deleted.
+
+That’s the entire flow — very straightforward. And in the next lecture, you’ll see how this actually works in a live execution. So stay tuned!
+
 # **M) Demo: Execute the Program**
+
+So now the time has finally come to actually run our code and see everything working end-to-end. Once we execute the final cell, the program immediately enters the continuous user interaction loop that we built earlier. As expected, it waits for the first user query. So I simply type in my request — something like: “Give me the top five-star hotels in Vienna, along with their rating and the latest price for one night, in a table.” That’s the prompt I am sending to our Azure-powered TripAdvisor agent.
+
+As soon as I hit enter, the agent processes the request. Behind the scenes, it reads the user message, triggers the processing run, calls the TripAdvisor API through our OpenAPI tool, waits for the response, and then displays the final answer. And as you can see, it actually returns a neatly formatted table. It gives me the list of five-star hotels in Vienna, the ratings, and the available price information. In this particular case, the TripAdvisor API returns the price levels instead of exact numerical prices — so you will see indicators like $, $$, or $$$. These signs reflect the overall price category for each hotel. Even though we don’t get precise amounts, we can still interpret the relative pricing — for example, a hotel like SO/ Vienna is clearly positioned at the higher end compared to something like Hilton Vienna Park.
+
+Overall, this confirms that the agent is working exactly as expected. It’s pulling live, licensed TripAdvisor data through Azure AI Foundry, using the Azure AI Agent Service, and responding conversationally with structured output. Once you're done experimenting, you can simply type “exit”. The moment you do that, the program breaks the loop, runs the cleanup step we implemented, deletes the thread from the server, and safely terminates the session.
+
+And with that, we officially come to the end of this entire series of lectures on integrating TripAdvisor data with Azure AI Foundry using the Azure AI Agents framework. I hope you enjoyed the walkthrough and learned how powerful and flexible this setup can be. If you found this helpful, please take a moment to rate the course and leave your feedback.
+
+# **XVI) Azure AI Agent Service Action Tools - Azure Logic Apps**
+
+# **A) What is Azure Logic Apps ?**
+
+The goal of this module is to understand how we can use Azure Logic Apps together with the Azure AI Foundry Agent Service. Before we jump into the portal and start building integrations, it’s important—especially for beginners or anyone who hasn’t worked with Logic Apps before—to develop a solid understanding of what Logic Apps actually are and why they matter.
+
+Azure Logic Apps is essentially a cloud-based workflow automation service provided by Microsoft Azure. It allows you to automate business processes and orchestrate different services without writing much code. You can think of it as a low-code / no-code workflow engine. Using a simple drag-and-drop interface, you can design workflows that perform tasks like sending emails, moving files, generating notifications, or connecting multiple enterprise systems together.
+
+One of the biggest advantages of Logic Apps is the wide range of built-in connectors. These connectors allow you to easily integrate with services such as Outlook, OneDrive, SharePoint, Dropbox, Teams, Twitter, and hundreds more. For example, you can automatically save incoming email attachments to OneDrive or trigger a workflow the moment a new message arrives in your inbox. The entire point is to reduce repetitive manual work and ensure that routine tasks run consistently and reliably.
+
+Logic Apps operate using a very simple structure: triggers and actions. A trigger is the event that starts the workflow, and actions are the steps that follow. For instance, uploading a new file to SharePoint can be the trigger, and sending a notification to Microsoft Teams can be the action. The workflow automatically runs as soon as that trigger event occurs. This trigger-action design makes it extremely intuitive to automate all kinds of business processes.
+
+Another great feature is that Logic Apps are built on serverless architecture. This means you don’t have to worry about provisioning or managing any servers. Everything scales automatically based on the number of workflow runs. Whether you have 10 form submissions or 10,000, Logic Apps handles the load without requiring you to configure anything. This makes it perfect for scenarios like processing approvals, automating notifications, integrating data across systems, or handling incoming records from email or forms.
+
+To give you a simple example, you could automatically convert incoming emails into CRM entries without manually typing anything into the database. Or you could design a leave-approval flow where the manager simply clicks a button to approve or reject a request. All of these are real-life scenarios where Logic Apps shine by reducing manual effort and improving efficiency.
+
+With this background in mind, you should now have a clear understanding of what Azure Logic Apps are, how they function, and why they’re so useful. In the upcoming demos, when we integrate Logic Apps with your Azure AI Foundry Agent, everything will make much more sense.
+
+# **B) Demo: Create a Simple Agent and Try Send an Email**
+
+In this lecture, we’re going to understand why Azure Logic Apps are important and why you actually need to integrate Logic Apps with your Azure AI Foundry agents. Instead of jumping straight into theory, we’ll walk through a simple demonstration that highlights the limitation of a standalone agent and shows why Logic Apps become essential.
+
+To begin, let’s create a very simple agent—nothing complex, no advanced tools, no external APIs. Just a basic agent that can answer travel-related questions. So I go ahead and click New Agent, leave most settings at their defaults, and optionally give it a name such as Travel Agent. Under system instructions, I write something basic like “You are a travel agent.” That’s it. No additional configurations. This keeps our example clean and focused.
+
+Next, we test the agent inside the playground. The agent gets created and becomes available immediately. Since this is based on GPT-4 Mini, it’s perfectly capable of generating text responses. So I ask a simple travel question such as:
+“Create a five-day travel itinerary to London.”
+The agent processes the request and generates a full itinerary. So far, everything works exactly as expected.
+
+Now, let’s take it one step further. I say:
+“Can you send this email to joy@cloudalchemy.uk
+?”
+And notice the response. The agent clearly says that it is unable to send emails directly. Instead, it offers to draft an email for me. This is important because the agent, in its current form, has no ability to perform external actions like sending an email, posting to Teams, writing to a database, or triggering a business workflow. It's limited to generating text.
+
+That’s exactly the point I wanted to demonstrate.
+Your agent today cannot send emails, trigger notifications, perform approvals, or execute automated workflows. It simply doesn’t have that capability on its own.
+
+And this is where Azure Logic Apps become extremely powerful. By integrating Logic Apps with your agent, you can extend the agent’s capabilities far beyond text generation. Logic Apps can implement actions such as sending an email, creating a ticket, initiating an approval flow, updating SharePoint, writing data to a SQL database, and much more.
+
+In the next lecture, I’ll show you how to create a Logic App action that enables your agent to actually send emails for real—not just draft them.
+So keep watching.
+
+# **C) Demo: Add Logic App Action**
+
+So now let’s try to give our agent some real powers. Until now, the agent could only respond with text. It could generate itineraries, answer questions, and provide information—but it couldn’t actually perform anything. And that’s the limitation we now want to remove.
+
+To do that, we need to focus on the Actions section on the right-hand side of the agent configuration panel. Previously, we spent time working with the Knowledge section, where we added files, Bing search, Azure AI Search indexes, TripAdvisor data, and other forms of knowledge. But remember—knowledge only lets your agent understand or retrieve information. It doesn’t let it execute anything in the real world.
+
+If you want your agent to perform an operation—such as sending an email, updating a database, triggering a workflow, or executing a business process—that falls under Actions. And this is exactly where Azure Logic Apps comes into the picture.
+
+When you open the Actions section, you will notice something useful: Microsoft has made this incredibly simple. You just select Azure Logic Apps, and then select the Logic App you want to integrate. As soon as you do this, you’ll see a huge catalog of ready-made actions—some authored by Microsoft and others created within your own subscriptions. You will find options to execute SQL queries, get weather data, fetch rows from a SQL table, send emails, and much more.
+
+For our demonstration, let’s keep it simple. We want the agent to be able to send an email. So I switch to the Microsoft-authored category and choose the action “Send email using Outlook.”
+You could choose any other action if you wanted—SQL operations, notifications, weather APIs—but for this example, Outlook email makes the concept easy to understand.
+
+Once you select the action, the system asks for some basic details. It prompts you for an action name, so I give it something meaningful like send_email. Then I provide a short description: “Send an email using Outlook.” After that, I pick my subscription, resource group, and region. This is all straightforward.
+
+Next comes authentication. Since sending emails requires access to your Microsoft 365 Outlook account, Logic Apps needs a connection. In my case, the connection is already authenticated from earlier work. But if it's your first time, all you need to do is click Add Connection, sign in with your Outlook 365 account, and the connection gets created. It’s a one-time sign-in process, very similar to granting app permissions.
+
+Once authentication is complete, Logic Apps shows a confirmation screen. It tells you that a new Logic App will be created and warns you that you cannot go back once you proceed. That’s because it is about to generate the entire Logic App workflow and its associated OpenAPI schema behind the scenes. So I confirm and click Next.
+
+At this stage, Azure automatically generates the OpenAPI specification for this new action. You can see the JSON spec describing what the Logic App will do—“send an email using Outlook when an HTTP request is received”—along with all the expected fields like subject, body, and recipient. This is the contract the agent will use whenever it wants to trigger this action.
+
+After reviewing the JSON schema, I click Create, and with that, the Logic App is provisioned. The action now appears as a fully registered tool under our agent.
+
+Now if you look at the agent configuration, you will see that the send_email tool is officially attached to your agent. This means your agent now has the capability to send real emails through Outlook—not just draft them.
+
+In the next lecture, I’ll show you how to use this new action directly from your agent and how the agent automatically decides when to call this Logic App to send the email for you.
+
+# **D) Demo: Test the Agent in the Agents Playground**
+
+Before we go ahead and start prompting our agent or executing anything, I thought it would be useful to show you something interesting. If you open your Azure portal and search for Logic Apps, then select the Logic Apps service, you will notice that Azure has automatically created a new resource for you. This resource is named send_email, and it was created behind the scenes when we added the “Send Email using Outlook” action to our agent. So without you doing anything manually, Azure created this Logic App, and this Logic App has been attached to your agent as a tool.
+
+Now let’s go ahead and test our agent. Open your Agents Playground—it’s the same agent we created earlier. Nothing has been changed in the agent configuration except that we added the send email tool under the Actions section. With that in place, let’s try a prompt: “Create a travel plan for five days visit to London and send an email to Queen Joy at cloudalchemy.uk.”
+
+This time, we’re specifically asking the agent not only to generate the travel plan but also to send it via email. Notice what happens next. You’ll see a message saying “Looking for references.” This means the agent is analyzing the request and figuring out which tool it needs to use. It correctly identifies that it must call the Logic App tool to send the email. The agent then responds saying that it has sent the email with the five-day travel itinerary.
+
+On the right pane, you can inspect what actually happened. You can see the tool that was used—again, it is the Logic App tool generated using the OpenAPI specification. You can click View run info to see all the execution details. In this view, you can examine the user input—your request for a five-day travel plan and the instruction to send the email. You can also check the assistant’s internal reasoning and the exact tool call that was triggered. This includes all the inputs passed to the Logic App and the resulting output. From this view, it is clear that the Logic App was successfully invoked.
+
+Now let’s verify whether the email was really sent. As I always say, “What is not checked is not done.” So I opened my Outlook inbox, and there it was—an email titled “Five Day Travel Itinerary for London.” Inside, the full itinerary was included just as expected. This confirms that our tool integration is working perfectly.
+
+With this, we’ve reached the end of this walkthrough. But don’t worry—there is much more to explore. I will be recording several more lectures specifically on Logic Apps. It’s a very powerful service, and you can do a lot more with it beyond simple chatbot use cases. I’ll also cover the coding side of Logic Apps to help you build more advanced workflows. I’m still preparing those materials, but I wanted to release this set of videos first so that you can start experimenting right away.
+
+# **E) Title - Coding Send an Email with Logic Apps**
+
+Just a title video on "Coding - Send an Email with Logic Apps"
+
+# **F) What we will be building ?**
+
+Hi folks, welcome to the new module on Azure Logic Apps. In this module, we’ll be working on building an email assistant, and you can already see the architecture we will be following. The diagram illustrates the complete workflow of an AI-powered assistant that sends emails using Azure AI Agents and Azure Logic Apps, with authentication handled through Microsoft Entra ID.
+
+Let’s walk through the workflow step by step. Everything starts from the user, who initiates the request. The user interacts with a Python application—either through a CLI or any other interface. The purpose of this app is to collect user input and send it to the Azure AI Agent. So essentially, the Python application acts as the first entry point in the flow.
+
+This Python application also manages authentication by communicating with Microsoft Entra ID. As you already know, in Entra ID, we previously created an app registration. We will now make use of that registered application. Microsoft Entra ID authenticates the app using secure tokens and ensures that only authorized applications or users can access the Azure AI Agent and the Logic Apps. This establishes a secure, validated communication channel.
+
+Next comes the Azure AI Agent, which we will create using the Azure AI Foundry Agent Service. The agent processes the user’s natural language prompt with LLMs like GPT. It interprets the user’s intent—for example: “Create an itinerary and send an email.” The agent turns this unstructured natural language into a structured action plan. Once the intent is understood and the data is prepared, the agent forwards that information to the Logic App. Essentially, the Azure AI Agent acts as the brain of the system—it handles reasoning and converts raw text into actionable steps.
+
+Now we move to the Azure Logic App, specifically the Send Email Logic App we created earlier. This Logic App executes the instructions coming from the AI Agent. In this case, it will trigger a workflow that sends an email through connectors such as Outlook, Gmail, or Microsoft Graph. Its job is to complete the final action in the workflow and integrate with real-world services like email providers. Since we already created the Logic App for sending emails, we will simply reuse that Logic App in our code.
+
+With this overview, you should now have a clear understanding of how our AI-powered email assistant works end-to-end. Now that you know the architecture and the roles of each component, let’s move ahead and start exploring the code.
+
+# **G) Demo: Install / Import Libraries & Set Env**
+
+In this video, we’ll take a detailed look at the libraries you need to install and how to properly set up your environment before we begin building the email assistant. As you can see, we start by installing several required packages using a simple pip command. The list includes: azure-identity, azure-ai-projects, requests, urllib3, and load_dotenv.
+
+Let’s briefly understand why each of these libraries is important.
+The azure-identity library is essential for authentication with Azure through Entra ID. It ensures secure access to Azure AI by handling credentials in a reliable, standardized way. Next, we have azure-ai-projects, which we’ve already discussed earlier. This library allows you to manage Azure AI projects and interact with agents—for example, creating agents, sending prompts, and receiving responses.
+
+Moving on, the requests library is used to send HTTP requests. This is particularly important when we trigger Logic Apps to send emails. Supporting the requests package is urllib3, a robust HTTP client that takes care of lower-level network operations and ensures stable connectivity. Finally, we have python-dotenv, which allows us to load environment variables from a .env file—something we rely on for securely storing credentials such as client IDs, secrets, and endpoints.
+
+After installing the required libraries, the next step is to import the necessary classes into your script. The first important import is ClientSecretCredential from azure.identity. This class helps authenticate your application with Azure using your tenant ID, client ID, and client secret. Next, we import AIProjectClient from azure.ai.projects, which is responsible for creating agents, sending messages, and retrieving responses.
+
+We also import ListSortOrder from azure.ai.agents.models. This allows us to sort agent messages and ensures that we always retrieve the latest assistant message efficiently. Additional libraries include time for adding polling delays, and of course, requests for sending HTTP calls to Logic Apps.
+
+We then import Python’s built-in json module, which is needed to parse the structured JSON data returned by the AI agent. This becomes especially important when we forward the email content to Logic Apps, because Logic Apps expects the payload in JSON format. We also import re, which helps us extract the JSON block from the AI’s natural language response using pattern matching.
+
+Another important import is urlparse and parse_qs, which help us separate the Logic App’s full URL into the base URL and its authentication parameters. This is crucial because the Logic App URL contains both parts combined into one long string. When you open your Logic App in the Azure portal and select the "Send Email" workflow, you’ll see a large URL containing everything—trigger path, API version, and security keys. Using these parsing utilities allows us to split it into clean components required by our script.
+
+Everything else, such as the client ID, tenant ID, client secret, and Azure endpoint, is already something you're familiar with from earlier modules. The new addition in your .env file will be the LOGIC_APPS_FULL_URL. This URL is copied directly from the Logic App’s "When an HTTP request is received" trigger. Once you copy that URL and place it in your environment settings, your script will be able to call the Logic App correctly.
+
+This completes our initial setup. With these libraries installed and the environment configured, we can now move to the next steps of building our email assistant.
+
+# **H) Demo: Understand Send Email Function**
+
+In this video, we’ll take a closer look at the send_email function, which plays a central role in our application. This function accepts three inputs: the recipient’s email address (email_to), the email subject, and the email body, which contains the content you want to send. The purpose of this function is simple yet powerful—it sends an email using Azure Logic Apps. Additionally, this function is registered as a tool within the AI agent, allowing the agent to automatically call it whenever the conversation requires sending an email.
+
+Before sending the email, the function performs some important preprocessing on the Logic Apps URL. Earlier, you may remember seeing the full Logic Apps trigger URL. It was quite long and contained many parts—such as the base domain, workflow path, query parameters, and security keys. Since the full URL contains unnecessary components for our POST request, we break it down using Python’s urlparse. This allows us to split the URL into different parts, starting with the scheme, which is simply https. Then we extract the netloc, which includes the domain name and port—for example, something like prod-48.eastus.logic.azure.com:443.
+
+The next component we separate is the path, which represents the endpoint of the Logic App workflow. The path is all we need from the main part of the URL. Everything that appears after the question mark in the original URL is the query string, which contains authentication and other key–value parameters. These query parameters are extracted using parse_qs, which converts them into a dictionary format so that they can be passed cleanly into the params argument of the requests.post() call.
+
+Inside the POST request, we also construct the JSON payload. This payload contains the three essential fields: email_to, email_subject, and email_body. Your Logic App must be designed to expect these JSON fields so that it can properly send the email once it receives the request. We also define a timeout of 30 seconds, meaning that if the Logic App doesn’t respond within that time, a timeout exception is raised.
+
+After sending the request, the function checks for both success and failure conditions. A status code of 200 or 202 means the email was successfully accepted or processed by the Logic App. Any other code—for example 400, 403, or 500—indicates a failure, and the function returns a corresponding error message. All exceptions are caught and reported so that you can easily diagnose issues such as invalid URLs or connectivity errors.
+
+To summarize, this function performs several important tasks:
+• It parses the full Logic Apps URL into meaningful components.
+• It extracts and reuses query parameters safely.
+• It sends a POST request containing JSON email data.
+• It handles both success and failure responses.
+• It catches and reports exceptions cleanly.
+
+With this, you should now have a clear understanding of how the send_email function works. In the next video, we’ll explore the create_agent function, so stay tuned!
+
+# **I) Demo: Create Agent**
+
+Moving on, let’s discuss the create_agent function, which is responsible for creating and returning an AI agent using the Azure AI Projects SDK. This function takes a single argument: a client object. The agent we create will guide the user through composing an email, and it leverages a custom tool—in this case, the Logic App function—to send the email. The agent runs on the GPT-4 model, so you need to ensure that a GPT-4 deployment is available in your environment.
+
+Within the function, we call the agent.create_agent method from the Azure AI Projects client. Here, we specify the model as GPT-4, give the agent a name—Email Assistant—and provide system instructions or prompts that define the behavior of the agent. Essentially, the agent is instructed to act as a human-in-the-loop email assistant: it first gathers the recipient information, the email subject, and the email body. Next, it presents a preview of the email to the user, asks for confirmation, and only then proceeds to send the email. This ensures that no email is sent without explicit approval, maintaining a human oversight workflow.
+
+An important aspect of this setup is the custom tool integration. The tool is based on the Logic App and the previously defined send_email function. The custom tool is registered with the agent using a tool call name that matches the function name (send_email). The description helps the model understand when and how to use the tool, emphasizing that it should only be called after the user confirms the email content. The tool defines three required parameters—email_to, email_subject, and email_body—which must align perfectly with the payload structure expected by the send_email function.
+
+Finally, we set the agent’s temperature to 0.7. As you know, the temperature parameter balances creativity and determinism: lower values make the model more factual and predictable, while higher values make it more creative and exploratory. A value of 0.7 provides a good balance for natural, conversational interactions while keeping the agent focused on the task.
+
+In summary, the create_agent function performs the following: it uses GPT-4 as the underlying model, sets system instructions to guide the email composition workflow, registers the Logic App email-sending function as a custom tool, specifies the required parameters for the tool, and sets a temperature to balance creativity and reliability. With this setup, the agent is fully equipped to assist in composing and sending emails interactively.
+
+In the next lesson, we will explore the chat function, which enables the agent to interact with users in real-time. Stay tuned.
+
+# **J) Demo: Process Conversation with Tool Calling**
+
+It’s time to talk about our chat function. This function takes several inputs: the client object, the thread, the agent object, and the message. Essentially, your thread contains all the messages, including the agent’s responses, and these are all managed through the client object. The chat function is responsible for sending a user’s message to the agent thread, starting a new agent run, handling any tool calls (like sending an email), and finally retrieving and returning the agent’s response.
+
+The workflow begins by sending the user message to the agent. This is done by calling agents.messages.create with the thread ID, marking the role as user, and providing the message content. This step ensures the user’s input is added to the current conversation thread, which is necessary to trigger a new agent response.
+
+Next, the function starts an agent run by calling runs.create with the thread ID and agent ID. This is where the agent processes the conversation: it reads all messages in the thread, analyzes the latest user input, decides what to respond, and optionally determines whether a tool call is needed. A while loop continuously checks the run status, which can be queued, in_progress, or requires_action. The loop continues until the agent has finished its execution.
+
+If the run status is requires_action, it means the agent wants to call a tool, such as the send_email function. The chat function handles this by looping over all requested tool calls, converting the function arguments from JSON into a Python dictionary, and executing the corresponding function. For example, the send_email function requires three parameters: email_to, email_subject, and email_body. Once the function executes, the results are appended to an outputs list and submitted back to the agent using client.agent.runs.submit. This ensures the agent receives feedback about the tool’s execution and can continue the conversation accordingly.
+
+To avoid overloading the API, the function includes a time.sleep(1) delay between run status checks. After each check, the run status is updated using run.get with the thread ID and run ID. Once the agent completes its run, the function retrieves the latest messages from the thread by calling client.messages.list, using a descending sort order to get the most recent messages first. The chat function then returns the agent’s reply by extracting the first chunk of text from the message content that is neither a system nor a user message.
+
+In summary, the chat function workflow works as follows:
+
+The user message is sent to the agent thread.
+
+A new agent run is started.
+
+The function loops until the run is finished.
+
+If the agent requires a tool call, it executes the corresponding function (e.g., sending an email) and submits the output back to the agent.
+
+The function continues to poll until the agent completes its task.
+
+Finally, it retrieves the latest agent message and returns the response to the user.
+
+With this, you now have a solid understanding of how the chat function works. In the next video, we will cover the main function and see how everything ties together.
+
+# **K) Demo: Understanding the main function**
+
+Okay, so the time has finally come to talk about our main function. The main function is responsible for initializing everything and managing the user input and output. It is automatically run if the script is executed directly, making it the entry point of the application.
+
+We start with a welcome message. When the application launches, it displays a greeting in the console, such as: “Hi, who would you like to send an email to?” This sets the stage for the user to begin interacting with the agent and provides a friendly starting point for the workflow.
+
+Next comes the authentication step. The main function uses the ClientSecretCredential class from the Azure Identity library to authenticate. The credentials are stored in your Azure OpenAI environment file, and the service principal ensures secure access to Azure AI services. After authentication, the function initializes the Azure AI Project client by passing the credential and endpoint. This configured client object becomes your main interface to create agents, manage threads, and handle interactions with the Azure AI environment.
+
+After setting up the client, the main function creates the email assistant agent using the create_agent function and then opens a new conversation thread. A while loop is used to continuously accept user input and send it to the agent for processing. The loop keeps running until an exit condition is met—typically when the user types exit or quit. At this point, the application gracefully terminates, displays a goodbye message, and performs cleanup tasks like deleting the thread or the agent. This cleanup is important to prevent unused agents from accumulating in your Azure Foundry environment.
+
+Finally, the main function includes a program entry point using the standard Python construct if __name__ == "__main__":. This ensures that the main function only executes when the script is run directly, not when imported as a module in another script.
+
+In summary, the main function workflow is as follows:
+
+Display a welcome message to the user.
+
+Authenticate to Azure using a service principal.
+
+Create the email assistant agent.
+
+Open a new conversation thread.
+
+Accept and process user messages in a loop.
+
+Call the Logic App to send emails when prompted by the agent.
+
+Exit gracefully upon user command.
+
+Perform cleanup tasks to remove the thread and agent.
+
+With this, you now have a clear understanding of how the main function orchestrates the entire email assistant workflow. In the next video, we will go ahead and execute the code to see everything in action.
+
+# **L) Demo: Execute the Code**
+
+Now it’s time to actually execute our code and see it in action. When we run the script, the email assistant starts, displaying a greeting like: “Hi, I’m your email assistant. Who would you like to send an email to?” This is the starting point of our interactive session with the agent.
+
+For this example, we want to do two things: interact with the LLM to generate content and send an email using the Logic App. So I input my request: create a travel plan for a four-day visit to Kerala, India, and send an email to kvjoy@cloudalchemy.uk. This is the user input that the agent will process.
+
+Since I didn’t provide a subject initially, the agent prompts me to specify one. This shows how the human-in-the-loop approach works—the assistant ensures that all required information is collected before executing an action. I provide the subject as “Four-day visit to Kerala, India.” Now the agent has everything it needs to generate the email.
+
+The assistant then creates an email preview, displaying the recipient, subject, and body. The body is generated dynamically using the LLM, formatted as a polite message: “Dear Joy, it’s picked my name, and I hope this finds you well…” This email data is internally formatted in JSON, which the Logic App will use to send the actual email.
+
+Next, the assistant asks for confirmation: “Would you like me to send this message?” I reply yes, and the agent triggers the Logic App to send the email. Within seconds, the email is delivered—I even received it on my Apple Watch. The email contains the generated itinerary for a four-day visit to Kerala, including suggested places to visit.
+
+This demonstration clearly shows how Azure Logic Apps can be used as an action for an Azure AI agent. By integrating the send email Logic App with the agent, we were able to generate a personalized itinerary and send it via email, all in a seamless workflow.
+
+In summary, this example illustrates the power of combining Azure AI Agent Foundry services with Logic Apps, enabling automated actions triggered directly from natural language prompts. You can now see how intelligent assistants can interact with real-world services efficiently.
+
+# **M) Title - Azure Sql & Logic Apps**
+
+Just a title video on "Azure SQL and Logic Apps"
+
+# **N) What are we going to build**
+
+After exploring Azure Logic Apps with a simple send email example, I thought it would be interesting to look at a more realistic use case—this time integrating with Azure SQL databases.
+
+Here’s what we are going to build: a proper Azure AI agent workflow. The workflow involves three main components. First, we have an AI agent. This agent interacts with a Logic Apps integration, which in turn communicates with an Azure SQL database. This layered integration allows us to handle database queries without writing any SQL code manually.
+
+Here’s how it works step by step. The AI agent is initiated and ready to process queries. All queries you provide—like “get me the rows in a table” or “give me the table names”—are interpreted using natural language processing. The agent understands your request in plain English and handles everything internally, so you don’t have to write a single SQL statement.
+
+The Logic Apps component serves as the workflow orchestrator. The agent sends a structured request to the Logic App, which executes the action using the “execute SQL query” workflow. The Logic App then connects to the Azure SQL database and retrieves the requested data. This integration ensures that all database interactions are automated and seamless.
+
+The beauty of this setup is that the AI agent acts as a natural language interface to your SQL database. You can ask for table names, query rows from specific tables, or perform other data retrieval operations using normal conversational prompts. Meanwhile, the Logic App handles the actual execution, making this a fully automated and code-free solution.
+
+In the upcoming steps, we will provision the Azure SQL server, create a database, and then connect everything together. Once set up, you will be able to run simple natural language prompts and get results back from your database effortlessly.
+
+# **O) Demo: Create Sql Database Server**
+
+To begin with, the first and foremost step is to provision your SQL database server. After that, we will create a SQL database inside it. For this, we will be using Azure SQL.
+
+If you don’t already have Azure SQL set up, you can simply search for Azure SQL in the Azure portal. Once selected, click Create. In my case, I don’t have any existing setup, so it’s starting fresh. At this stage, you need to choose or create a database server.
+
+When creating a server, select your subscription. If you encounter an error saying you don’t have access to create a server in the selected region, it means you need to pick another region. For example, I chose UK South. You can also create a new resource group if needed, or select an existing one. In my setup, I used a group named Logic App Test Group.
+
+Next, give your server a unique name—it must not already exist. Then, configure authentication. In my case, I opted for SQL authentication to keep things simple, though you can also choose both SQL and Microsoft authentication. You will need to provide a server admin name and password, and ensure they match.
+
+After that, configure networking settings. By default, the option to allow Azure services and resources to access the server is set to No. Since our agent and Logic Apps will need to talk to this server, set this option to Yes.
+
+Next, look at the identity settings. You can leave the system-assigned and user-assigned managed identities as is. The TDE (Transparent Data Encryption) is used for encryption and can remain at its default setting. For a lab environment, optional features like Microsoft Defender for SQL or tags can be left blank.
+
+Finally, review all the settings, and if everything looks good, click Create to provision your SQL database server. Once the server is ready, you can proceed to create a SQL database inside it. This deployment usually takes a couple of minutes. Once completed, you’ll be ready to move on to the next stage.
+
+# **P) Demo: Create Sql Database**
+
+Pretty soon, your SQL database server will be up and running. Once it’s ready, you’ll see the server type and other details displayed in the portal. At this point, you can click on the server and proceed to create your database.
+
+To create the database, simply select Create database. The portal will automatically pick your subscription and resource group based on the SQL server you just provisioned. You’ll also see a cost summary to help you understand any associated charges. Next, give your database a name—for example, I named mine Azure SQL.
+
+Because the database is linked to the SQL server you created, most of the settings like server and region are automatically filled in. You will also need to decide if you want to use an Elastic Pool, which is a cost-effective way to manage performance across multiple databases. In this case, we are not using Elastic Pool. For workload type, select Development, since this is not a production environment. For compute and storage, serverless is fine, and backup storage redundancy can be kept as locally redundant.
+
+Networking settings are very important. Ensure that “Allow Azure services and resources to access this server” is set to Yes, just like we did for the SQL server. It’s also a good idea to add your current client IP address for testing purposes, so you can connect to the database without issues. Private endpoints or virtual network integration can be configured if needed, but for simplicity, we leave them as default.
+
+Under security, we are not enabling Microsoft Defender for SQL, and other optional services can remain untouched. For testing, it’s useful to use existing sample data, so we’ll use the AdventureWorksLT sample database. This database comes with pre-created schemas and tables, making it easier to experiment without manually creating tables. Confirm your choice to use this sample database, and it will be created automatically.
+
+Finally, review all your settings, and if everything looks good, click Create. The database creation process usually takes around 3 to 5 minutes. Once the database is up and running, we can move on to the next stage, which involves setting up Azure AI agents to interact with the SQL database.
+
+# **Q) Demo: Create Agent**
+
+Once your Azure SQL database is created, it will be visible and fully operational. You can confirm this in multiple ways:
+
+Go to Azure SQL in the portal—you should see your database listed and marked as up and running.
+
+Alternatively, click on the SQL server that hosts your database. Scroll down to the SQL databases section—you should see your database (e.g., Azure SQL) is online and active.
+
+At this point, your SQL server and database are ready, and you have also installed the AdventureWorks sample database for testing. This gives you pre-populated tables and schemas to work with, which makes it easy to experiment with queries without creating tables from scratch.
+
+Next, we move on to the Azure AI Foundry portal to create an AI agent that can interact with this database:
+
+Open your Azure AI Foundry resource.
+
+Navigate to the Agents section and click New Agent.
+
+Give your agent a name—for example, Azure SQL Agent.
+
+Choose a model deployment, such as GPT-4-mini, for processing natural language queries.
+
+Provide instructions for the agent. For instance:
+
+“You are an AI agent that helps to run queries against an Azure SQL database.”
+
+This agent will now be able to take natural language inputs and convert them into SQL queries that can be executed against your Azure SQL database via a connected Logic App workflow.
+
+# **R) Demo: Create Logic App Action**
+
+So before you actually go ahead and create your Logic App action, what I normally do is I first test a few things on the Azure SQL database itself. If you go to your Azure SQL database, go to Query Editor and try and log in with the SQL server authentication that you provided. Here, I'm giving my login name and password just in case you hit any kind of error. It allows you to add your IP address and update your firewall rules if needed.
+
+Please go ahead and do this. If not, you can just simply execute the queries. Once connected, I can run queries like:
+
+SELECT * FROM product;
+
+For example, if there is a salesLTE.product table, I can execute it. You can see here that I'm actually executing SQL queries. But the aim is to eventually give it a natural language format and see the results without writing SQL manually.
+
+Now, I go back to my agents, and this is the agent that I created. In that agent, I need to go to the Actions tab. For the action, I need to choose Azure Logic Apps. Within Logic Apps, I will actually pick Execute SQL query on a database.
+
+It will then ask for your action name. I will call it SQL_Query. Again, I can give a description for my agent, like “An agent that helps you run queries against SQL Server database.” The subscription, resource group, and location are picked automatically. Then it says Executing SQL query on a database.
+
+You can also create a new connection if needed. I'll quickly show you that. Select Azure SQL connection, and we will use SQL Server Authentication. Here it asks for the SQL server name. You can get this from your SQL server overview or copy it from the portal. Then, provide the database name. In my case, the database is called Azure SQL.
+
+Next, enter the username (mine is KB Joy) and the password you used when creating the database. After that, click Authenticate. Ideally, the connection should be successfully created and authenticated.
+
+Once authenticated, click Next, and it should automatically pick up your connection settings, including your SQL server name and database name. Click Next and acknowledge that a Logic App will be created. Note that once this step is done, you will not be able to go back to the previous step.
+
+At this point, you will see an OpenAPI schema generated for this Logic App. It will create a tool for your agent called AzureSQLQuery_Tool (or similar), which is attached to your agent. Click Create, and pretty soon, you will see that this action is attached as a Logic App action to your agent.
+
+This is now the Azure SQL Query Tool, and it is fully attached as a Logic App action to your agent. In the next video, we will see how you can execute this tool and interact with your SQL database through natural language.
+
+# **S) Demo: Execute Queries against the Sql Database**
+
+So, the time has finally come to put our agent to the test. Remember, this agent is actually using an action, and this action is a Logic App action. This Logic App action is tied to the tool that was created, called AzureSQLQuery_Tool. This tool is based on executing queries against a SQL database.
+
+Let's give it a test. In natural language, I’ll say: “Give me the schema names and table names, and format them in a table.” We are asking for both schema names and table names.
+
+As soon as I give this input, the Logic App comes into play. You will see it is using the tool (which is OpenAPI-based) as part of our Logic App action. If I go to View Run Info, it will show that the agent has actually generated a SQL query for me. The query is something like:
+
+SELECT table_schema, table_name 
+FROM information_schema.tables 
+WHERE table_type = 'BASE TABLE';
+
+I didn’t write any SQL myself — that’s the beauty of it.
+
+Now, let’s try something else. Suppose I want the rows inside the salesELT.customer table. Again, I’m not writing any SQL code; the agent generates the SQL behind the scenes, executes it against the database, and fetches the records for me. Very soon, it shows that it is looking for references using Logic Apps, and bingo! The rows from the sales.customer table are returned.
+
+If we check the run info again, you will see that the SQL executed is:
+
+SELECT * FROM salesELT.customer;
+
+Pretty impressive!
+
+Let’s try a slightly more complex query. Suppose I want the most costly product from the salesELT.product table. Again, the agent handles this entirely. It generates the SQL behind the scenes, executes it, and returns the result. I get the product details: product number, standard cost, list price, weight, etc.
+
+Checking the run info in Logic Apps, you will see the executed SQL:
+
+SELECT TOP 1 * FROM sales.product ORDER BY list_price DESC;
+
+The agent ordered the products by list price and returned the topmost (most expensive) product.
+
+This demonstrates a key advantage: with the agent connected to Logic Apps, and Logic Apps connected to Azure SQL Database, I no longer need to learn or manually write SQL commands. All of this happens automatically behind the scenes.
+
+This showcases the power of Azure AI Agent Foundry along with Logic Apps — natural language inputs, automated SQL generation, and database queries, all without writing a single line of SQL.
+
+# **XVII) Semantic Kernel**
+
+# **A) What is Semantic Kernel ?**
+
+So, it's now time to take a deeper dive into Semantic Kernel. The aim is to see how you can use Semantic Kernel with Azure OpenAI to build agents — not just single agents, but multi-agent systems as well.
+
+But before we go further, an important question arises: What is Semantic Kernel?
+
+Semantic Kernel is basically a framework, similar to LangChain or LlamaIndex. Microsoft has developed its own framework and called it Semantic Kernel. Now, the next question is: why the name Semantic Kernel?
+
+Breaking it down: “Semantic” refers to meaning-based processing. Unlike keyword processing or simple syntax-based operations, semantic processing focuses on understanding the meaning. This is where large language models (LLMs) come into play, interpreting and generating natural language based on meaning, not just syntax. Semantic Kernel allows you to interact with LLMs in a structured way, extracting and injecting meaning into your workflows.
+
+Now, what about “Kernel”? In computer science, a kernel is often the core part of a system, like the Linux or Unix kernel. Similarly, in Semantic Kernel, the kernel is the central orchestration engine. It connects LLMs with your application logic, supports plugins, memory storage, planners, and functional chaining, and serves as a programmable interface between AI and code. Essentially, it sits between your AI and your application logic, acting as middleware.
+
+To summarize, Microsoft named it Semantic Kernel to reflect both its focus on semantic understanding and its role as the core orchestrator of AI workflows.
+
+Now let’s look at some key features of Semantic Kernel.
+
+Semantic Kernel is a software development kit (SDK) designed to build AI-infused applications using large language models. It is a lightweight, open-source SDK developed by Microsoft for integrating LLMs into applications. Many consider it the core behind the Copilot stack, which powers enterprise-grade AI experiences. Its main goal is to make orchestration of LLMs easier while integrating with traditional programming logic.
+
+In practice, Semantic Kernel acts as middleware, transforming LLM function calls into concrete code operations. For example, if an LLM requests weather information, Semantic Kernel can call your weather API and return the result — sitting right in between the AI and the code.
+
+Semantic Kernel supports multiple programming languages including C#, Python, and Java (officially for C# and Python, with Java supported via community packages). It can integrate with OpenAI, Azure OpenAI, and local LLMs (like Olama). This makes it flexible, supporting cloud LLMs or self-hosted models.
+
+It also works well with pluggable memory stores like Redis or Chroma, enabling persistent memory and context via vector stores. This is useful for long-running, stateful agents. For example, conversation memory can be stored in Redis for quick recall.
+
+Semantic Kernel is also designed for hybrid workflows, making it ideal for multi-agent systems. In this design, the LLM plans and calls functions, while deterministic code executes APIs or logic. For instance, an agent could plan a meeting: the LLM writes the plan, schedules the calendar, and sends invites via an API.
+
+These features make Semantic Kernel a robust toolkit for building modular, hybrid AI agents that combine human-like reasoning with reliable code execution.
+
+# **B) Architecture of Kernel**
+
+Okay, so let's try and understand the architecture of Semantic Kernel and the kernel itself. The main goal is to see how the kernel interacts with an application and orchestrates AI-driven workflows.
+
+We start with the application, which you can think of as your AI application. The application interacts with the Semantic Kernel to perform AI-driven tasks. Specifically, it initializes the kernel, calls functions, listens for events, and processes results. These actions are essential for any AI application that relies on LLMs.
+
+Now, let’s break down the workflow of the kernel step by step.
+
+First, there is the Select AI Service. This service helps the kernel pick the best configured LLM endpoint based on your setup and context. It could select OpenAI, Azure OpenAI, or Hugging Face models. This selection ensures that the kernel sends the requests to the correct AI model.
+
+Next, we have Render Prompt. The kernel takes the prompt template or semantic function and merges it with user input, function schemas, memory, and context to generate the final prompt string. In other words, the prompt you provide is combined with context and function definitions to create a fully-formed prompt ready for the LLM.
+
+Then comes Invoke AI Service. Once the final prompt is rendered, the kernel sends it to the selected model via its connector. This step includes applying retries, timeout logic, and telemetry hooks as configured. Essentially, the kernel manages the delivery of the prompt to the AI model reliably and efficiently.
+
+After that, we have Parse LLM Response. When the model returns output, the kernel inspects whether the response is plain text or a structured function call. It then parses the JSON, schemas, or function call metadata accordingly. This parsing allows the kernel to understand and structure the AI response properly.
+
+Next is Create Function Result. If the LLM requests a function — for example, querying the latest weather in London via an API like OpenWeatherMap — the kernel automatically invokes the registered native or plugin function, captures the results, and inserts them back into the conversation flow. This enables seamless integration of AI requests with real-world APIs.
+
+The kernel also handles Telemetry and Monitoring. At every stage, it emits logs and metrics such as prompt timing, token usage, and call durations to observability systems using OpenTelemetry-style middleware.
+
+Additionally, the kernel supports Responsible AI and Event Notifications. It triggers events and filters at key stages (before/after prompts or function execution) to enable moderation, safe usage, and compliance checks.
+
+Finally, the kernel returns results back to the application. After possibly chaining multiple calls, it outputs the final text, function outputs, or structured response for use in your UI, service, or pipeline.
+
+This entire flow demonstrates the tight orchestration loop at the core of Semantic Kernel, which enables automated prompt templating, function calling, observability, and compliance — all without requiring you to write custom logic manually.
+
+Just think about it: a single kernel is managing this entire functionality for the application stack, making it a very powerful orchestration engine.
+
+# **C) What is Plugin ?**
+
+So after getting a good understanding of the kernel, which is a part of the Semantic Kernel architecture, it’s now time to take a look at plugins. Plugins are essentially a collection of functions that expose capabilities via function calling.
+
+We discussed function calling at length when we talked about the persistence API and other general use cases. Essentially, a plugin is a grouped set of operations. These operations could be C# methods, external HTTP APIs (like OpenAPI), or even Azure Logic Apps. Semantic Kernel enables the large language model (LLM) to call these directly through function calling. Behind the scenes, it’s still function calling, but it allows your AI agent to perform actions beyond chat, which is the action side of it.
+
+For example, if you want your agent to send notifications or emails, this can all be done via plugins. Importantly, each plugin function must include semantic metadata, including descriptions and parameters. You might remember when we used the OpenWeatherMap API to get the current weather — you had to provide a metadata description explaining what the function does, such as “This function retrieves the current weather for a given city.” This metadata is very important for the LLM to understand the purpose and parameters of the function.
+
+Currently, there are three types of plugins supported:
+
+Native Plugins – These are your own C# or Python methods annotated for Semantic Kernel.
+
+OpenAPI Plugins – REST APIs defined by Swagger or OpenAPI.
+
+Logic Apps Plugins – Azure Logic Apps workflows exposed via OpenAPI or plugin manifests.
+
+These plugins enable both retrieval tasks and task automation. Whenever you talk about agents, there are always two components: knowledge (like retrieving information from a database or file system) and action (task automation).
+
+Functions in plugins fall into two categories:
+
+Retrieval Functions – Fetching data from databases, performing API lookups, etc.
+
+Automation Functions – Performing actions such as sending emails, updating systems, or modifying databases.
+
+This is why an AI agent is not limited to a chatbot — it can perform a wide variety of actions.
+
+Importing plugins in Semantic Kernel is straightforward. For a native plugin, you can simply use:
+
+Kernel.ImportPluginFromType("PluginName");
+
+For an OpenAPI plugin, you can use:
+
+Kernel.ImportPluginFromOpenAPI("PluginName");
+
+Each function within a plugin includes metadata, allowing the LLM to reference them. The AI agent uses function calling to perform either retrieval or automation as part of its reasoning chain.
+
+Overall, plugins are a critical component of the Semantic Kernel architecture. They enable AI agents to extend beyond chat, interact with external systems, and execute automated workflows efficiently.
+
+# **D) Various Orchestration Frameworks in Semantic Kernel**
+
+Before we actually start and look at the code, it’s important to talk about multi-agent orchestration. The world is increasingly moving from single-agent AI to multi-agent AI, where multiple agents perform various tasks collaboratively. Microsoft has anticipated this future with Semantic Kernel’s multi-agent orchestration, providing several advanced orchestration patterns. These patterns are quite futuristic, and in upcoming examples, we can align our code to follow them.
+
+The first pattern is the sequential orchestration. As the name suggests, tasks are processed in sequence, with each agent passing its output to the next. For example, Agent 1 could be a summarizer, which passes the result to a translator, and then the translator passes the output to the next agent. This is a straightforward step-by-step workflow.
+
+The second pattern is concurrent orchestration. Here, multiple agents work on the same task in parallel. Each agent processes the input independently, and the results are aggregated at the end. For instance, three solution-generating agents can work simultaneously, and their outputs are collected and combined by a collector agent.
+
+Next, we have the group chat orchestration, which introduces the concept of human-in-the-loop. In this pattern, agents engage in a collaborative conversation, optionally including a human participant. A group chat manager coordinates the flow and decides which agent should respond next based on the request. This is particularly powerful for simulating meetings, debates, or collaborative problem-solving sessions.
+
+The handoff orchestration is slightly more complex. Unlike sequential orchestration, where the flow is fixed, handoff orchestration allows agents to transfer control dynamically based on context or user requests. For example, a general support agent might hand off billing-related queries to a billing expert. If the billing agent encounters a technical issue, it can hand the query back to a technical expert. This pattern is ideal for customer support or scenarios requiring dynamic delegation.
+
+Finally, there’s the magnetic orchestration, inspired by the Autogen framework. This pattern is designed for complex, open-ended tasks requiring dynamic collaboration among multiple specialized agents. A magnetic manager coordinates the team, selects which agent should act next based on the evolving context, tracks task progress, and adapts workflows in real time. It maintains a shared context and dynamically orchestrates the agents’ actions to efficiently complete tasks.
+
+The framework makes it straightforward to instantiate and run any orchestration pattern. For example, you simply specify the type of orchestration (sequential, concurrent, group chat, magnetic) and start the runtime. Microsoft has designed it to provide a unified approach, making it easy to switch between patterns. The framework abstracts away the complexity of agent communication, coordination, and result aggregation, allowing you to focus on the application’s goals rather than the underlying orchestration.
+
+In the next example, we’ll focus on the sequential orchestration, and future lectures can cover more advanced patterns in Semantic Kernel.
+
+# **E) What are we going to build ?**
+
+Right, so it’s now time to build something together. What we will be building is a sequential orchestration agent, working with multiple agents in a simple, step-by-step flow. As we studied earlier, the sequential agent is the most straightforward type of orchestration.
+
+We start with the input. For our example, we are creating a social media post optimization agent (or a collection of agents). Let’s say the input is: “I am launching a course on Udemy on Model Context Protocol (MCP).” This input is first passed to the analyzer agent.
+
+The analyzer agent is responsible for examining the original post for tone, engagement factors, and potential issues. If it identifies areas for improvement, it highlights them for the next agent. Once the analysis is complete, the output is passed to the optimizer agent.
+
+The optimizer agent takes the analyzed content and creates an improved version of the post, addressing the issues found by the analyzer agent. The optimized version is then sent to the reviewer agent.
+
+The reviewer agent performs a final review and polish, ensuring maximum engagement. It considers aspects like hashtags, emojis, and phrasing to make the post more appealing to the audience. Finally, the reviewer agent generates the final version, which becomes the output of the sequential workflow.
+
+Overall, this is a straightforward orchestration, much simpler than more advanced patterns like magnetic orchestration. In the next lectures, we’ll go step by step through the code, starting with setting up our environment and then implementing the sequential agent. Keep watching to see it in action.
+
+# **F) Demo: Setup the Project in VS Code**
+
+The time has finally come to work on our code. But before we dive in, let’s first set up our environment inside Visual Studio Code. By now, I believe everyone has Visual Studio Code installed on their laptops or machines.
+
+Once you are in Visual Studio Code, start by selecting Open Folder. You can create a new folder, for example, named semantic_kernel, and then click Open. After the folder is open, you need to open a terminal. Go to Terminal → New Terminal.
+
+In the terminal, we will create a virtual environment. Use the following command:
+
+python3 -m venv src
+
+Here, src is the name of our virtual environment. Once created, activate it using:
+
+source src/bin/activate
+
+You’ll notice that your prompt changes from base to SRC, indicating that the virtual environment is active.
+
+Next, we need to install some packages. I’ve provided a requirements.txt file. Copy it into your folder. This file includes the following libraries:
+
+semantic_kernel[azure]==1.3.4.0 – Semantic Kernel with Azure support. The good news is that Semantic Kernel is no longer in beta and is now generally available.
+
+python-dotenv – Used for reading environment variables.
+
+To install the packages, run:
+
+pip install -r requirements.txt
+
+Make sure you are in the correct directory where requirements.txt is located. This will download Semantic Kernel and python-dotenv, setting up your environment properly.
+
+Once the installation is complete, your environment is ready, and you are in a good position to start working on the code. In the next video, we will look at how to use environment variables and discuss the different libraries you need to import in your code.
+
+# **G) Demo: Import Dependencies & Load Env Variables**
+
+It’s now time to discuss environment variables, which are crucial for our Semantic Kernel setup, and also the libraries we need to import in our code. First, you need to create a .env file. In this file, you should provide the Azure OpenAI endpoint, the Azure OpenAI API key, your Azure OpenAI deployment name, and the Azure OpenAI API version.
+
+As we’ve discussed before, once you create your Azure OpenAI service, you cannot directly use a model. You must first create a deployment within that service. This deployment allows you to specify which model (like GPT-4 or GPT-4 Mini) you want to use. The API version can be set according to the latest documentation, so you can adjust it based on what’s currently available.
+
+To get this information, go to portal.azure.com and search for Azure OpenAI. If you do not already have a resource, creating one is straightforward. You’ll need to provide a resource group, a name, choose a region, and select a pricing tier (it’s recommended to choose Standard S0). Once all details are provided, you can simply create the service.
+
+Once the service is created, click on it to view the endpoints. This is where you will get the endpoint URL and the API key. For deployment, click on the Foundry Portal link inside the resource. In the Foundry Portal, go to the Deployments section. You might already have a GPT-4 deployment, but if not, you can simply deploy a base model, choose GPT-4 or GPT-4 Mini, and create the deployment.
+
+Next, bring the Python file from the resources section into your project folder. Make sure it picks up the correct virtual environment in Visual Studio Code. Once your environment is properly set up, you’re ready to import the required dependencies for your code.
+
+Let’s go through the libraries and modules you need to import:
+
+First, we have type hints.
+
+List is a generic type hint for a list of items, e.g., List[str] for a list of strings.
+
+Optional indicates a type that can either have a value or None, e.g., Optional[int].
+Type hinting makes your code cleaner, safer, easier to debug, and improves autocomplete in IDEs.
+
+Next, we have Semantic Kernel-specific imports:
+
+from semantic_kernel.agents import Agent – this is the base class for all AI agents in Semantic Kernel.
+
+from semantic_kernel.agents import ChatCompletionAgent – a specialized agent that interacts with LLMs using chat completions.
+
+from semantic_kernel.orchestration import SequentialOrchestration – a controller that runs multiple agents in sequence, passing the output of one agent to the next.
+
+For connectors:
+
+from semantic_kernel.connectors import AzureChatCompletion – this connector lets the Semantic Kernel communicate with Azure OpenAI’s Chat Completion API.
+
+from semantic_kernel.connectors import ChatMessageContent – this class represents a message from or to the agent in chat format, used for agent responses.
+
+We also need the in-process runtime:
+
+from semantic_kernel.runtime import InProcessRuntime – this is a lightweight runtime environment to execute agent orchestration locally. It’s required by sequential orchestration to run the agents step by step in your Python environment.
+
+Lastly, we have standard Python modules:
+
+os – to interact with the operating system.
+
+asyncio – to write asynchronous or non-blocking code.
+
+dotenv – to load the .env file with environment variables.
+
+With the environment variables set and all the required libraries imported, your environment is now ready for writing and running the Semantic Kernel code. In the next steps, we will move on to implementing the actual code logic.
+
+# **H) Demo: Understand the Functions Defined**
+
+In this lecture, we will cover three important topics: loading environment variables from a .env file, configuring Azure OpenAI, and debugging or testing the connection function. Let’s go through each topic step by step.
+
+The first step is loading environment variables using the load_dotenv() function. This function reads the variables configured in the .env file and makes them available to the Python environment. Once loaded, we use these variables to set up the Azure OpenAI configuration, which includes the API key, the endpoint, the deployment name (GPT-4 in our example), and the API version. These values are essential for connecting your application to Azure OpenAI services.
+
+Next, we have a test function designed to verify that our Azure OpenAI connection is working correctly. This function is simple but crucial because it allows us to ensure the connection is valid before running the full orchestration. Within this function, we instantiate a service object called I_service using the AzureChatCompletion class. All the Azure-specific configuration variables—API key, endpoint, deployment name, and version—are passed to this class.
+
+After setting up the service object, we create a small test agent. This agent is initialized with a name, instructions, and the chat completion service instance (I_service). A test prompt is sent to this agent, such as: “You are a test agent. Respond with ‘Connection successful.’” If everything is set up correctly, the function will return a success message confirming that the connection to Azure OpenAI is working. If there is an issue, such as an incorrect API key or endpoint, the function will print the exception for troubleshooting.
+
+This test function, usually named test_azure_connection, is straightforward but very effective. It ensures that the environment and Azure OpenAI configuration are correct before running any orchestration logic. It’s a good practice to always test the connection first to avoid runtime errors.
+
+In the next lecture, we will focus on the function to get the agents. Since we are working with sequential orchestration, each agent has a specific role to play. We will explain the responsibilities of each agent in detail, so you can understand how the sequential flow works and how the output from one agent is passed to the next.
+
+# **I) Demo: Understand the role of each Agent**
+
+It’s now time to discuss and understand the role of each agent in our sequential orchestration setup. In this example, we have three agents, and each has a specific responsibility. These agents are defined in the get_social_media_agents function. Expanding this function reveals the three agents: Analyzer, Optimizer, and Reviewer. Let’s examine each of them in detail.
+
+Before initializing the agents, we first create the Azure OpenAI service object. This is done using the AI_service variable, which instantiates the AzureChatCompletion class with all the configuration values obtained from the .env file. This service object is then passed to each agent, allowing them to communicate with Azure OpenAI.
+
+The first agent is the Analyzer Agent. It is created as an object named analyzer_agent. The instructions provided to this agent act like a system prompt, defining its role. Specifically, it is asked to act as a social media analyst, analyzing a given social media post to determine the tone, style, engagement potential, target audience, and any missing elements. Essentially, this agent performs a level-one analysis, providing a first-pass evaluation of the content. The AI_service object is passed to this agent so it can interact with Azure OpenAI.
+
+The second agent is the Optimizer Agent. Its role is to take the analysis from the first agent and create an improved version of the post. This agent acts as a level-two content optimizer, enhancing engagement potential by adding appropriate hashtags, emojis, and even a call to action, such as directing readers to register for a course. Like the analyzer agent, the optimizer agent also uses the AI_service for communication with Azure OpenAI.
+
+The third agent is the Reviewer Agent. This agent performs the final review of the optimized post, ensuring it is polished and professional. It is instructed to correct grammar and spelling, optimize hashtag placement, balance emoji usage, and make the call to action compelling. In other words, this is a level-three agent that ensures the content is ready for publication, creating a final, polished social media post. Once again, the AI_service is passed to this agent.
+
+Finally, the get_social_media_agents function returns a list of these agent objects: the analyzer agent, optimizer agent, and reviewer agent. This list allows the sequential orchestration controller to process each agent in order, passing the output of one agent to the next.
+
+In the next lecture, we will explore the function to print the agents’ responses, allowing us to observe the output of each step in the sequence.
+
+# **J) Demo: Define Function run_business_post_example**
+
+In this lecture, we will look at two important functions. The first function is the agent response callback, and the second is the heart and soul of our program, which runs the business post example. Let’s go through them one by one.
+
+The first function, agent_response_callback, is a callback function that prints each agent’s response during the orchestration process. Remember, in sequential orchestration, every agent works in coordination with the others. This function helps us track the responses at every step. It receives a chat_message_content object, which contains the agent’s name and its response. Inside the function, we print a separator, followed by the agent’s name using message.name, and then the actual message content using message.content. This allows us to clearly see which agent produced which output during the orchestration.
+
+The second function is run_business_post_example, which is essentially the core function of this program. Here, we are creating a business-focused social media post using the agents we defined earlier. First, we call the get_social_media_agents function to get a list of our agent objects: Analyzer, Optimizer, and Reviewer. These agents are then passed to the Sequential Orchestration controller.
+
+Microsoft has made this incredibly simple. We just instantiate the SequentialOrchestration class, passing the members (our agents) and the agent response callback function. After this, we create a runtime environment using InProcessRuntime, which is needed to execute the agents locally. The runtime is then started with run.start().
+
+The input to this orchestration is a plain English prompt, for example:
+
+"Hi folks, I'm launching a new Beginners to Pro course on Udemy on Model Context Protocol (MCP) across the AI ecosystem covering AI frameworks and models."
+
+This simple prompt is all we need—the agents will analyze, optimize, and review the post to create a polished, engaging social media post. The function prints a header, a separator, and then the message outputs at each stage. The sequential orchestrator invokes the agents in order, passing the output of one agent to the next. The final result is stored in final_result, which is then printed as the final optimized business post. Any exceptions are caught and handled gracefully.
+
+In the next lecture, we will dive into the main function, which ties everything together and initiates the complete workflow.
+
+# **K) Demo: Understand the main block**
+
+It’s now time to look at the main function of our program. The main function is responsible for running the entire example. At the start, there are just a few print statements to display information. For instance, it prints the title: “Social Media Post Optimization with Sequential Agents”, followed by a separator for readability. This gives a clear visual cue about what the script is doing.
+
+Before executing anything, the main function ensures that your Azure OpenAI configuration values are properly set. It checks if the API key is present. If the API key is missing, it prints a warning message: “Please set your Azure OpenAI configuration before running.” This ensures that the program does not proceed without the necessary credentials.
+
+Next, the main function calls the test Azure connection function that we discussed earlier. This function checks if the connection to the Azure OpenAI service is successful. If the connection fails, a message is printed indicating “Connection failed”. If everything is configured correctly, it prints “Connection passed”, confirming that the Azure service is reachable and ready for orchestration.
+
+Once the connection is verified, the main function calls the run_business_post_example function. This is the core function where all the sequential agents—Analyzer, Optimizer, and Reviewer—are invoked to process the input social media post. Each agent performs its role, and the orchestration ensures that the output flows from one agent to the next, resulting in a polished and engaging final post. After the process is complete, the main function prints a final separator to clearly mark the end of the execution.
+
+Finally, the script runs the main function asynchronously if it is executed directly. This is achieved using asyncio.run(main()), which ensures that all asynchronous operations within the agents and orchestrator execute smoothly. This setup allows the program to handle multiple asynchronous tasks efficiently while maintaining the sequential flow of the agents.
+
+With this understanding, you are now ready to move on to the next step, where we will execute the code and see the sequential orchestration in action.
+
+# **L) Demo: Execute the Agents**
+
+It’s now time to execute the code and see our sequential agents in action. This is the moment where all the preparation—setting up the environment, configuring Azure OpenAI, and creating the agents—comes together. When you run the script, you’ll be able to observe how each function performs its job, passes the output to the next agent, and eventually produces the final result. This is a glimpse of the future of multi-agent systems, where different agents can perform specialized tasks and work collaboratively. Some even envision a time when agents could replace certain human roles—but that’s a topic for another day.
+
+To execute the code, you can simply run the Python script from your terminal. Once the script starts, the first thing that happens is a connection test to Azure OpenAI. The program will confirm that your configuration values are correct and that the connection is successful. You should see a print statement indicating that everything is set up properly.
+
+Next, the program moves on to processing the business post. For example, as a "lazy human," you might input something simple like:
+“Hi folks, I'm launching a new Business to Pro course on Udemy on Model Context Protocol (MCP) across the AI ecosystem, covering AI frameworks and models.”
+
+The Analyzer Agent goes first. Its role is to examine the post and provide a level-one analysis. It checks the current tone and style, engagement potential, target audience, and any missing elements. In this case, it notes that the tone is professional and straightforward but points out missing elements such as hashtags, emojis, visuals, links, and a call to action. It also recommends improving clarity, tone, and energy, and identifies the primary audience as aspiring AI practitioners, with a secondary audience of professionals looking to deepen their AI knowledge.
+
+Once the analysis is complete, the Optimizer Agent takes over. This agent works at level two and uses the analyzer’s feedback to create an improved version of the post. For example, it reframes the original text in a more engaging manner:
+"We are thrilled to announce the launch of our brand new course on Udemy, mastering AI with Model Context Protocol from Beginner to Pro. In this course, you'll learn to navigate AI frameworks with ease and build advanced models step by step—perfect for aspiring enthusiasts."
+
+Finally, the Reviewer Agent, which operates at level three, polishes the post for maximum engagement. This agent balances emojis, optimizes hashtag placement, ensures proper grammar and spelling, and adds a compelling call to action. The final output is a highly polished, professional, and engaging social media post ready for publication.
+
+By running this sequence, you get a clear understanding of how sequential orchestration works with Semantic Kernel and Azure OpenAI. Each agent has a specific role, the output flows smoothly from one agent to the next, and the final product is a well-crafted social media post. This concludes the lecture series, and you now have a full picture of building and running multi-agent orchestration systems.
